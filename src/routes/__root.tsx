@@ -1,12 +1,13 @@
 // src/routes/__root.tsx
-import type { ReactNode } from 'react'
 import {
-    Outlet,
     createRootRoute,
     HeadContent,
+    Outlet,
     Scripts,
-} from '@tanstack/react-router'
+} from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 
+import Header from '@/components/header';
 import appCss from "@/styles/app.css?url";
 
 export const Route = createRootRoute({
@@ -20,7 +21,7 @@ export const Route = createRootRoute({
                 content: 'width=device-width, initial-scale=1',
             },
             {
-                title: 'TanStack Start Starter',
+                title: 'Your Bible',
             },
         ],
         links: [
@@ -28,6 +29,10 @@ export const Route = createRootRoute({
                 rel: "stylesheet",
                 href: appCss,
             },
+            {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+            }
         ],
     }),
     component: RootComponent,
@@ -48,7 +53,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
                 <HeadContent />
             </head>
             <body>
-                {children}
+                <Header />
+                <main className='pt-8 px-10'>
+                    {children}
+                </main>
                 <Scripts />
             </body>
         </html>
