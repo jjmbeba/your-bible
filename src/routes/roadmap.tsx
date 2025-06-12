@@ -18,7 +18,7 @@ export const Route = createFileRoute('/roadmap')({
 
 function RouteComponent() {
     return <div>
-        <Timeline defaultValue={1}>
+        <Timeline defaultValue={2}>
             {roadmapList.map((item) => (
                 <TimelineItem key={item.id} step={item.id}>
                     <TimelineHeader>

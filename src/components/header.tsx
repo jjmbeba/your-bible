@@ -9,13 +9,16 @@ const Header = () => {
             label: 'Home',
         },
         {
+            to: '/bible',
+            label: 'Bible',
+        },
+        {
             to: '/roadmap',
             label: 'Roadmap',
         },
     ]);
 
     const { location: { pathname } } = useRouterState()
-    console.log(pathname)
 
     return (
         <div className='flex justify-between items-center py-4 mx-10 border border-b border-x-0'>
