@@ -1,14 +1,14 @@
 // src/routes/__root.tsx
-import type { ReactNode } from 'react'
 import {
-    Outlet,
     createRootRoute,
     HeadContent,
+    Outlet,
     Scripts,
-} from '@tanstack/react-router'
+} from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 
-import appCss from "@/styles/app.css?url";
 import Header from '@/components/header';
+import appCss from "@/styles/app.css?url";
 
 export const Route = createRootRoute({
     head: () => ({
@@ -29,6 +29,10 @@ export const Route = createRootRoute({
                 rel: "stylesheet",
                 href: appCss,
             },
+            {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+            }
         ],
     }),
     component: RootComponent,
