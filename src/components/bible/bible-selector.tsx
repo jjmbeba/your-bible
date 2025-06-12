@@ -91,10 +91,9 @@ const BibleSelector = () => {
                                         onSelect={(currentValue) => {
                                             navigate({
                                                 to: "/bible",
-                                                search: (prev) => ({
-                                                    ...prev,
+                                                search: {
                                                     bible: bible.id
-                                                })
+                                                }
                                             })
                                         }}
                                     >

@@ -2,13 +2,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { bibleSchema } from '@/schemas/bible'
 import { useForm } from '@tanstack/react-form'
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
-import { SearchIcon } from 'lucide-react'
+import { Loader2, SearchIcon } from 'lucide-react'
 import { Button } from '../ui/button'
+import { useBooks } from '@/queries/bible'
+import { Book } from '@/types/responses'
 
 const BibleDropDown = () => {
-    const books = ['John', 'Matthew', 'Mark', 'Luke', 'Acts', 'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians'];
-
-    const { book, chapter, verse } = getRouteApi('/bible').useSearch()
+    const { book, chapter, verse, bible } = getRouteApi('/bible').useSearch()
+    const { data: books, isLoading: isLoadingBooks } = useBooks(bible)
     const navigate = useNavigate()
 
     const form = useForm({
@@ -46,13 +47,21 @@ const BibleDropDown = () => {
                         <Select
                             defaultValue={field.state.value}
                             onValueChange={(value) => field.handleChange(value)}
+                            disabled={isLoadingBooks}
                         >
                             <SelectTrigger className='w-[180px]'>
-                                <SelectValue placeholder='Select a Bible Book' />
+                                {isLoadingBooks ? (
+                                    <SelectValue>
+                                        <Loader2 className='size-4 animate-spin' />
+                                        Loading...
+                                    </SelectValue>
+                                ) : (
+                                    <SelectValue placeholder='Select a Bible Book' />
+                                )}
                             </SelectTrigger>
                             <SelectContent>
-                                {books.map(book => (
-                                    <SelectItem key={book} value={book}>{book}</SelectItem>
+                                {books?.map((book: Book) => (
+                                    <SelectItem key={book.id} value={book.id}>{book.name}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -77,7 +86,7 @@ const BibleDropDown = () => {
                             </SelectTrigger>
                             <SelectContent>
                                 {Array.from({ length: 21 }).map((_, index) => (
-                                    <SelectItem key={index+1} value={(index+1).toString()}>Chapter {index + 1}</SelectItem>
+                                    <SelectItem key={index + 1} value={(index + 1).toString()}>Chapter {index + 1}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -102,7 +111,7 @@ const BibleDropDown = () => {
                             </SelectTrigger>
                             <SelectContent>
                                 {Array.from({ length: 21 }).map((_, index) => (
-                                    <SelectItem key={index+1} value={(index+1).toString()}>Verse {index + 1}</SelectItem>
+                                    <SelectItem key={index + 1} value={(index + 1).toString()}>Verse {index + 1}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>

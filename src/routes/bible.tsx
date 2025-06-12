@@ -2,6 +2,7 @@ import { getBibles } from '@/actions/bible'
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
 import { Button } from '@/components/ui/button'
+import { useBooks } from '@/queries/bible'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
@@ -15,17 +16,14 @@ export const Route = createFileRoute('/bible')({
   }),
   loaderDeps: ({ search }) => ({ search }),
   loader: async ({ deps: { search } }) => {
-    const { book } = search
+    const { book, bible } = search
 
     return {}
   }
 })
 
 function RouteComponent() {
-  const { book, chapter, verse } = Route.useSearch()
-  const data = Route.useLoaderData()
-
-  console.log("data", data)
+  const { book, chapter, verse, bible } = Route.useSearch()
 
   return (
     <div>
