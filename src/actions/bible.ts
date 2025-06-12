@@ -1,7 +1,6 @@
 import { axiosInstance } from "@/lib/axios";
-import { Bible } from "@/types/responses";
+import { BibleSummary } from "@/types/responses";
 import { createServerFn } from "@tanstack/react-start";
-import axios from "axios";
 
 export const getBibles = createServerFn().handler(async () => {
     const API_KEY = process.env.API_KEY
@@ -10,14 +9,12 @@ export const getBibles = createServerFn().handler(async () => {
         throw new Error("API_KEY is not set")
     }
 
-    const response : Bible[] = await axios.get('https://api.scripture.api.bible/v1/bibles', {
-        headers: {
-            'api-key': API_KEY,
-            'Content-Type': 'application/json'
-        }
-    }).then(res => res.data).catch((error) => {
+    const response = await axiosInstance.get<{ data: BibleSummary[] }>('v1/bibles').then(res => {
+        return res.data
+    }).catch((error) => {
         console.error("error", error)
+        return { data: [] }
     })
 
-    return response
+    return response.data
 })
