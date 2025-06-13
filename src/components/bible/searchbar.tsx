@@ -5,8 +5,12 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Loader2 } from 'lucide-react'
 
-const SearchBar = () => {
-    const { bible } = getRouteApi('/bible').useSearch()
+type SearchBarProps = {
+    disabled?: boolean
+}
+
+const SearchBar = ({ disabled = false }: SearchBarProps) => {
+    const { query } = getRouteApi('/search').useSearch()
     const navigate = useNavigate()
 
     const form = useForm({
@@ -16,17 +20,17 @@ const SearchBar = () => {
             })
         },
         defaultValues: {
-            query: ''
+            query: query ?? ''
         },
         onSubmit: ({ value }) => {
             console.log(value)
-            // navigate({
-            //     to: '/bible',
-            //     search: (prev) => ({
-            //         bible: prev.bible,
-            //         chapter: value.query
-            //     })
-            // })
+            navigate({
+                to: '/search',
+                search: (prev) => ({
+                    bible: prev.bible,
+                    query: value.query
+                })
+            })
         }
     })
 
@@ -40,6 +44,7 @@ const SearchBar = () => {
                 children={(field) => (
                     <div className='relative flex flex-col gap-2'>
                         <Input
+                            disabled={disabled}
                             type="text"
                             placeholder="Search"
                             value={field.state.value}

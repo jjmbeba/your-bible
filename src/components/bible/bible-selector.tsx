@@ -20,11 +20,14 @@ import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Select, SelectTrigger, SelectValue } from '../ui/select'
 
-const BibleSelector = () => {
+type BibleSelectorProps = {
+    value?: string
+}
+
+const BibleSelector = ({ value }: BibleSelectorProps) => {
     const { data: bibles, isLoading: isLoadingBibles } = useBibles()
     const [open, setOpen] = useState<boolean>(false)
     const navigate = useNavigate()
-    const { bible: value } = getRouteApi('/bible').useSearch()
 
     if (isLoadingBibles) {
         return (
@@ -90,7 +93,7 @@ const BibleSelector = () => {
                                         value={bible.name}
                                         onSelect={(currentValue) => {
                                             navigate({
-                                                to: "/bible",
+                                                to: ".",
                                                 search: {
                                                     bible: bible.id
                                                 }

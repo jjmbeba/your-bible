@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as BibleRouteImport } from './routes/bible'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoadmapRoute = RoadmapRouteImport.update({
   id: '/roadmap',
   path: '/roadmap',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
+  '/search': typeof SearchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bible' | '/roadmap'
+  fullPaths: '/' | '/bible' | '/roadmap' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bible' | '/roadmap'
-  id: '__root__' | '/' | '/bible' | '/roadmap'
+  to: '/' | '/bible' | '/roadmap' | '/search'
+  id: '__root__' | '/' | '/bible' | '/roadmap' | '/search'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BibleRoute: typeof BibleRoute
   RoadmapRoute: typeof RoadmapRoute
+  SearchRoute: typeof SearchRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roadmap': {
       id: '/roadmap'
       path: '/roadmap'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BibleRoute: BibleRoute,
   RoadmapRoute: RoadmapRoute,
+  SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
