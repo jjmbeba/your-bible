@@ -1,9 +1,10 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { parseBible } from '@/lib/parse'
 import { useChapter } from '@/queries/bible'
-import { createFileRoute } from '@tanstack/react-router'
-import { Loader2 } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ChevronLeftIcon, ChevronRightIcon, Loader2 } from 'lucide-react'
 import { z } from 'zod'
 
 export const Route = createFileRoute('/bible')({
@@ -28,6 +29,26 @@ function RouteComponent() {
       <div className="mt-6 p-4 w-full flex items-center justify-center">
         {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className="max-w-3xl w-full">
           <h1 className="text-2xl font-bold mb-6">{chapterData?.reference}</h1>
+          {chapterData && <div className="flex justify-end items-center gap-4">
+            <Link className={buttonVariants({
+              variant: 'outline',
+              size: 'icon'
+            })} to="/bible" search={(prev) => ({
+              ...prev,
+              chapter: chapterData?.previous?.id ?? ''
+            })}>
+              <ChevronLeftIcon className="size-4" />
+            </Link>
+            <Link className={buttonVariants({
+              variant: 'outline',
+              size: 'icon'
+            })} to="/bible" search={(prev) => ({
+              ...prev,
+              chapter: chapterData?.next?.id ?? ''
+            })}>
+              <ChevronRightIcon className="size-4" />
+            </Link>
+          </div>}
           <div className="mt-4 prose prose-lg max-w-none">
             {parseBible(chapterData?.content ?? '')}
           </div>

@@ -6,28 +6,37 @@ import { Loader2 } from 'lucide-react'
 import { useMemo } from 'react'
 
 const BibleDropDown = () => {
-    const { book, chapter, bible } = getRouteApi('/bible').useSearch()
-    const { data: books, isLoading: isLoadingBooks } = useBooks(bible)
     const navigate = useNavigate()
+    const { chapter, bible } = getRouteApi('/bible').useSearch()
+    const currentBook = chapter?.split('.')[0]
+    const { data: books, isLoading: isLoadingBooks } = useBooks(bible)
+
+    const selectedBook = useMemo(() =>
+        books?.find((book: Book) => book.id === currentBook),
+        [books, currentBook]
+    )
 
     const selectedBookChapters = useMemo(() => {
-        return books?.find((existingBook: Book) => existingBook.id === book)?.chapters ?? []
-    }, [books, book])
+        return books?.find((existingBook: Book) => existingBook.id === selectedBook?.id)?.chapters ?? []
+    }, [books, selectedBook])
 
     return (
         <div className='flex gap-4 items-center'>
             <div className='flex flex-col gap-2'>
                 <Select
-                    defaultValue={book}
+                    value={selectedBook?.id}
                     onValueChange={(value) => {
-                        navigate({
-                            to: '/bible',
-                            search: (prev) => ({
-                                ...prev,
-                                book: value,
-                                chapter: undefined
+                        const selectedBook = books?.find((book: Book) => book.id === value)
+                        const firstChapter = selectedBook?.chapters?.[0]?.id
+                        if (firstChapter) {
+                            navigate({
+                                to: '/bible',
+                                search: (prev) => ({
+                                    ...prev,
+                                    chapter: firstChapter,
+                                })
                             })
-                        })
+                        }
                     }}
                     disabled={isLoadingBooks}
                 >
@@ -51,6 +60,7 @@ const BibleDropDown = () => {
             <div className='flex flex-col gap-2'>
                 <Select
                     defaultValue={chapter ?? ''}
+                    value={chapter ?? ''}
                     onValueChange={(value) => {
                         navigate({
                             to: '/bible',
