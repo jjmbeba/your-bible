@@ -34,7 +34,7 @@ function RouteComponent() {
     }, [page]);
 
     const { data: searchResults, isLoading: isLoadingSearchResults } = useSearchVerse(bible, query, offset)
-    
+
     const pages = useMemo(() => {
         if (!searchResults) return 0
 
@@ -50,11 +50,11 @@ function RouteComponent() {
 
     return (
         <div className="w-full px-2 sm:px-4">
-            <div className="p-3 sm:p-5 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="p-2 sm:p-5 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
                 <SearchBar disabled={!bible} />
                 <BibleSelector value={bible} />
             </div>
-            <div className="mt-4 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
+            <div className="mt-3 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
                 {!bible ? (
                     <div className="text-center text-sm text-muted-foreground">
                         Please select a bible to search.
@@ -65,7 +65,7 @@ function RouteComponent() {
                     </div>
                 ) : (
                     <div className="w-full max-w-3xl">
-                        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Search Results {searchResults?.total ? `- ${searchResults?.total}` : ''}</h1>
+                        <h1 className="text-lg sm:text-2xl font-bold mb-3 sm:mb-6">Search Results {searchResults?.total ? `- ${searchResults?.total}` : ''}</h1>
                         {!searchResults ? (
                             <div className="text-center text-sm text-muted-foreground">
                                 No results found.
@@ -75,22 +75,22 @@ function RouteComponent() {
                                 {searchResults?.verses.map((verse) => (
                                     <div
                                         key={verse.id}
-                                        className="mb-6 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                                        className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
                                     >
-                                        <div className="flex items-start gap-3">
+                                        <div className="flex items-start gap-2 sm:gap-3">
                                             <div className="flex-1">
-                                                <h2 className="text-lg font-semibold text-primary mb-2">
+                                                <h2 className="text-base sm:text-lg font-semibold text-primary mb-1 sm:mb-2">
                                                     {verse.reference}
                                                 </h2>
-                                                <p className="text-base leading-relaxed text-foreground">
+                                                <p className="text-sm sm:text-base leading-relaxed text-foreground">
                                                     {highlightText(verse.text, query || '')}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
-                                <Pagination className='flex items-center justify-between'>
-                                    <p className="text-sm text-muted-foreground">
+                                <Pagination className='flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0'>
+                                    <p className="text-xs sm:text-sm text-muted-foreground">
                                         Page {currentPage} of {pages}
                                     </p>
                                     <PaginationContent>
@@ -108,7 +108,6 @@ function RouteComponent() {
                                         </PaginationItem>
 
                                         {Array.from({ length: pages }, (_, i) => i + 1).map((page) => {
-                                            // Show first page, last page, current page, and pages around current page
                                             if (
                                                 page === 1 ||
                                                 page === pages ||
