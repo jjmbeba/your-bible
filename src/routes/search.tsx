@@ -1,22 +1,12 @@
 import BibleSelector from '@/components/bible/bible-selector'
 import SearchBar from '@/components/bible/searchbar'
-import { highlightText } from '@/lib/parse'
+import SearchPagination from '@/components/search/search-pagination'
+import VerseCard from '@/components/search/verse-card'
 import { useSearchVerse } from '@/queries/bible'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { z } from 'zod'
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import { useMemo } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { useMemo } from 'react'
+import { z } from 'zod'
 
 export const Route = createFileRoute('/search')({
     component: RouteComponent,
@@ -73,85 +63,9 @@ function RouteComponent() {
                         ) : (
                             <div>
                                 {searchResults?.verses.map((verse) => (
-                                    <div
-                                        key={verse.id}
-                                        className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                                    >
-                                        <div className="flex items-start gap-2 sm:gap-3">
-                                            <div className="flex-1">
-                                                <h2 className="text-base sm:text-lg font-semibold text-primary mb-1 sm:mb-2">
-                                                    {verse.reference}
-                                                </h2>
-                                                <p className="text-sm sm:text-base leading-relaxed text-foreground">
-                                                    {highlightText(verse.text, query || '')}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  <VerseCard key={verse.id} verse={verse} query={query} />
                                 ))}
-                                <Pagination className='flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0'>
-                                    <p className="text-xs sm:text-sm text-muted-foreground">
-                                        Page {currentPage} of {pages}
-                                    </p>
-                                    <PaginationContent>
-                                        <PaginationItem>
-                                            <Link className={cn({
-                                                'opacity-50 cursor-not-allowed': currentPage <= 1
-                                            })} to='/search' search={
-                                                (prev) => ({
-                                                    ...prev,
-                                                    page: currentPage - 1
-                                                })
-                                            } disabled={currentPage <= 1}>
-                                                <PaginationPrevious />
-                                            </Link>
-                                        </PaginationItem>
-
-                                        {Array.from({ length: pages }, (_, i) => i + 1).map((page) => {
-                                            if (
-                                                page === 1 ||
-                                                page === pages ||
-                                                (page >= currentPage - 1 && page <= currentPage + 1)
-                                            ) {
-                                                return (
-                                                    <PaginationItem key={page}>
-                                                        <Link to='/search' search={
-                                                            (prev) => ({
-                                                                ...prev,
-                                                                page: page
-                                                            })
-                                                        } className={cn(buttonVariants({
-                                                            variant: page === currentPage ? 'outline' : 'ghost',
-                                                            size: 'icon'
-                                                        }))}>
-                                                            {page}
-                                                        </Link>
-                                                    </PaginationItem>
-                                                );
-                                            }
-                                            if (page === 2 || page === pages - 1) {
-                                                return (
-                                                    <PaginationItem key={page}>
-                                                        <PaginationEllipsis />
-                                                    </PaginationItem>
-                                                );
-                                            }
-                                            return null;
-                                        })}
-                                        <PaginationItem>
-                                            <Link to='/search' search={
-                                                (prev) => ({
-                                                    ...prev,
-                                                    page: currentPage + 1
-                                                })
-                                            } disabled={currentPage >= pages} className={cn({
-                                                'opacity-50 cursor-not-allowed': currentPage >= pages
-                                            })}>
-                                                <PaginationNext />
-                                            </Link>
-                                        </PaginationItem>
-                                    </PaginationContent>
-                                </Pagination>
+                                <SearchPagination currentPage={currentPage} pages={pages} />
                             </div>
                         )}
                     </div>
