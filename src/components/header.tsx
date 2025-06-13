@@ -18,6 +18,10 @@ const Header = () => {
             label: 'Bible',
         },
         {
+            to: '/search',
+            label: 'Search',
+        },
+        {
             to: '/roadmap',
             label: 'Roadmap',
         },
