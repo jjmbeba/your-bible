@@ -21,15 +21,15 @@ function RouteComponent() {
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
 
   return (
-    <div>
-      <div className="p-4 border rounded-lg flex justify-between items-center">
+    <div className="w-full px-2 sm:px-4">
+      <div className="p-3 sm:p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
         <BibleDropDown />
         <BibleSelector />
       </div>
-      <div className="mt-6 p-4 w-full flex items-center justify-center">
-        {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className="max-w-3xl w-full">
-          <h1 className="text-2xl font-bold mb-6">{chapterData?.reference}</h1>
-          {chapterData && <div className="flex justify-end items-center gap-4">
+      <div className="mt-4 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
+        {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className="w-full max-w-3xl">
+          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{chapterData?.reference}</h1>
+          {chapterData && <div className="flex justify-end items-center gap-2 sm:gap-4">
             <Link className={buttonVariants({
               variant: 'outline',
               size: 'icon'
@@ -49,7 +49,7 @@ function RouteComponent() {
               <ChevronRightIcon className="size-4" />
             </Link>
           </div>}
-          <div className="mt-4 prose prose-lg max-w-none">
+          <div className="mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20">
             {parseBible(chapterData?.content ?? '')}
           </div>
         </div>}

@@ -21,8 +21,8 @@ const BibleDropDown = () => {
     }, [books, selectedBook])
 
     return (
-        <div className='flex gap-4 items-center'>
-            <div className='flex flex-col gap-2'>
+        <div className='flex flex-col sm:flex-row gap-2 sm:gap-4 items-center w-full sm:w-auto'>
+            <div className='w-full sm:w-auto'>
                 <Select
                     value={selectedBook?.id}
                     onValueChange={(value) => {
@@ -40,7 +40,7 @@ const BibleDropDown = () => {
                     }}
                     disabled={isLoadingBooks}
                 >
-                    <SelectTrigger className='w-[180px]'>
+                    <SelectTrigger className='w-full sm:w-[180px]'>
                         {isLoadingBooks ? (
                             <SelectValue>
                                 <Loader2 className='size-4 animate-spin' />
@@ -57,7 +57,7 @@ const BibleDropDown = () => {
                     </SelectContent>
                 </Select>
             </div>
-            <div className='flex flex-col gap-2'>
+            <div className='w-full sm:w-auto'>
                 <Select
                     defaultValue={chapter ?? ''}
                     value={chapter ?? ''}
@@ -71,7 +71,7 @@ const BibleDropDown = () => {
                         })
                     }}
                 >
-                    <SelectTrigger className='w-[200px]'>
+                    <SelectTrigger className='w-full sm:w-[200px]'>
                         <SelectValue placeholder='Select a Bible Chapter' />
                     </SelectTrigger>
                     <SelectContent>
