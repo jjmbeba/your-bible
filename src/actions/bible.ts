@@ -43,11 +43,13 @@ export const getChapter = createServerFn().validator(z.object({
 
 export const searchVerse = createServerFn().validator(z.object({
     bibleId: z.string(),
-    query: z.string()
-})).handler(async ({ data: { bibleId, query } }) => {
+    query: z.string(),
+    offset: z.number()
+})).handler(async ({ data: { bibleId, query, offset } }) => {
     const response = await axiosInstance.get<{ data: SearchResponse }>(`v1/bibles/${bibleId}/search`, {
         params: {
-            query
+            query,
+            offset
         }
     }).then(res => {
         return res.data
