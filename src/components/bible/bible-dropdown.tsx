@@ -2,8 +2,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useBooks } from '@/queries/bible'
 import { Book, ChapterSummary } from '@/types/responses'
 import { getRouteApi, useNavigate } from '@tanstack/react-router'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Search } from 'lucide-react'
 import { useMemo } from 'react'
+import SearchBar from './searchbar'
 
 const BibleDropDown = () => {
     const navigate = useNavigate()
