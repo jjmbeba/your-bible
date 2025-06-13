@@ -3,6 +3,7 @@ import { getRouteApi, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
+import { Loader2 } from 'lucide-react'
 
 const SearchBar = () => {
     const { bible } = getRouteApi('/bible').useSearch()
@@ -59,7 +60,7 @@ const SearchBar = () => {
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
                     <Button type='submit' size='sm' disabled={!canSubmit}>
-                        Search
+                        {isSubmitting ? <Loader2 className='size-4 animate-spin' /> : 'Search'}
                     </Button>
                 )}
             />

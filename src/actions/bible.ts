@@ -53,7 +53,17 @@ export const searchVerse = createServerFn().validator(z.object({
         return res.data
     }).catch((error) => {
         console.error("error", error)
-        return { data: [] }
+    
+        const empty: SearchResponse = {
+            query,
+            limit: 0,
+            offset: 0,
+            total: 0,
+            verseCount: 0,
+            verses: [],
+        }
+
+        return { data: empty }
     })
 
     return response.data
