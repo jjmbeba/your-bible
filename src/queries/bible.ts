@@ -1,4 +1,4 @@
-import { getBibles, getBooks, getChapter } from "@/actions/bible";
+import { getBibles, getBooks, getChapter, searchVerse } from "@/actions/bible";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
 const biblesQueryOptions = queryOptions({
@@ -18,6 +18,13 @@ const chapterQueryOptions = (bibleId?: string, chapterId?: string) => queryOptio
     enabled: !!bibleId && !!chapterId
 })
 
+const searchVerseQueryOptions = (bibleId?: string, query?: string) => queryOptions({
+    queryKey: ['search-verse', bibleId, query],
+    queryFn: () => searchVerse({ data: { bibleId: bibleId ?? '', query: query ?? '' } }),
+    enabled: !!bibleId && !!query
+})
+
 export const useBibles = () => useQuery(biblesQueryOptions)
 export const useBooks = (bibleId?: string) => useQuery(booksQueryOptions(bibleId))
 export const useChapter = (bibleId?: string, chapterId?: string) => useQuery(chapterQueryOptions(bibleId, chapterId))
+export const useSearchVerse = (bibleId?: string, query?: string) => useQuery(searchVerseQueryOptions(bibleId, query))

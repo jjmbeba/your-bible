@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import { BibleSummary, Book, Chapter } from "@/types/responses";
+import { BibleSummary, Book, Chapter, SearchResponse } from "@/types/responses";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -36,6 +36,34 @@ export const getChapter = createServerFn().validator(z.object({
     }).catch((error) => {
         console.error("error", error)
         return { data: null }
+    })
+
+    return response.data
+})
+
+export const searchVerse = createServerFn().validator(z.object({
+    bibleId: z.string(),
+    query: z.string()
+})).handler(async ({ data: { bibleId, query } }) => {
+    const response = await axiosInstance.get<{ data: SearchResponse }>(`v1/bibles/${bibleId}/search`, {
+        params: {
+            query
+        }
+    }).then(res => {
+        return res.data
+    }).catch((error) => {
+        console.error("error", error)
+    
+        const empty: SearchResponse = {
+            query,
+            limit: 0,
+            offset: 0,
+            total: 0,
+            verseCount: 0,
+            verses: [],
+        }
+
+        return { data: empty }
     })
 
     return response.data

@@ -23,7 +23,7 @@ function RouteComponent() {
 
   return (
     <div className="w-full px-2 sm:px-4">
-      <div className="p-3 sm:p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="p-3 sm:p-5 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
         <BibleDropDown />
         <BibleSelector />
       </div>
