@@ -55,7 +55,9 @@ function RouteComponent() {
             </Link>
           </div>}
           <div className="mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20">
-            {parseBible(chapterData?.content ?? '')}
+            {bible && chapter ? parseBible(chapterData?.content ?? '') : <div className='flex items-center justify-center h-full text-center'>
+              Select a Bible and Chapter to view the content
+            </div>}
           </div>
         </div>}
       </div>
