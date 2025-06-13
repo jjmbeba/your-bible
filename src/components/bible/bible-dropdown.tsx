@@ -38,14 +38,14 @@ const BibleDropDown = () => {
                             })
                         }
                     }}
-                    disabled={isLoadingBooks}
+                    disabled={isLoadingBooks || !bible}
                 >
                     <SelectTrigger className='w-full sm:w-[180px]'>
                         {isLoadingBooks ? (
-                            <SelectValue>
+                            <div className='flex items-center gap-2'>
                                 <Loader2 className='size-4 animate-spin' />
                                 Loading...
-                            </SelectValue>
+                            </div>
                         ) : (
                             <SelectValue placeholder='Select a Bible Book' />
                         )}
@@ -69,6 +69,7 @@ const BibleDropDown = () => {
                             })
                         })
                     }}
+                    disabled={isLoadingBooks || !bible || !selectedBook}
                 >
                     <SelectTrigger className='w-full sm:w-[200px]'>
                         <SelectValue placeholder='Select a Bible Chapter' />
