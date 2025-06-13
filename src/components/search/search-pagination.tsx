@@ -30,7 +30,7 @@ const SearchPagination = ({ currentPage, pages }: SearchPaginationProps) => {
                             ...prev,
                             page: currentPage - 1
                         })
-                    } disabled={currentPage <= 1}>
+                    } disabled={currentPage <= 1} aria-disabled={currentPage <= 1}>
                         <PaginationPrevious />
                     </Link>
                 </PaginationItem>
@@ -72,7 +72,7 @@ const SearchPagination = ({ currentPage, pages }: SearchPaginationProps) => {
                             ...prev,
                             page: currentPage + 1
                         })
-                    } disabled={currentPage >= pages} className={cn({
+                    } disabled={currentPage >= pages} aria-disabled={currentPage >= pages} className={cn({
                         'opacity-50 cursor-not-allowed': currentPage >= pages
                     })}>
                         <PaginationNext />
