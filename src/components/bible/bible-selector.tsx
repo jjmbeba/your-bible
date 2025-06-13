@@ -29,7 +29,7 @@ const BibleSelector = () => {
     if (isLoadingBibles) {
         return (
             <Select>
-                <SelectTrigger disabled={isLoadingBibles}>
+                <SelectTrigger disabled={isLoadingBibles} className="w-full sm:w-[200px]">
                     <Loader2 className='size-4 animate-spin' />
                     <SelectValue placeholder='Loading...' />
                 </SelectTrigger>
@@ -40,7 +40,7 @@ const BibleSelector = () => {
     if (!bibles || bibles.length === 0) {
         return (
             <Select>
-                <SelectTrigger disabled>
+                <SelectTrigger disabled className="w-full sm:w-[200px]">
                     <SelectValue placeholder='No bibles available' />
                 </SelectTrigger>
             </Select>
@@ -48,14 +48,14 @@ const BibleSelector = () => {
     }
 
     return (
-        <div>
+        <div className="w-full sm:w-auto">
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
+                        className="bg-background hover:bg-background border-input w-full sm:w-[200px] justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
                     >
                         <span className={cn("truncate", !value && "text-muted-foreground")}>
                             {value
@@ -71,7 +71,7 @@ const BibleSelector = () => {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                    className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+                    className="border-input w-[calc(100vw-2rem)] sm:w-[var(--radix-popper-anchor-width)] p-0"
                     align="start"
                 >
                     <Command
@@ -80,8 +80,8 @@ const BibleSelector = () => {
                             return value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
                         }}
                     >
-                        <CommandInput placeholder="Search bible..." />
-                        <CommandList>
+                        <CommandInput placeholder="Search bible..." className="h-9" />
+                        <CommandList className="max-h-[300px]">
                             <CommandEmpty>No bible found.</CommandEmpty>
                             <CommandGroup>
                                 {bibles.map((bible: BibleSummary) => (
@@ -95,7 +95,9 @@ const BibleSelector = () => {
                                                     bible: bible.id
                                                 }
                                             })
+                                            setOpen(false)
                                         }}
+                                        className="cursor-pointer"
                                     >
                                         {bible.name}
                                         {value === bible.id && (

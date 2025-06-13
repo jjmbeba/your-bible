@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import { BibleSummary, Book } from "@/types/responses";
+import { BibleSummary, Book, Chapter } from "@/types/responses";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -22,6 +22,20 @@ export const getBooks = createServerFn().validator(z.object({
     }).catch((error) => {
         console.error("error", error)
         return { data: [] }
+    })
+
+    return response.data
+})
+
+export const getChapter = createServerFn().validator(z.object({
+    bibleId: z.string(),
+    chapterId: z.string()
+})).handler(async ({ data: { bibleId, chapterId } }) => {
+    const response = await axiosInstance.get<{ data: Chapter }>(`v1/bibles/${bibleId}/chapters/${chapterId}`).then(res => {
+        return res.data
+    }).catch((error) => {
+        console.error("error", error)
+        return { data: null }
     })
 
     return response.data
