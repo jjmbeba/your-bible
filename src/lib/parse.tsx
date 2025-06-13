@@ -3,7 +3,7 @@ import parse, { Element, Text } from 'html-react-parser';
 export function parseBible(content: string) {
     return parse(content ?? '', {
       replace: (domNode) => {
-        if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class === 'v') {
+        if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
           const element = domNode as Element;
           const verseNumber = element.children[0] as Text;
           return (
@@ -23,7 +23,11 @@ export function parseBible(content: string) {
             if (child.type === 'tag' && child.name === 'span' && child.attribs?.class === 'v') {
               const verseNumber = child.children[0] as Text;
               acc.push({ number: verseNumber.data, text: '' });
-            } else if (child.type === 'text' && acc.length > 0) {
+            } else if (child.type === 'text') {
+              // If acc is empty, create a default verse container
+              if (acc.length === 0) {
+                acc.push({ number: '', text: '' });
+              }
               acc[acc.length - 1].text += child.data;
             }
             return acc;

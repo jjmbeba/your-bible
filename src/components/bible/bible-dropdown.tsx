@@ -59,7 +59,6 @@ const BibleDropDown = () => {
             </div>
             <div className='w-full sm:w-auto'>
                 <Select
-                    defaultValue={chapter ?? ''}
                     value={chapter ?? ''}
                     onValueChange={(value) => {
                         navigate({

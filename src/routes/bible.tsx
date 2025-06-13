@@ -1,7 +1,8 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { parseBible } from '@/lib/parse'
+import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ChevronLeftIcon, ChevronRightIcon, Loader2 } from 'lucide-react'
@@ -17,7 +18,7 @@ export const Route = createFileRoute('/bible')({
 })
 
 function RouteComponent() {
-  const { book, chapter, bible } = Route.useSearch()
+  const { chapter, bible } = Route.useSearch()
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
 
   return (
@@ -30,19 +31,23 @@ function RouteComponent() {
         {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className="w-full max-w-3xl">
           <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{chapterData?.reference}</h1>
           {chapterData && <div className="flex justify-end items-center gap-2 sm:gap-4">
-            <Link className={buttonVariants({
+            <Link className={cn(buttonVariants({
               variant: 'outline',
               size: 'icon'
-            })} to="/bible" search={(prev) => ({
+            }), {
+              'opacity-50 cursor-not-allowed': !chapterData?.previous,
+            })} disabled={!chapterData?.previous} to="/bible" search={(prev) => ({
               ...prev,
               chapter: chapterData?.previous?.id ?? ''
             })}>
               <ChevronLeftIcon className="size-4" />
             </Link>
-            <Link className={buttonVariants({
+            <Link className={cn(buttonVariants({
               variant: 'outline',
               size: 'icon'
-            })} to="/bible" search={(prev) => ({
+            }), {
+              'opacity-50 cursor-not-allowed': !chapterData?.next,
+            })} disabled={!chapterData?.next} to="/bible" search={(prev) => ({
               ...prev,
               chapter: chapterData?.next?.id ?? ''
             })}>
