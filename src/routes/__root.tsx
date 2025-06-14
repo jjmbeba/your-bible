@@ -1,16 +1,16 @@
 // src/routes/__root.tsx
 import {
-    createRootRoute,
     createRootRouteWithContext,
     HeadContent,
     Outlet,
-    Scripts,
+    Scripts
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
+import { ClerkProvider } from '@clerk/tanstack-react-start';
 
 import Header from '@/components/header';
 import appCss from "@/styles/app.css?url";
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
@@ -44,9 +44,11 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
     return (
-        <RootDocument>
-            <Outlet />
-        </RootDocument>
+        <ClerkProvider>
+            <RootDocument>
+                <Outlet />
+            </RootDocument>
+        </ClerkProvider>
     )
 }
 
