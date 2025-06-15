@@ -11,16 +11,16 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const links = linkOptions([
         {
-            to: '/',
-            label: 'Home',
-        },
-        {
             to: '/bible',
             label: 'Bible',
         },
         {
             to: '/search',
             label: 'Search',
+        },
+        {
+            to: '/collections',
+            label: 'Collections',
         },
         {
             to: '/roadmap',
@@ -32,8 +32,9 @@ const Header = () => {
 
     return (
         <div className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
-            <h1 className='text-xl sm:text-2xl font-bold'>Your Bible</h1>
-
+            <Link to="/">
+                <h1 className='text-xl sm:text-2xl font-bold'>Your Bible</h1>
+            </Link>
             {/* Desktop Navigation */}
             <nav className='hidden sm:flex items-center gap-2'>
                 {links.map((link) => (

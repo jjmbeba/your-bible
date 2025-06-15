@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "@clerk/tanstack-react-start": "^0.17.0",
+    "@convex-dev/react-query": "0.0.0-alpha.8",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-popover": "^1.1.14",
@@ -28,6 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "convex": "^1.24.8",
     "html-react-parser": "^5.2.5",
     "lucide-react": "^0.514.0",
     "postcss": "^8.5.5",
