@@ -24,7 +24,7 @@ const CollectionButton = ({ type, ...rest }: Props) => {
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
                     {type === 'create' ? <PlusIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
-                    <span>{type === 'create' ? 'Create Collection' : 'Edit Collection'}</span>
+                    <span className='hidden sm:block'>{type === 'create' ? 'Create Collection' : 'Edit Collection'}</span>
                 </Button>
             </DialogTrigger>
             <DialogContent>
