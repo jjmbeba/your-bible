@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/tanstack-react-start';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,20 +33,33 @@ const Header = () => {
     return (
         <div className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
             <h1 className='text-xl sm:text-2xl font-bold'>Your Bible</h1>
-            
+
             {/* Desktop Navigation */}
             <nav className='hidden sm:flex items-center gap-2'>
                 {links.map((link) => (
-                    <Link 
-                        key={link.to} 
+                    <Link
+                        key={link.to}
                         className={cn(buttonVariants({ variant: 'link' }), {
                             'underline': pathname === link.to,
-                        })} 
+                        })}
                         to={link.to}
                     >
                         {link.label}
                     </Link>
                 ))}
+                <ClerkLoading>
+                    <div className='size-6 bg-muted rounded-full animate-pulse' />
+                </ClerkLoading>
+                <ClerkLoaded>
+                    <SignedIn>
+                        <UserButton />
+                    </SignedIn>
+                    <SignedOut>
+                        <SignInButton>
+                            <Button size="sm" variant="outline">Sign In</Button>
+                        </SignInButton>
+                    </SignedOut>
+                </ClerkLoaded>
             </nav>
 
             {/* Mobile Navigation */}

@@ -10,4 +10,7 @@ export default defineConfig({
   plugins: [tsConfigPaths(), tanstackStart({
     target: 'vercel'
   })],
+  ssr: {
+    noExternal: ['@clerk/tanstack-react-start']
+  }
 })
