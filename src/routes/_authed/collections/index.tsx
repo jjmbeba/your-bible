@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/_authed/collections/')({
   component: RouteComponent,
@@ -15,7 +16,11 @@ export const Route = createFileRoute('/_authed/collections/')({
 })
 
 function RouteComponent() {
-  const { data: collections, isLoading } = useQuery(convexQuery(api.collections.get, {}))
+  const { data: collections, isLoading, error } = useQuery(convexQuery(api.collections.get, {}))
+
+  if (error) {
+    toast.error(error.message)
+  }
 
   return (
     <div className="w-full px-2 sm:px-4">
