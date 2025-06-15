@@ -59,3 +59,33 @@ export const createCollection = mutation({
     return collection;
   }
 })
+
+export const updateCollection = mutation({
+  args: {
+    id: v.id("collections"),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+
+    if (!identity) {
+      throw new Error("Unauthorized")
+    }
+
+    const collection = await ctx.db.get(args.id)
+
+    if (!collection) {
+      throw new Error("Collection not found")
+    }
+
+    if (collection.userId !== identity.subject) {
+      throw new Error("Unauthorized - You don't have access to this collection")
+    }
+
+    const updatedCollection = await ctx.db.patch(args.id, {
+      name: args.name,
+    })
+
+    return updatedCollection;
+  }
+})

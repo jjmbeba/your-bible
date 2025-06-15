@@ -14,3 +14,15 @@ export const useCreateCollection = () => {
         }
     })
 }
+
+export const useUpdateCollection = () => {
+    return useMutation({
+        mutationFn: useConvexMutation(api.collections.updateCollection),
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: () => {
+            toast.success('Collection updated successfully')
+        }
+    })
+}

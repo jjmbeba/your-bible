@@ -1,4 +1,4 @@
-import { useCreateCollection } from '@/hooks/collections'
+import { useCreateCollection, useUpdateCollection } from '@/hooks/collections'
 import { createCollectionSchema } from '@/schemas/collections'
 import { useForm } from '@tanstack/react-form'
 import { Id } from 'convex/_generated/dataModel'
@@ -23,6 +23,7 @@ type Props = CreateCollectionForm | EditCollectionForm
 
 const CollectionForm = ({ type, ...rest }: Props) => {
     const { mutate: createCollection, isPending: isCreating } = useCreateCollection()
+    const { mutate: updateCollection, isPending: isUpdating } = useUpdateCollection()
 
     const form = useForm({
         defaultValues: type === 'edit' && 'defaultValues' in rest ? rest.defaultValues : {
@@ -36,7 +37,11 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                 createCollection(value)
                 form.reset()
             } else {
-                // await editCollection(rest.id, value)
+                const id = 'id' in rest ? rest.id : '' as Id<'collections'>
+                updateCollection({
+                    id,
+                    name: value.name
+                })
             }
         }
     })
@@ -79,7 +84,7 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                     children={([canSubmit, isSubmitting]) => (
                         <div className="mt-6 flex justify-end gap-2">
                             <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Cancel</Button>
-                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : type === 'create' ? 'Create' : 'Save'}</Button>
+                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating || isUpdating}>{isSubmitting || isCreating || isUpdating ? <Loader2 className="animate-spin" /> : type === 'create' ? 'Create' : 'Save'}</Button>
                         </div>
                     )}
                 />
