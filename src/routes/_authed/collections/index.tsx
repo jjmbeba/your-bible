@@ -1,3 +1,4 @@
+import CollectionButton from '@/components/collections/collections-btn'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -20,6 +21,7 @@ function RouteComponent() {
     <div className="w-full px-2 sm:px-4">
       <div className="p-2 sm:p-5 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
         <h1 className="text-lg sm:text-2xl font-bold">Your Collections</h1>
+        <CollectionButton />
       </div>
       <div className="mt-3 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
         {isLoading ? (
