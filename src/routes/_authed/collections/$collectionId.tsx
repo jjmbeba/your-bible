@@ -1,3 +1,4 @@
+import CollectionButton from '@/components/collections/collections-btn'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -28,7 +29,10 @@ function RouteComponent() {
             <Loader2 className="animate-spin" />
           </div>
         ) : (
-          <h1 className="text-lg sm:text-2xl font-bold">{collection?.name || 'Collection'}</h1>
+          <>
+            <h1 className="text-lg sm:text-2xl font-bold">{collection?.name || 'Collection'}</h1>
+            <CollectionButton type='edit' id={collectionId as Id<'collections'>} defaultValues={{ name: collection?.name || '' }} />
+          </>
         )}
       </div>
       <div className="mt-3 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">

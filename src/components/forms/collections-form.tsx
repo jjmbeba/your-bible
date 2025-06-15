@@ -1,17 +1,13 @@
-import { createCollectionSchema, editCollectionSchema } from '@/schemas/collections'
-import { Id } from 'convex/_generated/dataModel'
-import React from 'react'
-import { z } from 'zod'
-import { DialogHeader, DialogTitle } from '../ui/dialog'
-import { useForm } from '@tanstack/react-form'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
-import { Loader2 } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
-import { useConvexMutation } from '@convex-dev/react-query'
-import { api } from 'convex/_generated/api'
 import { useCreateCollection } from '@/hooks/collections'
+import { createCollectionSchema } from '@/schemas/collections'
+import { useForm } from '@tanstack/react-form'
+import { Id } from 'convex/_generated/dataModel'
+import { Loader2 } from 'lucide-react'
+import { z } from 'zod'
+import { Button } from '../ui/button'
+import { DialogHeader, DialogTitle } from '../ui/dialog'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
 type CreateCollectionForm = {
     type: 'create'
@@ -20,7 +16,7 @@ type CreateCollectionForm = {
 type EditCollectionForm = {
     type: 'edit'
     id: Id<'collections'>
-    defaultValues: z.infer<typeof editCollectionSchema>
+    defaultValues: z.infer<typeof createCollectionSchema>
 }
 
 type Props = CreateCollectionForm | EditCollectionForm
@@ -83,7 +79,7 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                     children={([canSubmit, isSubmitting]) => (
                         <div className="mt-6 flex justify-end gap-2">
                             <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Cancel</Button>
-                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
+                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : type === 'create' ? 'Create' : 'Save'}</Button>
                         </div>
                     )}
                 />
