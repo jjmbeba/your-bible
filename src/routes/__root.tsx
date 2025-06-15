@@ -11,6 +11,7 @@ import { ClerkProvider } from '@clerk/tanstack-react-start';
 import Header from '@/components/header';
 import appCss from "@/styles/app.css?url";
 import { QueryClient } from '@tanstack/react-query';
+import { fetchClerkAuth } from '@/actions/auth';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
@@ -40,6 +41,12 @@ export const Route = createRootRouteWithContext<{
         ],
     }),
     component: RootComponent,
+    beforeLoad: async () => {
+        const { userId } = await fetchClerkAuth()
+        return {
+            userId,
+        }
+    }
 })
 
 function RootComponent() {

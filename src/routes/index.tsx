@@ -3,6 +3,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
     component: Home,
+    loader: async ({ context }) => {
+        console.log(context.userId)
+    },
 })
 
 function Home() {

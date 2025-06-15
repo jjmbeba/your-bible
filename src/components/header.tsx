@@ -55,7 +55,9 @@ const Header = () => {
                         <UserButton />
                     </SignedIn>
                     <SignedOut>
-                        <SignInButton />
+                        <SignInButton>
+                            <Button size="sm" variant="outline">Sign In</Button>
+                        </SignInButton>
                     </SignedOut>
                 </ClerkLoaded>
             </nav>
