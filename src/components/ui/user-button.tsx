@@ -1,4 +1,4 @@
-import { SignInButton, ClerkLoading, SignedIn, ClerkLoaded, SignedOut } from '@clerk/tanstack-react-start'
+import { SignInButton, ClerkLoading, SignedIn, ClerkLoaded, SignedOut, UserButton as ClerkUserButton } from '@clerk/tanstack-react-start'
 import React from 'react'
 import { Button } from './button'
 
@@ -10,7 +10,7 @@ const UserButton = () => {
             </ClerkLoading>
             <ClerkLoaded>
                 <SignedIn>
-                    <UserButton />
+                    <ClerkUserButton />
                 </SignedIn>
                 <SignedOut>
                     <SignInButton>
