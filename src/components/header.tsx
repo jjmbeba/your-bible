@@ -40,9 +40,10 @@ const Header = () => {
                 {links.map((link) => (
                     <Link
                         key={link.to}
-                        className={cn(buttonVariants({ variant: 'link' }), {
-                            'underline': pathname === link.to,
-                        })}
+                        className={cn(buttonVariants({ variant: 'link' }))}
+                        activeProps={{
+                            className: "underline"
+                        }}
                         to={link.to}
                     >
                         {link.label}

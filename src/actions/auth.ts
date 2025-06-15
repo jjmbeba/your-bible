@@ -14,7 +14,7 @@ export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async ()
 
     const auth = await getAuth(request)
     const token = await auth.getToken({
-      template: 'convex'
+      template: 'convex',
     })
     
     return {
