@@ -5,7 +5,7 @@ import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/tanstack-react-start';
+import UserButton from './ui/user-button';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -49,19 +49,7 @@ const Header = () => {
                         {link.label}
                     </Link>
                 ))}
-                <ClerkLoading>
-                    <div className='size-6 bg-muted rounded-full animate-pulse' />
-                </ClerkLoading>
-                <ClerkLoaded>
-                    <SignedIn>
-                        <UserButton />
-                    </SignedIn>
-                    <SignedOut>
-                        <SignInButton>
-                            <Button size="sm" variant="outline">Sign In</Button>
-                        </SignInButton>
-                    </SignedOut>
-                </ClerkLoaded>
+                <UserButton />
             </nav>
 
             {/* Mobile Navigation */}
@@ -73,20 +61,25 @@ const Header = () => {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] sm:hidden">
-                    <nav className="flex flex-col gap-4 mt-8">
-                        {links.map((link) => (
-                            <Link
-                                key={link.to}
-                                className={cn(
-                                    "text-lg font-medium transition-colors hover:text-primary",
-                                    pathname === link.to ? "text-primary" : "text-muted-foreground"
-                                )}
-                                to={link.to}
-                                onClick={() => setIsOpen(false)}
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                    <nav className="flex flex-col h-full">
+                        <div className="flex flex-col gap-4 mt-8">
+                            {links.map((link) => (
+                                <Link
+                                    key={link.to}
+                                    className={cn(
+                                        "text-lg font-medium transition-colors hover:text-primary",
+                                        pathname === link.to ? "text-primary" : "text-muted-foreground"
+                                    )}
+                                    to={link.to}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </div>
+                        <div className="mt-auto pt-4 border-t">
+                            <UserButton />
+                        </div>
                     </nav>
                 </SheetContent>
             </Sheet>

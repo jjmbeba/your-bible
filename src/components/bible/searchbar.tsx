@@ -23,7 +23,6 @@ const SearchBar = ({ disabled = false }: SearchBarProps) => {
             query: query ?? ''
         },
         onSubmit: ({ value }) => {
-            console.log(value)
             navigate({
                 to: '/search',
                 search: (prev) => ({

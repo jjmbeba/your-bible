@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as BibleRouteImport } from './routes/bible'
@@ -18,6 +19,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
 import { Route as AuthedCollectionsCollectionIdRouteImport } from './routes/_authed/collections/$collectionId'
 
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
+  '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/collections': typeof AuthedCollectionsIndexRoute
 }
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
+  '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/collections': typeof AuthedCollectionsIndexRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
+  '/sign-in': typeof SignInRoute
   '/_authed/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/_authed/collections/': typeof AuthedCollectionsIndexRoute
 }
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/roadmap'
     | '/search'
+    | '/sign-in'
     | '/collections/$collectionId'
     | '/collections'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/roadmap'
     | '/search'
+    | '/sign-in'
     | '/collections/$collectionId'
     | '/collections'
   id:
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/roadmap'
     | '/search'
+    | '/sign-in'
     | '/_authed/collections/$collectionId'
     | '/_authed/collections/'
   fileRoutesById: FileRoutesById
@@ -125,10 +137,18 @@ export interface RootRouteChildren {
   BibleRoute: typeof BibleRoute
   RoadmapRoute: typeof RoadmapRoute
   SearchRoute: typeof SearchRoute
+  SignInRoute: typeof SignInRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   BibleRoute: BibleRoute,
   RoadmapRoute: RoadmapRoute,
   SearchRoute: SearchRoute,
+  SignInRoute: SignInRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
