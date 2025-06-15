@@ -19,7 +19,7 @@ function RouteComponent() {
 
   return (
     <div className="w-full px-2 sm:px-4">
-      <div className="p-2 sm:p-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
+      <div className="p-2 sm:p-5 rounded-lg flex flex-row sm:flex-col justify-between items-center gap-2 sm:gap-4">
         <h1 className="text-lg sm:text-2xl font-bold">Your Collections</h1>
         <CollectionButton type='create' />
       </div>

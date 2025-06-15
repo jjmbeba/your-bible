@@ -24,15 +24,15 @@ function RouteComponent() {
 
   return (
     <div className="w-full px-1 sm:px-4">
-      <div className="p-2 sm:p-5 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+      <div className="p-2 sm:p-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
         {isLoading ? (
           <div className="text-center text-sm text-muted-foreground py-2 sm:py-0">
             <Loader2 className="animate-spin h-5 w-5 sm:h-6 sm:w-6" />
           </div>
         ) : (
           <>
-            <h1 className="text-lg sm:text-2xl font-bold text-center sm:text-left w-full sm:w-auto">{collection?.name || 'Collection'}</h1>
-            <div className='flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end'>
+            <h1 className="text-lg sm:text-2xl font-bold">{collection?.name || 'Collection'}</h1>
+            <div className='flex items-center gap-2'>
               <CollectionButton type='edit' id={collectionId as Id<'collections'>} defaultValues={{ name: collection?.name || '' }} />
               <DeleteCollectionButton id={collectionId as Id<'collections'>} />
             </div>

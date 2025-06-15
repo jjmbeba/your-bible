@@ -19,7 +19,7 @@ const DeleteCollectionButton = ({ id }: Props) => {
             <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="sm">
                     <TrashIcon className="w-4 h-4" />
-                    Delete Collection
+                    <span className='hidden sm:block'>Delete Collection</span>
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
