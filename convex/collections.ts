@@ -1,15 +1,35 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
+
+const getAuthenticatedUser = async (ctx: any) => {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) {
+    throw new Error("Unauthorized");
+  }
+  return identity;
+};
+
+const validateCollectionAccess = async (ctx: any, collectionId: Id<"collections">) => {
+  const identity = await getAuthenticatedUser(ctx);
+  const collection = await ctx.db.get(collectionId);
+  
+  if (!collection) {
+    throw new Error("Collection not found");
+  }
+
+  if (collection.userId !== identity.subject) {
+    throw new Error("Unauthorized - You don't have access to this collection");
+  }
+
+  return { collection, identity };
+};
 
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity()
+    const identity = await getAuthenticatedUser(ctx);
     
-    if (!identity) {
-      throw new Error("Unauthorized")
-    }
-
     return await ctx.db
       .query("collections")
       .filter((q) => q.eq(q.field("userId"), identity.subject))
@@ -20,22 +40,7 @@ export const get = query({
 export const getCollection = query({
   args: { id: v.id("collections") },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-
-    if (!identity) {
-      throw new Error("Unauthorized")
-    }
-
-    const collection = await ctx.db.get(args.id);
-    
-    if (!collection) {
-      throw new Error("Collection not found")
-    }
-
-    if (collection.userId !== identity.subject) {
-      throw new Error("Unauthorized - You don't have access to this collection")
-    }
-
+    const { collection } = await validateCollectionAccess(ctx, args.id);
     return collection;
   },
 });
@@ -45,20 +50,14 @@ export const createCollection = mutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
+    const identity = await getAuthenticatedUser(ctx);
 
-    if (!identity) {
-      throw new Error("Unauthorized")
-    }
-
-    const collection = await ctx.db.insert("collections", {
+    return await ctx.db.insert("collections", {
       userId: identity.subject,
       name: args.name,
-    })
-
-    return collection;
+    });
   }
-})
+});
 
 export const updateCollection = mutation({
   args: {
@@ -66,26 +65,21 @@ export const updateCollection = mutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
+    await validateCollectionAccess(ctx, args.id);
 
-    if (!identity) {
-      throw new Error("Unauthorized")
-    }
-
-    const collection = await ctx.db.get(args.id)
-
-    if (!collection) {
-      throw new Error("Collection not found")
-    }
-
-    if (collection.userId !== identity.subject) {
-      throw new Error("Unauthorized - You don't have access to this collection")
-    }
-
-    const updatedCollection = await ctx.db.patch(args.id, {
+    return await ctx.db.patch(args.id, {
       name: args.name,
-    })
+    });
+  }
+});
 
-    return updatedCollection;
+export const deleteCollection = mutation({
+  args: {
+    id: v.id("collections"),
+  },
+  handler: async (ctx, args) => {
+    await validateCollectionAccess(ctx, args.id);
+
+    return await ctx.db.delete(args.id);
   }
 })

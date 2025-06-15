@@ -1,4 +1,5 @@
 import CollectionButton from '@/components/collections/collections-btn'
+import DeleteCollectionButton from '@/components/collections/delete-collections-btn'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -31,7 +32,10 @@ function RouteComponent() {
         ) : (
           <>
             <h1 className="text-lg sm:text-2xl font-bold">{collection?.name || 'Collection'}</h1>
-            <CollectionButton type='edit' id={collectionId as Id<'collections'>} defaultValues={{ name: collection?.name || '' }} />
+            <div className='flex items-center gap-2'>
+              <CollectionButton type='edit' id={collectionId as Id<'collections'>} defaultValues={{ name: collection?.name || '' }} />
+              <DeleteCollectionButton id={collectionId as Id<'collections'>} />
+            </div>
           </>
         )}
       </div>

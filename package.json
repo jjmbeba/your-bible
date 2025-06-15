@@ -14,6 +14,7 @@
   "dependencies": {
     "@clerk/tanstack-react-start": "^0.17.0",
     "@convex-dev/react-query": "0.0.0-alpha.8",
+    "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-popover": "^1.1.14",
