@@ -16,6 +16,7 @@ import { fetchClerkAuth } from '@/actions/auth';
 import { type ConvexReactClient } from 'convex/react';
 import { type ConvexQueryClient } from '@convex-dev/react-query';
 import { ConvexProviderWithClerk } from "convex/react-clerk"
+import { Toaster } from 'sonner';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient,
@@ -91,6 +92,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
                 <main className='pt-8 px-10'>
                     {children}
                 </main>
+                <Toaster richColors />
                 <Scripts />
             </body>
         </html>

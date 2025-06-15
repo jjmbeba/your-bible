@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const get = query({
   args: {},
@@ -39,3 +39,23 @@ export const getCollection = query({
     return collection;
   },
 });
+
+export const createCollection = mutation({
+  args: {
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+
+    if (!identity) {
+      throw new Error("Unauthorized")
+    }
+
+    const collection = await ctx.db.insert("collections", {
+      userId: identity.subject,
+      name: args.name,
+    })
+
+    return collection;
+  }
+})

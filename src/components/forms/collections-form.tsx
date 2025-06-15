@@ -8,6 +8,10 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import { useConvexMutation } from '@convex-dev/react-query'
+import { api } from 'convex/_generated/api'
+import { useCreateCollection } from '@/hooks/collections'
 
 type CreateCollectionForm = {
     type: 'create'
@@ -22,6 +26,8 @@ type EditCollectionForm = {
 type Props = CreateCollectionForm | EditCollectionForm
 
 const CollectionForm = ({ type, ...rest }: Props) => {
+    const { mutate: createCollection, isPending: isCreating } = useCreateCollection()
+
     const form = useForm({
         defaultValues: type === 'edit' && 'defaultValues' in rest ? rest.defaultValues : {
             name: ''
@@ -30,7 +36,12 @@ const CollectionForm = ({ type, ...rest }: Props) => {
             onSubmit: createCollectionSchema
         },
         onSubmit: async ({ value }) => {
-            console.log(value)
+            if (type === 'create') {
+                createCollection(value)
+                form.reset()
+            } else {
+                // await editCollection(rest.id, value)
+            }
         }
     })
 
@@ -72,7 +83,7 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                     children={([canSubmit, isSubmitting]) => (
                         <div className="mt-6 flex justify-end gap-2">
                             <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Cancel</Button>
-                            <Button type="submit" disabled={!canSubmit || isSubmitting}>{isSubmitting ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
+                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
                         </div>
                     )}
                 />
