@@ -12,10 +12,14 @@ export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async ()
       }
     }
 
-    const { userId } = await getAuth(request)
+    const auth = await getAuth(request)
+    const token = await auth.getToken({
+      template: 'convex',
+    })
     
     return {
-      userId,
+      userId: auth.userId,
+      token,
       error: null
     }
   } catch (error) {
