@@ -8,12 +8,12 @@ import UserButton from './ui/user-button';
 
 const Header = () => {
     const { location: { pathname } } = useRouterState()
+    const [isOpen, setIsOpen] = useState(false);
 
     if (pathname === '/sign-in' || pathname === '/sign-up') {
         return null;
     }
 
-    const [isOpen, setIsOpen] = useState(false);
     const links = linkOptions([
         {
             to: '/bible',

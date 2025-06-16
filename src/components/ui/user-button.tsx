@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { useAuthActions } from '@convex-dev/auth/react';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { api } from 'convex/_generated/api';
 import { Authenticated, AuthLoading, Unauthenticated, useQuery } from "convex/react";
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
@@ -12,7 +12,7 @@ import { LogOutIcon, UserIcon } from 'lucide-react';
 const UserButton = () => {
     const { signOut } = useAuthActions()
     const currentUser = useQuery(api.auth.getCurrentUser)
-    console.log("currentUser", currentUser)
+    const router = useRouter()
 
     const userInitials = useMemo(() => {
         return currentUser?.email?.charAt(0).toUpperCase()
@@ -46,7 +46,10 @@ const UserButton = () => {
                             <UserIcon />
                             Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => void signOut()}>
+                        <DropdownMenuItem onClick={() => {
+                            void signOut()
+                            router.invalidate()
+                        }}>
                             <LogOutIcon />
                             Sign out
                         </DropdownMenuItem>
