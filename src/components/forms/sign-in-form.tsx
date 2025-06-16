@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import SocialButtons from '../ui/social-buttons'
 
 export default function SignInForm() {
     const { from } = getRouteApi('/sign-in').useSearch()
@@ -115,7 +116,7 @@ export default function SignInForm() {
                     </Button>
                 )}
             />
-            {/* <SocialSignIn /> */}
+            <SocialButtons />
         </form>
     );
 }
