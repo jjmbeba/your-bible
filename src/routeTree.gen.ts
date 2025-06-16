@@ -13,7 +13,6 @@ import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as BibleRouteImport } from './routes/bible'
-import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
@@ -39,10 +38,6 @@ const BibleRoute = BibleRouteImport.update({
   path: '/bible',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthedRouteRoute = AuthedRouteRouteImport.update({
   id: '/_authed',
   getParentRoute: () => rootRouteImport,
@@ -66,7 +61,7 @@ const AuthedCollectionsCollectionIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthRoute
+  '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
@@ -76,7 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthRoute
+  '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
@@ -88,7 +83,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteRouteWithChildren
-  '/_auth': typeof AuthRoute
   '/bible': typeof BibleRoute
   '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
@@ -121,7 +115,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authed'
-    | '/_auth'
     | '/bible'
     | '/roadmap'
     | '/search'
@@ -133,7 +126,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
   BibleRoute: typeof BibleRoute
   RoadmapRoute: typeof RoadmapRoute
   SearchRoute: typeof SearchRoute
@@ -168,13 +160,6 @@ declare module '@tanstack/react-router' {
       path: '/bible'
       fullPath: '/bible'
       preLoaderRoute: typeof BibleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed': {
@@ -225,7 +210,6 @@ const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
   BibleRoute: BibleRoute,
   RoadmapRoute: RoadmapRoute,
   SearchRoute: SearchRoute,

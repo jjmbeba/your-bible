@@ -1,14 +1,19 @@
 import { cn } from '@/lib/utils';
 import { Link, linkOptions, useRouterState } from '@tanstack/react-router';
-import { buttonVariants } from './ui/button';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import UserButton from './ui/user-button';
 
 const Header = () => {
+    const { location: { pathname } } = useRouterState()
     const [isOpen, setIsOpen] = useState(false);
+
+    if (pathname === '/sign-in' || pathname === '/sign-up') {
+        return null;
+    }
+
     const links = linkOptions([
         {
             to: '/bible',
@@ -27,8 +32,6 @@ const Header = () => {
             label: 'Roadmap',
         },
     ]);
-
-    const { location: { pathname } } = useRouterState()
 
     return (
         <div className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
