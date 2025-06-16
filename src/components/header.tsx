@@ -4,6 +4,7 @@ import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Button, buttonVariants } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import UserButton from './ui/user-button';
 
 const Header = () => {
     const { location: { pathname } } = useRouterState()
@@ -51,7 +52,7 @@ const Header = () => {
                         {link.label}
                     </Link>
                 ))}
-                {/* <UserButton /> */}
+                <UserButton />
             </nav>
 
             {/* Mobile Navigation */}
@@ -80,7 +81,7 @@ const Header = () => {
                             ))}
                         </div>
                         <div className="mt-auto pt-4 border-t">
-                            {/* <UserButton /> */}
+                            <UserButton />
                         </div>
                     </nav>
                 </SheetContent>

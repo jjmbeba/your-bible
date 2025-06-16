@@ -1,15 +1,12 @@
 import { signUpSchema } from "@/schemas/auth";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export default function SignUpForm() {
-    const { signIn } = useAuthActions()
     const navigate = useNavigate()
     const { from } = getRouteApi('/sign-in').useSearch()
 
@@ -29,23 +26,7 @@ export default function SignUpForm() {
             onBlur: signUpSchema
         },
         onSubmit: async ({ value }) => {
-            try {
-                await signIn("password", {
-                    flow:"signUp",
-                    email: value.email,
-                    password: value.password,
-                })
-
-                toast.success("Signed up successfully")
-
-                if (from) {
-                    navigate({ to: from })
-                } else {
-                    navigate({ to: "/" })
-                }
-            } catch (error) {
-                toast.error(error.message ?? "Something went wrong")
-            }
+           
         },
     })
 

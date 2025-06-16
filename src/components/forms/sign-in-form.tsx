@@ -1,16 +1,13 @@
 import { signInSchema } from '@/schemas/auth'
-import { useAuthActions } from '@convex-dev/auth/react'
 import { useForm } from '@tanstack/react-form'
 import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import SocialButtons from '../ui/social-buttons'
 
 export default function SignInForm() {
-    const { signIn } = useAuthActions()
     const navigate = useNavigate()
     const { from } = getRouteApi('/sign-in').useSearch()
 
@@ -23,25 +20,7 @@ export default function SignInForm() {
             onSubmit: signInSchema
         },
         onSubmit: async ({ value }) => {
-            try {
-                await signIn('password', {
-                    ...value,
-                    flow: "signIn",
-                })
-
-                toast.success("Signed in successfully")
-                
-                if(from) {
-                    navigate({ to: from })
-                } else {
-                    navigate({ to: "/" })
-                }
-
-            } catch (error) {
-                if (error instanceof Error) {
-                    toast.error(error.message)
-                }
-            }
+            
         },
     })
 

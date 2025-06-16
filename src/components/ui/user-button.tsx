@@ -1,63 +1,60 @@
-// import { cn } from '@/lib/utils';
-// import { useAuthActions } from '@convex-dev/auth/react';
-// import { Link, useRouter } from '@tanstack/react-router';
-// import { api } from 'convex/_generated/api';
-// import { Authenticated, AuthLoading, Unauthenticated, useQuery } from "convex/react";
-// import { Avatar, AvatarFallback, AvatarImage } from './avatar';
-// import { buttonVariants } from './button';
-// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdown-menu';
-// import { useMemo } from 'react';
-// import { LogOutIcon, UserIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Link, useRouter } from '@tanstack/react-router';
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
+import { buttonVariants } from './button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './dropdown-menu';
+import { useMemo } from 'react';
+import { LogOutIcon, UserIcon } from 'lucide-react';
+import { useSession, signOut } from '@/lib/auth-client';
 
-// const UserButton = () => {
-//     const { signOut } = useAuthActions()
-//     const currentUser = useQuery(api.auth.getCurrentUser)
-//     const router = useRouter()
+const UserButton = () => {
+    const router = useRouter()
+    const { data: session, isPending } = useSession()
 
-//     const userInitials = useMemo(() => {
-//         return currentUser?.email?.charAt(0).toUpperCase()
-//     }, [currentUser?.email])
+    const userInitials = useMemo(() => {
+        return session?.user?.name?.charAt(0).toUpperCase()
+    }, [session?.user?.name])
 
-//     return (
-//         <>
-//             <AuthLoading>
-//                 <div className='size-8 rounded-full bg-primary/10 flex items-center justify-center animate-pulse' />
-//             </AuthLoading>
-//             <Unauthenticated>
-//                 <Link to='/sign-in' className={cn(buttonVariants({
-//                     variant: 'outline',
-//                     size: 'sm',
-//                 }))}>
-//                     Sign In
-//                 </Link>
-//             </Unauthenticated>
-//             <Authenticated>
-//                 <DropdownMenu>
-//                     <DropdownMenuTrigger asChild>
-//                         <Avatar className='cursor-pointer'>
-//                             <AvatarImage src={currentUser?.image} />
-//                             <AvatarFallback>{userInitials}</AvatarFallback>
-//                         </Avatar>
-//                     </DropdownMenuTrigger>
-//                     <DropdownMenuContent>
-//                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-//                         <DropdownMenuSeparator />
-//                         <DropdownMenuItem>
-//                             <UserIcon />
-//                             Profile
-//                         </DropdownMenuItem>
-//                         <DropdownMenuItem onClick={async () => {
-//                             await signOut()
-//                             router.invalidate()
-//                         }}>
-//                             <LogOutIcon />
-//                             Sign out
-//                         </DropdownMenuItem>
-//                     </DropdownMenuContent>
-//                 </DropdownMenu>
-//             </Authenticated>
-//         </>
-//     )
-// }
+    if (isPending) {
+        return <div className='size-8 rounded-full bg-primary/10 flex items-center justify-center animate-pulse' />
+    }
 
-// export default UserButton
+    return (
+        <>
+            {!session ? (
+                <Link to='/sign-in' className={cn(buttonVariants({
+                    variant: 'outline',
+                    size: 'sm',
+                }))}>
+                    Sign In
+                </Link>
+            ) : (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Avatar className='cursor-pointer'>
+                            <AvatarImage src={session.user?.image ?? undefined} />
+                            <AvatarFallback>{userInitials}</AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <UserIcon />
+                            Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={async () => {
+                            await signOut()
+                            router.invalidate()
+                        }}>
+                            <LogOutIcon />
+                            Sign out
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu> 
+            )}
+        </>
+    )
+}
+
+export default UserButton
