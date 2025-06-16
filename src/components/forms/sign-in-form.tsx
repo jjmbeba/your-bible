@@ -1,14 +1,16 @@
+import { signIn } from '@/lib/auth-client'
 import { signInSchema } from '@/schemas/auth'
 import { useForm } from '@tanstack/react-form'
-import { getRouteApi, Link, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Link, useRouter } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import SocialButtons from '../ui/social-buttons'
 
 export default function SignInForm() {
-    const navigate = useNavigate()
+    const router = useRouter()
     const { from } = getRouteApi('/sign-in').useSearch()
 
     const form = useForm({
@@ -20,7 +22,29 @@ export default function SignInForm() {
             onSubmit: signInSchema
         },
         onSubmit: async ({ value }) => {
-            
+            const { email, password } = value
+
+            await signIn.email({
+                email,
+                password,
+                callbackURL: from ?? "/",
+            }, {
+                onError: (error) => {
+                    console.error(error)
+					toast.error(error.error.message)
+				},
+				onSuccess: (data) => {
+					toast.success("Sign in successful")
+
+					if (from) {
+						router.history.push(from)
+					} else {
+						router.navigate({
+							to: "/"
+						})
+					}
+				}
+            })
         },
     })
 
