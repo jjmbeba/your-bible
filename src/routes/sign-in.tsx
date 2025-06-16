@@ -1,4 +1,5 @@
 import SignInTab from '@/components/tabs/sign-in-tab'
+import SignUpTab from '@/components/tabs/sign-up-tab'
 import { buttonVariants } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
@@ -37,7 +38,7 @@ function RouteComponent() {
               <SignInTab />
             </TabsContent>
             <TabsContent value="sign-up" className="mt-4">
-              {/* <SignUp /> */}
+              <SignUpTab />
             </TabsContent>
           </Tabs>
         </div>
