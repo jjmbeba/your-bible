@@ -28,11 +28,11 @@ const validateCollectionAccess = async (ctx: any, collectionId: Id<"collections"
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await getAuthenticatedUser(ctx);
+    // const identity = await getAuthenticatedUser(ctx);
     
     return await ctx.db
       .query("collections")
-      .filter((q) => q.eq(q.field("userId"), identity.subject))
+      // .filter((q) => q.eq(q.field("userId"), identity.subject))
       .collect();
   },
 });
@@ -40,7 +40,8 @@ export const get = query({
 export const getCollection = query({
   args: { id: v.id("collections") },
   handler: async (ctx, args) => {
-    const { collection } = await validateCollectionAccess(ctx, args.id);
+    // const { collection } = await validateCollectionAccess(ctx, args.id);
+    const collection = await ctx.db.get(args.id);
     return collection;
   },
 });

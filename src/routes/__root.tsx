@@ -53,8 +53,7 @@ function RootComponent() {
     })
 
     return (
-        <ConvexProvider client={context.convexClient}
-        >
+        <ConvexProvider client={context.convexClient}>
             <RootDocument>
                 <Outlet />
             </RootDocument>
