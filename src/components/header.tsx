@@ -6,6 +6,12 @@ import { Button, buttonVariants } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
 const Header = () => {
+    const { location: { pathname } } = useRouterState()
+
+    if (pathname === '/sign-in' || pathname === '/sign-up') {
+        return null;
+    }
+
     const [isOpen, setIsOpen] = useState(false);
     const links = linkOptions([
         {
@@ -25,8 +31,6 @@ const Header = () => {
             label: 'Roadmap',
         },
     ]);
-
-    const { location: { pathname } } = useRouterState()
 
     return (
         <div className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
