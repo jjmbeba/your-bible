@@ -1,13 +1,15 @@
+import { signUp } from "@/lib/auth-client";
 import { signUpSchema } from "@/schemas/auth";
 import { formOptions, useForm } from "@tanstack/react-form";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export default function SignUpForm() {
-    const navigate = useNavigate()
+    const router = useRouter()
     const { from } = getRouteApi('/sign-in').useSearch()
 
     const formOpts = formOptions({
@@ -26,7 +28,28 @@ export default function SignUpForm() {
             onBlur: signUpSchema
         },
         onSubmit: async ({ value }) => {
-           
+            const { email, password, firstName, lastName } = value
+
+            await signUp.email({
+                email,
+                password,
+                name: `${firstName} ${lastName}`,
+            }, {
+                onError: (error) => {
+                    toast.error(error.error.message)
+                },
+                onSuccess: (data) => {
+                    toast.success("Sign up successful")
+
+                    if (from) {
+                        router.history.push(from)
+                    } else {
+                        router.navigate({
+                            to: "/"
+                        })
+                    }
+                }
+            })
         },
     })
 
