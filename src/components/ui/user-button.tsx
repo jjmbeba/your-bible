@@ -6,10 +6,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useMemo } from 'react';
 import { LogOutIcon, UserIcon } from 'lucide-react';
 import { useSession, signOut } from '@/lib/auth-client';
+import { useQueryClient } from '@tanstack/react-query';
 
 const UserButton = () => {
     const router = useRouter()
     const { data: session, isPending } = useSession()
+    const queryClient = useQueryClient()
 
     const userInitials = useMemo(() => {
         return session?.user?.name?.charAt(0).toUpperCase()
@@ -17,6 +19,20 @@ const UserButton = () => {
 
     if (isPending) {
         return <div className='size-8 rounded-full bg-primary/10 flex items-center justify-center animate-pulse' />
+    }
+
+    const handleLogout = async () => {
+        await signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    queryClient.setQueryData(['session'], null)
+                    queryClient.invalidateQueries({ queryKey: ['session'] })
+
+                    router.navigate({ to: '/' })
+                    router.invalidate()
+                }
+            }
+        })
     }
 
     return (
@@ -43,15 +59,12 @@ const UserButton = () => {
                             <UserIcon />
                             Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={async () => {
-                            await signOut()
-                            router.invalidate()
-                        }}>
+                        <DropdownMenuItem onClick={handleLogout}>
                             <LogOutIcon />
                             Sign out
                         </DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu> 
+                </DropdownMenu>
             )}
         </>
     )

@@ -14,6 +14,7 @@ import { type ConvexQueryClient } from '@convex-dev/react-query';
 import { QueryClient } from '@tanstack/react-query';
 import { ConvexProvider, type ConvexReactClient } from 'convex/react';
 import { Toaster } from 'sonner';
+import { fetchSession } from '@/actions/auth';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient,
@@ -44,7 +45,22 @@ export const Route = createRootRouteWithContext<{
             }
         ],
     }),
-    component: RootComponent
+    component: RootComponent,
+    beforeLoad: async ({ context: { queryClient } }) => {
+        const sessionKey = ['session']
+
+        const cachedSession = queryClient.getQueryData(sessionKey)
+        if (cachedSession) {
+            return { session: cachedSession }
+        }
+
+        const session = await fetchSession()
+        queryClient.setQueryData(sessionKey, session)
+        
+        return {
+            session
+        }
+    }
 })
 
 function RootComponent() {
