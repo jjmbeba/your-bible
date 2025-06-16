@@ -20,7 +20,7 @@ export default function SignInForm() {
             password: "",
         },
         validators: {
-            onBlur: signInSchema
+            onSubmit: signInSchema
         },
         onSubmit: async ({ value }) => {
             try {

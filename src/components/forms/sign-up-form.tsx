@@ -34,7 +34,6 @@ export default function SignUpForm() {
                     flow:"signUp",
                     email: value.email,
                     password: value.password,
-                    name: `${value.firstName} ${value.lastName}`,
                 })
 
                 toast.success("Signed up successfully")

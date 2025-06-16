@@ -46,8 +46,8 @@ const UserButton = () => {
                             <UserIcon />
                             Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {
-                            void signOut()
+                        <DropdownMenuItem onClick={async () => {
+                            await signOut()
                             router.invalidate()
                         }}>
                             <LogOutIcon />
