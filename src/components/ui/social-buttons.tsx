@@ -14,7 +14,7 @@ const GithubButton = () => {
     const { signIn } = useAuthActions()
 
     return (
-        <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => void signIn('github')}>
+        <Button variant="outline" type="button"	 size="sm" className="w-full gap-2" onClick={() => void signIn('github')}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -35,7 +35,7 @@ const GithubButton = () => {
 
 const GoogleButton = () => {
     return (
-        <Button variant="outline" size="sm" className="w-full gap-2" disabled>
+        <Button variant="outline" type="button" size="sm" className="w-full gap-2" disabled>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="0.98em"

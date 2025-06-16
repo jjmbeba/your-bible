@@ -1,15 +1,17 @@
 import { signInSchema } from '@/schemas/auth'
+import { useAuthActions } from '@convex-dev/auth/react'
 import { useForm } from '@tanstack/react-form'
-import { getRouteApi, Link, useRouter } from '@tanstack/react-router'
+import { getRouteApi, Link } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import SocialButtons from '../ui/social-buttons'
 
 export default function SignInForm() {
+    const { signIn } = useAuthActions()
     const { from } = getRouteApi('/sign-in').useSearch()
-    const router = useRouter()
 
     const form = useForm({
         defaultValues: {
@@ -20,28 +22,18 @@ export default function SignInForm() {
             onBlur: signInSchema
         },
         onSubmit: async ({ value }) => {
-            const { email, password } = value
+            try {
+                await signIn('password', {
+                    ...value,
+                    flow: "signIn",
+                    redirectTo: from ?? "/"
+                })
 
-            // await signIn.email({
-            // 	email,
-            // 	password,
-            // 	rememberMe
-            // }, {
-            // 	onError: (error) => {
-            // 		toast.error(error.error.message)
-            // 	},
-            // 	onSuccess: (data) => {
-            // 		toast.success("Sign in successful")
-
-            // 		if (from) {
-            // 			router.history.push(from)
-            // 		} else {
-            // 			router.navigate({
-            // 				to: "/"
-            // 			})
-            // 		}
-            // 	}
-            // })
+            } catch (error) {
+                if (error instanceof Error) {
+                    toast.error(error.message)
+                }
+            }
         },
     })
 
