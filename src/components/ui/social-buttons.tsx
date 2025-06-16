@@ -1,3 +1,4 @@
+import { useAuthActions } from "@convex-dev/auth/react"
 import { Button } from "./button"
 
 const SocialButtons = () => {
@@ -10,8 +11,10 @@ const SocialButtons = () => {
 }
 
 const GithubButton = () => {
+    const { signIn } = useAuthActions()
+
     return (
-        <Button variant="outline" size="sm" className="w-full gap-2">
+        <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => void signIn('github')}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
