@@ -12,8 +12,9 @@ import Header from '@/components/header';
 import appCss from "@/styles/app.css?url";
 import { type ConvexQueryClient } from '@convex-dev/react-query';
 import { QueryClient } from '@tanstack/react-query';
-import { ConvexProvider, type ConvexReactClient } from 'convex/react';
+import { type ConvexReactClient } from 'convex/react';
 import { Toaster } from 'sonner';
+import { ConvexAuthProvider } from '@convex-dev/auth/react';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient,
@@ -53,11 +54,11 @@ function RootComponent() {
     })
 
     return (
-        <ConvexProvider client={context.convexClient}>
+        <ConvexAuthProvider client={context.convexClient}>
             <RootDocument>
                 <Outlet />
             </RootDocument>
-        </ConvexProvider>
+        </ConvexAuthProvider>
     )
 }
 
