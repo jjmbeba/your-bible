@@ -1,11 +1,16 @@
+import SignInTab from '@/components/tabs/sign-in-tab'
 import { buttonVariants } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
+import { z } from 'zod'
 
 export const Route = createFileRoute('/sign-in')({
   component: RouteComponent,
+  validateSearch: z.object({
+    from: z.string().optional(),
+  }),
 })
 
 function RouteComponent() {
@@ -29,7 +34,7 @@ function RouteComponent() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="sign-in" className="mt-4">
-              {/* <SignIn /> */}
+              <SignInTab />
             </TabsContent>
             <TabsContent value="sign-up" className="mt-4">
               {/* <SignUp /> */}
