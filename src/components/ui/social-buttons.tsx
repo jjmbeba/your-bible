@@ -1,5 +1,6 @@
-import { useAuthActions } from "@convex-dev/auth/react"
+import { signIn } from "@/lib/auth-client"
 import { Button } from "./button"
+import { toast } from "sonner"
 
 const SocialButtons = () => {
     return (
@@ -11,10 +12,17 @@ const SocialButtons = () => {
 }
 
 const GithubButton = () => {
-    const { signIn } = useAuthActions()
-
     return (
-        <Button variant="outline" type="button"	 size="sm" className="w-full gap-2" onClick={() => void signIn('github')}>
+        <Button variant="outline" type="button" size="sm" className="w-full gap-2" onClick={async () => {
+            await signIn.social({
+                provider: 'github'
+            }, {
+                onError: (error) => {
+                    console.error(error)
+                    toast.error(error.error.message)
+                }
+            })
+        }}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"

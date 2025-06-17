@@ -1,7 +1,7 @@
+import { signUp } from "@/lib/auth-client";
 import { signUpSchema } from "@/schemas/auth";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { formOptions, useForm } from "@tanstack/react-form";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
@@ -9,8 +9,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
 export default function SignUpForm() {
-    const { signIn } = useAuthActions()
-    const navigate = useNavigate()
+    const router = useRouter()
     const { from } = getRouteApi('/sign-in').useSearch()
 
     const formOpts = formOptions({
@@ -29,24 +28,28 @@ export default function SignUpForm() {
             onBlur: signUpSchema
         },
         onSubmit: async ({ value }) => {
-            try {
-                await signIn("password", {
-                    flow:"signUp",
-                    email: value.email,
-                    password: value.password,
-                    name: `${value.firstName} ${value.lastName}`,
-                })
+            const { email, password, firstName, lastName } = value
 
-                toast.success("Signed up successfully")
+            await signUp.email({
+                email,
+                password,
+                name: `${firstName} ${lastName}`,
+            }, {
+                onError: (error) => {
+                    toast.error(error.error.message)
+                },
+                onSuccess: (data) => {
+                    toast.success("Sign up successful")
 
-                if (from) {
-                    navigate({ to: from })
-                } else {
-                    navigate({ to: "/" })
+                    if (from) {
+                        router.history.push(from)
+                    } else {
+                        router.navigate({
+                            to: "/"
+                        })
+                    }
                 }
-            } catch (error) {
-                toast.error(error.message ?? "Something went wrong")
-            }
+            })
         },
     })
 

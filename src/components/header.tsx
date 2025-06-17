@@ -10,7 +10,7 @@ const Header = () => {
     const { location: { pathname } } = useRouterState()
     const [isOpen, setIsOpen] = useState(false);
 
-    if (pathname === '/sign-in' || pathname === '/sign-up') {
+    if (pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')) {
         return null;
     }
 
