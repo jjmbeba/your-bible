@@ -8,6 +8,7 @@ import { Button } from '../ui/button'
 import { DialogHeader, DialogTitle } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import { useSession } from '@/lib/auth-client'
 
 type CreateCollectionForm = {
     type: 'create'
@@ -22,6 +23,7 @@ type EditCollectionForm = {
 type Props = CreateCollectionForm | EditCollectionForm
 
 const CollectionForm = ({ type, ...rest }: Props) => {
+    const { data: session, isPending: isSessionPending } = useSession()
     const { mutate: createCollection, isPending: isCreating } = useCreateCollection()
     const { mutate: updateCollection, isPending: isUpdating } = useUpdateCollection()
 
@@ -33,15 +35,18 @@ const CollectionForm = ({ type, ...rest }: Props) => {
             onSubmit: createCollectionSchema
         },
         onSubmit: async ({ value }) => {
-            if (type === 'create') {
-                createCollection(value)
+            if (type === 'create' && session?.session.userId && !isSessionPending) {
+                createCollection({
+                    name: value.name,
+                    userId: session?.session.userId
+                })
                 form.reset()
             } else {
-                const id = 'id' in rest ? rest.id : '' as Id<'collections'>
-                updateCollection({
-                    id,
-                    name: value.name
-                })
+                // const id = 'id' in rest ? rest.id : '' as Id<'collections'>
+                // updateCollection({
+                //     id,
+                //     name: value.name
+                // })
             }
         }
     })
@@ -84,7 +89,7 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                     children={([canSubmit, isSubmitting]) => (
                         <div className="mt-6 flex justify-end gap-2">
                             <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Cancel</Button>
-                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating || isUpdating}>{isSubmitting || isCreating || isUpdating ? <Loader2 className="animate-spin" /> : type === 'create' ? 'Create' : 'Save'}</Button>
+                            <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating || isUpdating || isSessionPending}>{isSubmitting || isCreating || isUpdating ? <Loader2 className="animate-spin" /> : type === 'create' ? 'Create' : 'Save'}</Button>
                         </div>
                     )}
                 />

@@ -39,14 +39,13 @@ export const getCollection = query({
 export const createCollection = mutation({
   args: {
     name: v.string(),
+    userId: v.string(),
   },
   handler: async (ctx, args) => {
-    // const identity = await getAuthenticatedUser(ctx);
-
-    // return await ctx.db.insert("collections", {
-    //   userId: identity.subject,
-    //   name: args.name,
-    // });
+    return await ctx.db.insert("collections", {
+      userId: args.userId,
+      name: args.name,
+    });
   }
 });
 
