@@ -21,6 +21,8 @@ function RouteComponent() {
   const { chapter, bible } = Route.useSearch()
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
 
+  console.log(chapterData)
+
   return (
     <div className="w-full px-2 sm:px-4">
       <div className="p-3 sm:p-5 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
