@@ -2,13 +2,13 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 export const get = query({
-  args: {},
-  handler: async (ctx) => {
-    // const identity = await getAuthenticatedUser(ctx);
-    
+  args: {
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
     return await ctx.db
       .query("collections")
-      // .filter((q) => q.eq(q.field("userId"), identity.subject))
+      .filter((q) => q.eq(q.field("userId"), args.userId))
       .collect();
   },
 });
