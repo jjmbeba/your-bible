@@ -19,8 +19,6 @@ export const getCollection = query({
   handler: async (ctx, args) => {
     const collection = await validateCollectionAccess(ctx, args.id, args.userId);
 
-    if(!collection) return null;
-
     const verses = await ctx.db.query("collectionVerses").withIndex("by_collection_id", q => q.eq("collectionId", collection._id)).collect();
 
     return {
