@@ -42,11 +42,13 @@ const CollectionForm = ({ type, ...rest }: Props) => {
                 })
                 form.reset()
             } else {
-                // const id = 'id' in rest ? rest.id : '' as Id<'collections'>
-                // updateCollection({
-                //     id,
-                //     name: value.name
-                // })
+                if (!session?.session.userId) return;
+                const id = 'id' in rest ? rest.id : '' as Id<'collections'>
+                updateCollection({
+                    id,
+                    name: value.name,
+                    userId: session?.session.userId
+                })
             }
         }
     })
