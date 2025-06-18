@@ -1,6 +1,6 @@
 import { validateCollectionAccess } from "@/lib/convex";
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const addVerseToCollection = mutation({
     args: {
@@ -18,4 +18,16 @@ export const addVerseToCollection = mutation({
             collectionId: args.collectionId,
         });
     }
-})
+});
+
+export const getVerseCollections = query({
+    args: {
+        collectionId: v.id("collections"),
+        userId: v.string(),
+    },
+    handler: async (ctx, args) => {
+        await validateCollectionAccess(ctx, args.collectionId, args.userId);
+
+        return await ctx.db.query("collectionVerses").filter((q) => q.eq(q.field("collectionId"), args.collectionId)).collect();
+    }
+});

@@ -1,7 +1,8 @@
 import { Id } from "convex/_generated/dataModel";
+import { QueryCtx } from "convex/_generated/server";
 
 export const validateCollectionAccess = async (
-    ctx: any,
+    ctx: QueryCtx,
     collectionId: Id<"collections">,
     userId: string
   ) => {

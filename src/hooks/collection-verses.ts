@@ -1,6 +1,7 @@
-import { useMutation } from "@tanstack/react-query"
-import { useConvexMutation } from "@convex-dev/react-query"
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { api } from "convex/_generated/api"
+import { Id } from "convex/_generated/dataModel"
 import { toast } from "sonner"
 
 export const useAddVerseToCollection = () => {
@@ -12,5 +13,15 @@ export const useAddVerseToCollection = () => {
         onError: (error) => {
             toast.error(error.message)
         }
+    })
+}
+
+export const useVerseCollections = (collectionId: Id<'collections'>, userId?: string) => {
+    return useQuery({
+        ...convexQuery(api.verseCollections.getVerseCollections, {
+            collectionId,
+            userId: userId ?? ''
+        }),
+        enabled: !!userId
     })
 }

@@ -17,7 +17,16 @@ export const get = query({
 export const getCollection = query({
   args: { id: v.id("collections"), userId: v.string() },
   handler: async (ctx, args) => {
-    return await validateCollectionAccess(ctx, args.id, args.userId);
+    const collection = await validateCollectionAccess(ctx, args.id, args.userId);
+
+    if(!collection) return null;
+
+    const verses = await ctx.db.query("collectionVerses").withIndex("by_collection_id", q => q.eq("collectionId", collection._id)).collect();
+
+    return {
+      collection,
+      verses,
+    };
   },
 });
 
