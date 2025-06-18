@@ -7,7 +7,7 @@ type VerseCardProps = {
     query: string
 }
 
-const VerseCard = ({ verse, query }: VerseCardProps) => {
+const SearchVerseCard = ({ verse, query }: VerseCardProps) => {
     return (
         <div
             className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
@@ -26,4 +26,4 @@ const VerseCard = ({ verse, query }: VerseCardProps) => {
     )
 }
 
-export default VerseCard
+export default SearchVerseCard

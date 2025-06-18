@@ -31,3 +31,16 @@ export const getVerseCollections = query({
         return await ctx.db.query("collectionVerses").filter((q) => q.eq(q.field("collectionId"), args.collectionId)).collect();
     }
 });
+
+export const deleteVerseFromCollection = mutation({
+    args: {
+        verseCollectionId: v.id("collectionVerses"),
+        collectionId: v.id("collections"),
+        userId: v.string(),
+    },
+    handler: async (ctx, args) => {
+        await validateCollectionAccess(ctx, args.collectionId, args.userId);
+
+        return await ctx.db.delete(args.verseCollectionId);
+    }
+});

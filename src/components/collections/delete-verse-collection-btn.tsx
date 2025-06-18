@@ -1,9 +1,19 @@
-import { TrashIcon } from 'lucide-react'
+import { useDeleteVerseFromCollection } from '@/hooks/collection-verses'
+import { cn } from '@/lib/utils'
+import { Id } from 'convex/_generated/dataModel'
+import { Loader2, TrashIcon } from 'lucide-react'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog'
 import { Button, buttonVariants } from '../ui/button'
-import { cn } from '@/lib/utils'
 
-const DeleteVerseColButton = () => {
+type DeleteVerseColButtonProps = {
+    verseCollectionId: Id<'collectionVerses'>
+    collectionId: Id<'collections'>
+    userId: string
+}
+
+const DeleteVerseColButton = ({ verseCollectionId, collectionId, userId }: DeleteVerseColButtonProps) => {
+    const { mutate: deleteVerseFromCollection, isPending } = useDeleteVerseFromCollection()
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -25,9 +35,16 @@ const DeleteVerseColButton = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction className={cn(buttonVariants({
-                        variant: 'destructive',
-                    }))}>Delete</AlertDialogAction>
+                    <AlertDialogAction
+                        className={cn(buttonVariants({
+                            variant: 'destructive',
+                        }))}
+                        onClick={() => deleteVerseFromCollection({
+                            verseCollectionId,
+                            collectionId,
+                            userId,
+                        })}
+                    >{isPending ? <Loader2 className="animate-spin" /> : 'Delete'}</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

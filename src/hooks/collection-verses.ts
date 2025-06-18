@@ -25,3 +25,15 @@ export const useVerseCollections = (collectionId: Id<'collections'>, userId?: st
         enabled: !!userId
     })
 }
+
+export const useDeleteVerseFromCollection = () => {
+    return useMutation({
+        mutationFn: useConvexMutation(api.verseCollections.deleteVerseFromCollection),
+        onSuccess: () => {
+            toast.success('Verse deleted from collection')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+}

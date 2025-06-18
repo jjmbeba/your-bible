@@ -1,7 +1,6 @@
+import CollectionVerseCard from '@/components/collections/collection-verse-card'
 import CollectionButton from '@/components/collections/collections-btn'
 import DeleteCollectionButton from '@/components/collections/delete-collections-btn'
-import DeleteVerseColButton from '@/components/collections/delete-verse-collection-btn'
-import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/auth-client'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
@@ -9,7 +8,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { type Session } from 'better-auth'
 import { api } from 'convex/_generated/api'
 import { Id } from 'convex/_generated/dataModel'
-import { Loader2, TrashIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/_authed/collections/$collectionId')({
   component: RouteComponent,
@@ -43,6 +42,8 @@ function RouteComponent() {
 
   const { collection, verses } = data;
 
+  const userId = session?.session.userId!
+
   return (
     <div className="w-full px-1 sm:px-4">
       <div className="p-2 sm:p-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
@@ -58,30 +59,9 @@ function RouteComponent() {
         <div className="w-full max-w-3xl">
           <div className="space-y-6">
             {verses.map((verse) => (
-              <VerseCard key={verse._id} verseText={verse.verseText} verseId={verse.verseId} />
+              <CollectionVerseCard key={verse._id} verseCollectionId={verse._id} collectionId={collection._id} userId={userId} verseText={verse.verseText} verseId={verse.verseId} />
             ))}
           </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-
-const VerseCard = ({ verseText, verseId }: { verseText: string, verseId: string }) => {
-  return (
-    <div
-      className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors relative group"
-    >
-      <DeleteVerseColButton />
-      <div className="flex items-start gap-3">
-        <div className="flex-1">
-          <p className="text-base sm:text-lg leading-relaxed text-foreground">
-            {verseText}
-          </p>
-          <p className="mt-4 text-xs text-muted-foreground">
-            {verseId}
-          </p>
         </div>
       </div>
     </div>
