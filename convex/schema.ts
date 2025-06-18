@@ -6,4 +6,9 @@ export default defineSchema({
     name: v.string(),
     userId: v.string(),
   }),
+  collectionVerses: defineTable({
+    verseId: v.string(),
+    verseText: v.string(),
+    collectionId: v.id("collections"),
+  }).index("by_collection_id", ["collectionId"]),
 });

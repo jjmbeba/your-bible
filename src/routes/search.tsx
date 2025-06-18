@@ -1,7 +1,7 @@
 import BibleSelector from '@/components/bible/bible-selector'
 import SearchBar from '@/components/bible/searchbar'
 import SearchPagination from '@/components/search/search-pagination'
-import VerseCard from '@/components/search/verse-card'
+import SearchVerseCard from '@/components/search/search-verse-card'
 import { useSearchVerse } from '@/queries/bible'
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
@@ -63,7 +63,7 @@ function RouteComponent() {
                         ) : (
                             <div>
                                 {searchResults?.verses.map((verse) => (
-                                  <VerseCard key={verse.id} verse={verse} query={query} />
+                                  <SearchVerseCard key={verse.id} verse={verse} query={query} />
                                 ))}
                                 <SearchPagination currentPage={currentPage} pages={pages} />
                             </div>
