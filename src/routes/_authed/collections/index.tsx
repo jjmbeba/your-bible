@@ -1,22 +1,32 @@
 import CollectionButton from '@/components/collections/collections-btn'
+import { useSession } from '@/lib/auth-client'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { type Session } from 'better-auth'
 import { api } from 'convex/_generated/api'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
 export const Route = createFileRoute('/_authed/collections/')({
   component: RouteComponent,
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData(
-      convexQuery(api.collections.get, {})
+  loader: async ({ context: { session, queryClient } }) => {
+    const userId = (session as Session).userId
+    if (!userId) return;
+
+    await queryClient.ensureQueryData(
+      convexQuery(api.collections.get, { userId: (session as Session).userId })
     )
   }
 })
 
 function RouteComponent() {
-  const { data: collections, isLoading, error } = useQuery(convexQuery(api.collections.get, {}))
+  const { data: session } = useSession()
+
+  const { data: collections, isLoading, error } = useQuery({
+    ...convexQuery(api.collections.get, { userId: session?.session.userId ?? '' }),
+    enabled: !!session?.session.userId
+  })
 
   if (error) {
     toast.error(error.message)

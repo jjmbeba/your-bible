@@ -58,7 +58,7 @@ export const Route = createRootRouteWithContext<{
         queryClient.setQueryData(sessionKey, session)
         
         return {
-            session
+            session: session?.session
         }
     }
 })

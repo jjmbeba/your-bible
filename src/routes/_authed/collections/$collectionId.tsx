@@ -1,26 +1,34 @@
 import CollectionButton from '@/components/collections/collections-btn'
 import DeleteCollectionButton from '@/components/collections/delete-collections-btn'
+import { useSession } from '@/lib/auth-client'
 import { convexQuery } from '@convex-dev/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { type Session } from 'better-auth'
 import { api } from 'convex/_generated/api'
 import { Id } from 'convex/_generated/dataModel'
 import { Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/_authed/collections/$collectionId')({
   component: RouteComponent,
-  loader: async ({ context, params }) => {
-    await context.queryClient.ensureQueryData(
-      convexQuery(api.collections.getCollection, { id: params.collectionId as Id<"collections"> })
+  loader: async ({ context: { session, queryClient }, params }) => {
+    const userId = (session as Session).userId
+    if (!userId) return;
+
+    await queryClient.ensureQueryData(
+      convexQuery(api.collections.getCollection, { id: params.collectionId as Id<"collections">, userId })
     )
   }
 })
 
 function RouteComponent() {
+  const { data: session } = useSession()
   const { collectionId } = Route.useParams()
-  const { data: collection, isLoading } = useQuery(
-    convexQuery(api.collections.getCollection, { id: collectionId as Id<"collections"> })
-  )
+
+  const { data: collection, isLoading } = useQuery({
+    ...convexQuery(api.collections.getCollection, { id: collectionId as Id<"collections">, userId: session?.session.userId ?? '' }),
+    enabled: !!session?.session.userId
+  })
 
   return (
     <div className="w-full px-1 sm:px-4">
