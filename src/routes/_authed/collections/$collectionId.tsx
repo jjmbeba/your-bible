@@ -44,6 +44,12 @@ function RouteComponent() {
 
   const userId = session?.session.userId!
 
+  if (verses.length === 0) return (
+    <div className="min-h-[80vh] flex items-center justify-center text-sm text-muted-foreground py-2 sm:py-0 gap-2">
+      <p>No verses found. Add some verses to your collection.</p>
+    </div>
+  );
+
   return (
     <div className="w-full px-1 sm:px-4">
       <div className="p-2 sm:p-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
