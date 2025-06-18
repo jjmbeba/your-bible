@@ -6,12 +6,14 @@ import { useDeleteCollection } from '@/hooks/collections'
 import { cn } from '@/lib/utils'
 import { Id } from 'convex/_generated/dataModel'
 import { useNavigate } from '@tanstack/react-router'
+import { useSession } from '@/lib/auth-client'
 
 type Props = {
     id: Id<'collections'>
 }
 
 const DeleteCollectionButton = ({ id }: Props) => {
+    const { data: session, isPending: isSessionPending } = useSession()
     const { mutate: deleteCollection, isPending } = useDeleteCollection()
 
     return (
@@ -38,10 +40,12 @@ const DeleteCollectionButton = ({ id }: Props) => {
                         variant: 'destructive',
                         size: 'sm'
                     }))} onClick={() => {
+                        if (!session?.session.userId) return;
                         deleteCollection({
-                            id
+                            id,
+                            userId: session?.session.userId
                         })
-                    }} disabled={isPending}>
+                    }} disabled={isPending || isSessionPending}>
                         {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Delete'}
                     </AlertDialogAction>
                 </AlertDialogFooter>
