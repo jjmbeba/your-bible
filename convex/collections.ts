@@ -1,21 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
-
-const validateCollectionAccess = async (
-  ctx: any,
-  collectionId: Id<"collections">,
-  userId: string
-) => {
-  const collection = await ctx.db.get(collectionId);
-  if (!collection) {
-    throw new Error("Collection not found");
-  }
-  if (collection.userId !== userId) {
-    throw new Error("You are not authorized to access this collection");
-  }
-  return collection;
-};
+import { validateCollectionAccess } from "@/lib/convex";
 
 export const get = query({
   args: {

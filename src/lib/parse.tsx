@@ -21,6 +21,7 @@ export function parseBible(content: string) {
             <AddToCollectionDialog
               verseNumber={verseNumber.data}
               verseText=""
+              verseId={element.attribs['data-sid']}
               trigger={
                 <button
                   className={cn(
@@ -40,14 +41,14 @@ export function parseBible(content: string) {
       if (domNode.type === 'tag' && domNode.name === 'p') {
         const element = domNode as Element;
         // Split content by verse numbers
-        const verses = element.children.reduce((acc: { number: string; text: string }[], child) => {
+        const verses = element.children.reduce((acc: { number: string; text: string; id: string }[], child) => {
           if (child.type === 'tag' && child.name === 'span' && child.attribs?.class === 'v') {
             const verseNumber = child.children[0] as Text;
-            acc.push({ number: verseNumber.data, text: '' });
+            acc.push({ number: verseNumber.data, text: '', id: child.attribs['data-sid'] });
           } else if (child.type === 'text') {
             // If acc is empty, create a default verse container
             if (acc.length === 0) {
-              acc.push({ number: '', text: '' });
+              acc.push({ number: '', text: '', id: '' });
             }
             acc[acc.length - 1].text += child.data;
           }
@@ -65,6 +66,7 @@ export function parseBible(content: string) {
                   <AddToCollectionDialog
                     verseNumber={verse.number}
                     verseText={verse.text.trim()}
+                    verseId={verse.id}
                     trigger={
                       <button
                         className={cn(
