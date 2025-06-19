@@ -44,12 +44,6 @@ function RouteComponent() {
 
   const userId = session?.session.userId!
 
-  if (verses.length === 0) return (
-    <div className="min-h-[80vh] flex items-center justify-center text-sm text-muted-foreground py-2 sm:py-0 gap-2">
-      <p>No verses found. Add some verses to your collection.</p>
-    </div>
-  );
-
   return (
     <div className="w-full px-1 sm:px-4">
       <div className="p-2 sm:p-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
@@ -61,15 +55,21 @@ function RouteComponent() {
           </div>
         </>
       </div>
-      <div className="mt-2 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
-        <div className="w-full max-w-3xl">
-          <div className="space-y-6">
-            {verses.map((verse) => (
-              <CollectionVerseCard key={verse._id} verseCollectionId={verse._id} collectionId={collection._id} userId={userId} verseText={verse.verseText} verseId={verse.verseId} />
-            ))}
+      {verses.length > 0 ? (
+        <div className="mt-2 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
+          <div className="w-full max-w-3xl">
+            <div className="space-y-6">
+              {verses.map((verse) => (
+                <CollectionVerseCard key={verse._id} verseCollectionId={verse._id} collectionId={collection._id} userId={userId} verseText={verse.verseText} verseId={verse.verseId} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="min-h-[80vh] flex items-center justify-center text-sm text-muted-foreground py-2 sm:py-0 gap-2">
+          <p>No verses found. Add some verses to your collection.</p>
+        </div>
+      )}
     </div>
   )
 }

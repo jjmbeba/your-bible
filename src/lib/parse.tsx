@@ -1,10 +1,10 @@
+import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
-import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
 
-export function parseBible(content: string) {
+export function parseBible(content: string, highlightSid?: string) {
   return parse(content ?? '', {
     replace: (domNode) => {
       if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
@@ -13,14 +13,17 @@ export function parseBible(content: string) {
         return (
           <div key={element.attribs['data-number']} className="inline-flex items-center gap-1">
             <span
-              className="inline-block font-bold text-primary mr-3"
+              className={cn(
+                'inline-block font-bold text-primary mr-3'
+              )}
               data-number={element.attribs['data-number']}
+              tabIndex={0}
+              aria-label={`Verse ${verseNumber.data}`}
             >
               {verseNumber.data}
             </span>
             <AddToCollectionDialog
-              verseNumber={verseNumber.data}
-              verseText=""
+              verseText={verseNumber.data}
               verseId={element.attribs['data-sid']}
               trigger={
                 <button
@@ -57,33 +60,42 @@ export function parseBible(content: string) {
 
         return (
           <div className="space-y-4">
-            {verses.map((verse, index) => (
-              <p key={index} className="leading-relaxed text-foreground group">
-                <div className="inline-flex items-center gap-1">
-                  <span className="inline-block font-bold text-primary mr-3">
-                    {verse.number}
-                  </span>
-                  <AddToCollectionDialog
-                    verseNumber={verse.number}
-                    verseText={verse.text.trim()}
-                    verseId={verse.id}
-                    trigger={
-                      <button
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                          'h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
-                        )}
-                        aria-label={`Add verse ${verse.number} to collection`}
-                        tabIndex={0}
-                      >
-                        <BookmarkPlus className="h-4 w-4" />
-                      </button>
-                    }
-                  />
-                </div>
-                {verse.text.trim()}
-              </p>
-            ))}
+            {verses.map((verse, index) => {
+              const isHighlighted = highlightSid && verse.id === highlightSid;
+              return (
+                <p
+                  key={index}
+                  className={cn(
+                    'leading-relaxed text-foreground group',
+                    isHighlighted && 'bg-yellow-200 rounded px-1'
+                  )}
+                  id={isHighlighted ? 'highlighted-verse' : undefined}
+                  tabIndex={0}
+                  aria-label={`Verse ${verse.number}${isHighlighted ? ' (selected)' : ''}`}
+                >
+                  <div className="inline-flex items-center gap-1">
+                    <span className="inline-block font-bold text-primary mr-3">
+                      {verse.number}
+                    </span>
+                    <AddToCollectionDialog
+                      verseText={verse.text.trim()}
+                      verseId={verse.id}
+                      trigger={
+                        <Button
+                          variant={'ghost'}
+                          className='size-6 opacity-0 group-hover:opacity-100 transition-opacity'
+                          size={'icon'}
+                          aria-label={`Add verse ${verse.id} to collection`}
+                        >
+                          <BookmarkPlus className="h-4 w-4" />
+                        </Button>
+                      }
+                    />
+                  </div>
+                  {verse.text.trim()}
+                </p>
+              );
+            })}
           </div>
         );
       }
@@ -102,4 +114,11 @@ export const highlightText = (text: string, query: string) => {
       </span>
     ) : part
   );
+};
+
+export const verseParamToDataSid = (verse?: string) => {
+  if (!verse) return '';
+  const parts = verse.split('.');
+  if (parts.length < 3) return '';
+  return `${parts[0]} ${parts[1]}:${parts[2]}`;
 };
