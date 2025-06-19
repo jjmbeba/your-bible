@@ -19,13 +19,12 @@ import {
 import { ScrollArea } from '../ui/scroll-area'
 
 type Props = {
-    verseNumber: string
     verseText: string
     verseId: string
     trigger: React.ReactNode
 }
 
-const AddToCollectionDialog = ({ verseNumber, verseText, verseId, trigger }: Props) => {
+const AddToCollectionDialog = ({ verseText, verseId, trigger }: Props) => {
     const { data: session } = useSession()
     const [loadingCollectionId, setLoadingCollectionId] = useState<string | null>(null)
     const { mutate: addVerseToCollection, isPending: isAddingVerseToCollection } = useAddVerseToCollection()
@@ -60,7 +59,7 @@ const AddToCollectionDialog = ({ verseNumber, verseText, verseId, trigger }: Pro
                 <DialogHeader>
                     <DialogTitle>Add to Collection</DialogTitle>
                     <DialogDescription>
-                        Choose a collection to add verse {verseNumber} to
+                        Choose a collection to add verse {verseId} to
                     </DialogDescription>
                 </DialogHeader>
                 <div className="mt-4">

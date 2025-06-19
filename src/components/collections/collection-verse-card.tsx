@@ -9,7 +9,7 @@ const CollectionVerseCard = ({ verseCollectionId, collectionId, userId, verseTex
             <DeleteVerseColButton verseCollectionId={verseCollectionId} collectionId={collectionId} userId={userId} />
             <div className="flex items-start gap-3">
                 <div className="flex-1">
-                    <p className="text-base sm:text-lg leading-relaxed text-foreground">
+                    <p className="text-base sm:text-lg leading-relaxed text-foreground max-w-2xl">
                         {verseText}
                     </p>
                     <p className="mt-4 text-xs text-muted-foreground">

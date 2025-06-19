@@ -1,7 +1,7 @@
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
 
 export function parseBible(content: string) {
@@ -19,8 +19,7 @@ export function parseBible(content: string) {
               {verseNumber.data}
             </span>
             <AddToCollectionDialog
-              verseNumber={verseNumber.data}
-              verseText=""
+              verseText={verseNumber.data}
               verseId={element.attribs['data-sid']}
               trigger={
                 <button
@@ -63,23 +62,20 @@ export function parseBible(content: string) {
                   <span className="inline-block font-bold text-primary mr-3">
                     {verse.number}
                   </span>
-                  <AddToCollectionDialog
-                    verseNumber={verse.number}
-                    verseText={verse.text.trim()}
-                    verseId={verse.id}
-                    trigger={
-                      <button
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                          'h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
-                        )}
-                        aria-label={`Add verse ${verse.number} to collection`}
-                        tabIndex={0}
-                      >
-                        <BookmarkPlus className="h-4 w-4" />
-                      </button>
-                    }
-                  />
+                    <AddToCollectionDialog
+                      verseText={verse.text.trim()}
+                      verseId={verse.id}
+                      trigger={
+                        <Button
+                          variant={'ghost'}
+                          className='size-6 opacity-0 group-hover:opacity-100 transition-opacity'
+                          size={'icon'}
+                          aria-label={`Add verse ${verse.id} to collection`}
+                        >
+                          <BookmarkPlus className="h-4 w-4" />
+                        </Button>
+                      }
+                    />
                 </div>
                 {verse.text.trim()}
               </p>
