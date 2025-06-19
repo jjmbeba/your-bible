@@ -1,5 +1,6 @@
 import { highlightText } from '@/lib/parse'
 import { SearchVerse } from '@/types/responses'
+import { Link } from '@tanstack/react-router'
 import { BookmarkPlus } from 'lucide-react'
 import AddToCollectionDialog from '../bible/add-to-collection-dialog'
 import { Button } from '../ui/button'
@@ -17,9 +18,11 @@ const SearchVerseCard = ({ verse, query }: VerseCardProps) => {
             <div className="flex items-start gap-2 sm:gap-3">
                 <div className="flex-1">
                     <div className='flex items-center justify-between gap-2 group'>
-                        <h2 className="text-base sm:text-lg font-semibold text-primary mb-1 sm:mb-2">
-                            {verse.reference}
-                        </h2>
+                        <Link className={'hover:underline'} to={'/bible'} search={{ bible: verse.bibleId, chapter: verse.chapterId, verse: verse.id }}>
+                            <h2 className="text-base sm:text-lg font-semibold text-primary mb-1 sm:mb-2">
+                                {verse.reference}
+                            </h2>
+                        </Link>
                         <AddToCollectionDialog
                             verseText={verse.text.trim()}
                             verseId={verse.id}

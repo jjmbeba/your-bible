@@ -1,11 +1,12 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
 import { buttonVariants } from '@/components/ui/button'
-import { parseBible } from '@/lib/parse'
+import { parseBible, verseParamToDataSid } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ChevronLeftIcon, ChevronRightIcon, Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
 import { z } from 'zod'
 
 export const Route = createFileRoute('/bible')({
@@ -14,12 +15,27 @@ export const Route = createFileRoute('/bible')({
     book: z.string().optional(),
     chapter: z.string().optional(),
     bible: z.string().optional(),
+    verse: z.string().optional(),
   })
 })
 
 function RouteComponent() {
-  const { chapter, bible } = Route.useSearch()
+  const { chapter, bible, verse } = Route.useSearch()
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
+
+  const highlightSid = verseParamToDataSid(verse)
+
+  useEffect(() => {
+    if (highlightSid) {
+      const el = document.getElementById('highlighted-verse')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        el.focus({ preventScroll: true })
+      }
+    }
+  }, [highlightSid, chapterData?.content])
+
+  console.log(chapterData?.content)
 
   return (
     <div className="w-full px-2 sm:px-4">
@@ -55,7 +71,7 @@ function RouteComponent() {
             </Link>
           </div>}
           <div className="mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20">
-            {bible && chapter ? parseBible(chapterData?.content ?? '') : <div className='flex items-center justify-center h-full text-center'>
+            {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid) : <div className='flex items-center justify-center h-full text-center'>
               Select a Bible and Chapter to view the content
             </div>}
           </div>

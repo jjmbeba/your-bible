@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
 
-export function parseBible(content: string) {
+export function parseBible(content: string, highlightSid?: string) {
   return parse(content ?? '', {
     replace: (domNode) => {
       if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
@@ -13,8 +13,12 @@ export function parseBible(content: string) {
         return (
           <div key={element.attribs['data-number']} className="inline-flex items-center gap-1">
             <span
-              className="inline-block font-bold text-primary mr-3"
+              className={cn(
+                'inline-block font-bold text-primary mr-3'
+              )}
               data-number={element.attribs['data-number']}
+              tabIndex={0}
+              aria-label={`Verse ${verseNumber.data}`}
             >
               {verseNumber.data}
             </span>
@@ -56,12 +60,23 @@ export function parseBible(content: string) {
 
         return (
           <div className="space-y-4">
-            {verses.map((verse, index) => (
-              <p key={index} className="leading-relaxed text-foreground group">
-                <div className="inline-flex items-center gap-1">
-                  <span className="inline-block font-bold text-primary mr-3">
-                    {verse.number}
-                  </span>
+            {verses.map((verse, index) => {
+              const isHighlighted = highlightSid && verse.id === highlightSid;
+              return (
+                <p
+                  key={index}
+                  className={cn(
+                    'leading-relaxed text-foreground group',
+                    isHighlighted && 'bg-yellow-200 rounded px-1'
+                  )}
+                  id={isHighlighted ? 'highlighted-verse' : undefined}
+                  tabIndex={0}
+                  aria-label={`Verse ${verse.number}${isHighlighted ? ' (selected)' : ''}`}
+                >
+                  <div className="inline-flex items-center gap-1">
+                    <span className="inline-block font-bold text-primary mr-3">
+                      {verse.number}
+                    </span>
                     <AddToCollectionDialog
                       verseText={verse.text.trim()}
                       verseId={verse.id}
@@ -76,10 +91,11 @@ export function parseBible(content: string) {
                         </Button>
                       }
                     />
-                </div>
-                {verse.text.trim()}
-              </p>
-            ))}
+                  </div>
+                  {verse.text.trim()}
+                </p>
+              );
+            })}
           </div>
         );
       }
@@ -98,4 +114,11 @@ export const highlightText = (text: string, query: string) => {
       </span>
     ) : part
   );
+};
+
+export const verseParamToDataSid = (verse?: string) => {
+  if (!verse) return '';
+  const parts = verse.split('.');
+  if (parts.length < 3) return '';
+  return `${parts[0]} ${parts[1]}:${parts[2]}`;
 };
