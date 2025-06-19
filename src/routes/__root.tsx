@@ -8,13 +8,15 @@ import {
 } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
 
+import { fetchSession } from '@/actions/auth';
 import Header from '@/components/header';
+import DefaultSkeleton from '@/components/skeletons/default-skeleton';
 import appCss from "@/styles/app.css?url";
 import { type ConvexQueryClient } from '@convex-dev/react-query';
 import { QueryClient } from '@tanstack/react-query';
+import { useRouterState } from '@tanstack/react-router';
 import { ConvexProvider, type ConvexReactClient } from 'convex/react';
 import { Toaster } from 'sonner';
-import { fetchSession } from '@/actions/auth';
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient,
@@ -56,11 +58,11 @@ export const Route = createRootRouteWithContext<{
 
         const session = await fetchSession()
         queryClient.setQueryData(sessionKey, session)
-        
+
         return {
             session: session?.session
         }
-    }
+    },
 })
 
 function RootComponent() {
@@ -68,10 +70,14 @@ function RootComponent() {
         from: Route.id
     })
 
+    const isFetching = useRouterState({
+        select: (s) => s.status === 'pending',
+    });
+
     return (
         <ConvexProvider client={context.convexClient}>
             <RootDocument>
-                <Outlet />
+                {isFetching ? <DefaultSkeleton/> : <Outlet />}
             </RootDocument>
         </ConvexProvider>
     )
