@@ -8,6 +8,8 @@ export const addVerseToCollection = mutation({
         collectionId: v.id("collections"),
         userId: v.string(),
         verseText: v.string(),
+        chapterId: v.string(),
+        bibleId: v.string(),
     },
     handler: async (ctx, args) => {
         await validateCollectionAccess(ctx, args.collectionId, args.userId);
@@ -16,6 +18,8 @@ export const addVerseToCollection = mutation({
             verseId: args.verseId,
             verseText: args.verseText,
             collectionId: args.collectionId,
+            chapterId: args.chapterId,
+            bibleId: args.bibleId,
         });
     }
 });

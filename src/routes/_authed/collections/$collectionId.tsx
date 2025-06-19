@@ -60,7 +60,7 @@ function RouteComponent() {
           <div className="w-full max-w-3xl">
             <div className="space-y-6">
               {verses.map((verse) => (
-                <CollectionVerseCard key={verse._id} verseCollectionId={verse._id} collectionId={collection._id} userId={userId} verseText={verse.verseText} verseId={verse.verseId} />
+                <CollectionVerseCard key={verse._id} {...verse} userId={userId} />
               ))}
             </div>
           </div>

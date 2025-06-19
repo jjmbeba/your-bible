@@ -11,6 +11,7 @@ type VerseCardProps = {
 }
 
 const SearchVerseCard = ({ verse, query }: VerseCardProps) => {
+    console.log(verse)
     return (
         <div
             className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
@@ -26,6 +27,8 @@ const SearchVerseCard = ({ verse, query }: VerseCardProps) => {
                         <AddToCollectionDialog
                             verseText={verse.text.trim()}
                             verseId={verse.id}
+                            chapterId={verse.chapterId}
+                            bibleId={verse.bibleId}
                             trigger={
                                 <Button
                                     variant={'ghost'}
