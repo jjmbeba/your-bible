@@ -54,11 +54,9 @@ const Header = () => {
                 ))}
                 <UserButton />
             </nav>
-
-            {/* Mobile Navigation */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild className="sm:hidden">
-                    <Button variant="ghost" size="icon" className="sm:hidden">
+                    <Button variant="outline" size="icon" className="sm:hidden">
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">Toggle menu</span>
                     </Button>
