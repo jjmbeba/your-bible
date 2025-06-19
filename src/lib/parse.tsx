@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
 
-export function parseBible(content: string, highlightSid?: string) {
+export function parseBible(content: string, highlightSid?: string, bibleId?: string, chapterId?: string) {
   return parse(content ?? '', {
     replace: (domNode) => {
       if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
@@ -25,6 +25,8 @@ export function parseBible(content: string, highlightSid?: string) {
             <AddToCollectionDialog
               verseText={verseNumber.data}
               verseId={element.attribs['data-sid']}
+              chapterId={element.attribs['data-chapter']}
+              bibleId={element.attribs['data-bible']}
               trigger={
                 <button
                   className={cn(
@@ -62,6 +64,7 @@ export function parseBible(content: string, highlightSid?: string) {
           <div className="space-y-4">
             {verses.map((verse, index) => {
               const isHighlighted = highlightSid && verse.id === highlightSid;
+
               return (
                 <p
                   key={index}
@@ -78,6 +81,8 @@ export function parseBible(content: string, highlightSid?: string) {
                       {verse.number}
                     </span>
                     <AddToCollectionDialog
+                      chapterId={chapterId ?? ''}
+                      bibleId={bibleId ?? ''}
                       verseText={verse.text.trim()}
                       verseId={verse.id}
                       trigger={
