@@ -1,9 +1,8 @@
 import { highlightText } from '@/lib/parse'
 import { SearchVerse } from '@/types/responses'
-import React from 'react'
+import { BookmarkPlus } from 'lucide-react'
 import AddToCollectionDialog from '../bible/add-to-collection-dialog'
 import { Button } from '../ui/button'
-import { BookmarkPlus } from 'lucide-react'
 
 type VerseCardProps = {
     verse: SearchVerse,

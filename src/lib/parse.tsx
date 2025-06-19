@@ -1,8 +1,8 @@
+import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button, buttonVariants } from '@/components/ui/button';
-import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
 
 export function parseBible(content: string) {
   return parse(content ?? '', {
