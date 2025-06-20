@@ -1,7 +1,7 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
 import { buttonVariants } from '@/components/ui/button'
-import { parseBible, verseParamToDataSid } from '@/lib/parse'
+import { parseBible, verseParamToDataSid, Note } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -24,6 +24,19 @@ function RouteComponent() {
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
 
   const highlightSid = verseParamToDataSid(verse)
+
+  // Mock notes data for UI testing
+  const mockNotes: Note[] = [
+    { verseId: 'GEN.1.3' },
+    { verseId: 'GEN.1.5' },
+    // Add more as needed for testing
+  ]
+
+  const handleNoteClick = (verseId: string) => {
+    // No-op for now, will open note editor in future
+    // eslint-disable-next-line no-console
+    console.log('Open note editor for verse', verseId)
+  }
 
   useEffect(() => {
     if (highlightSid) {
@@ -69,7 +82,7 @@ function RouteComponent() {
             </Link>
           </div>}
           <div className="mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20">
-            {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid, bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
+            {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid, bible, chapter, mockNotes, handleNoteClick) : <div className='flex items-center justify-center h-full text-center'>
               Select a Bible and Chapter to view the content
             </div>}
           </div>

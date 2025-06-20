@@ -2,9 +2,21 @@ import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
-import { BookmarkPlus } from 'lucide-react';
+import { BookmarkPlus, NotebookText } from 'lucide-react';
 
-export function parseBible(content: string, highlightSid?: string, bibleId?: string, chapterId?: string) {
+export type Note = {
+  verseId: string;
+  // Optionally add more fields as needed (noteId, content, etc.)
+};
+
+export function parseBible(
+  content: string,
+  highlightSid?: string,
+  bibleId?: string,
+  chapterId?: string,
+  notes: Note[] = [],
+  onNoteClick?: (verseId: string) => void
+) {
   return parse(content ?? '', {
     replace: (domNode) => {
       if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
@@ -51,7 +63,6 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
             const verseNumber = child.children[0] as Text;
             acc.push({ number: verseNumber.data, text: '', id: child.attribs['data-sid'] });
           } else if (child.type === 'text') {
-            // If acc is empty, create a default verse container
             if (acc.length === 0) {
               acc.push({ number: '', text: '', id: '' });
             }
@@ -64,22 +75,39 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
           <div className="space-y-4">
             {verses.map((verse, index) => {
               const isHighlighted = highlightSid && verse.id === highlightSid;
+              const hasNote = notes.some((note) => note.verseId === verse.id);
+
+              // Accessibility handlers for note
+              const handleClick = () => {
+                if (hasNote && onNoteClick) onNoteClick(verse.id);
+              };
+              const handleKeyDown = (e: React.KeyboardEvent) => {
+                if ((e.key === 'Enter' || e.key === ' ') && hasNote && onNoteClick) {
+                  e.preventDefault();
+                  onNoteClick(verse.id);
+                }
+              };
 
               return (
                 <p
                   key={index}
                   className={cn(
                     'leading-relaxed text-foreground group',
-                    isHighlighted && 'bg-yellow-200 rounded px-1'
+                    isHighlighted && 'bg-yellow-200 rounded px-1',
+                    hasNote && 'bg-yellow-100/80 rounded px-1 cursor-pointer transition',
                   )}
                   id={isHighlighted ? 'highlighted-verse' : undefined}
-                  tabIndex={0}
-                  aria-label={`Verse ${verse.number}${isHighlighted ? ' (selected)' : ''}`}
+                  tabIndex={hasNote ? 0 : undefined}
+                  aria-label={`Verse ${verse.number}${hasNote ? ' (note attached)' : ''}${isHighlighted ? ' (selected)' : ''}`}
+                  onClick={hasNote ? handleClick : undefined}
+                  onKeyDown={hasNote ? handleKeyDown : undefined}
+                  role={hasNote ? 'button' : undefined}
                 >
-                  <div className="inline-flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1">
                     <span className="inline-block font-bold text-primary mr-3">
                       {verse.number}
                     </span>
+                    {/* Add to Collection always visible */}
                     <AddToCollectionDialog
                       chapterId={chapterId ?? ''}
                       bibleId={bibleId ?? ''}
@@ -96,7 +124,18 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
                         </Button>
                       }
                     />
-                  </div>
+                    {/* Note indicator if note exists */}
+                    {hasNote && (
+                      <span
+                        className="inline-flex items-center group-hover:text-blue-500 text-gray-500 h-4 w-4 ml-1"
+                        tabIndex={-1}
+                        aria-label="View Note"
+                        title="View Note"
+                      >
+                        <NotebookText className="h-4 w-4" />
+                      </span>
+                    )}
+                  </span>
                   {verse.text.trim()}
                 </p>
               );
