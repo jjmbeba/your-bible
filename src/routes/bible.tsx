@@ -1,12 +1,12 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
-import { buttonVariants } from '@/components/ui/button'
-import { parseBible, verseParamToDataSid, Note } from '@/lib/parse'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { parseBible, verseParamToDataSid } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ChevronLeftIcon, ChevronRightIcon, Loader2 } from 'lucide-react'
-import { useEffect } from 'react'
+import { ChevronLeftIcon, ChevronRightIcon, Loader2, NotebookTextIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 
 export const Route = createFileRoute('/bible')({
@@ -22,21 +22,9 @@ export const Route = createFileRoute('/bible')({
 function RouteComponent() {
   const { chapter, bible, verse } = Route.useSearch()
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
-
   const highlightSid = verseParamToDataSid(verse)
 
-  // Mock notes data for UI testing
-  const mockNotes: Note[] = [
-    { verseId: 'GEN.1.3' },
-    { verseId: 'GEN.1.5' },
-    // Add more as needed for testing
-  ]
-
-  const handleNoteClick = (verseId: string) => {
-    // No-op for now, will open note editor in future
-    // eslint-disable-next-line no-console
-    console.log('Open note editor for verse', verseId)
-  }
+  const [openNotes, setOpenNotes] = useState(true)
 
   useEffect(() => {
     if (highlightSid) {
@@ -55,8 +43,16 @@ function RouteComponent() {
         <BibleSelector value={bible} />
       </div>
       <div className="mt-4 sm:mt-6 p-2 sm:p-4 w-full flex items-center justify-center">
-        {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className="w-full max-w-3xl">
+        {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className={cn("w-full", {
+          'max-w-3xl': !openNotes,
+        })}>
+         <div className="flex items-center justify-between">
           <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{chapterData?.reference}</h1>
+          <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
+            <NotebookTextIcon className="size-4" />
+            {openNotes ? 'Close Notes' : 'Open Notes'}
+          </Button>
+         </div>
           {chapterData && <div className="flex justify-end items-center gap-2 sm:gap-4">
             <Link className={cn(buttonVariants({
               variant: 'outline',
@@ -81,10 +77,23 @@ function RouteComponent() {
               <ChevronRightIcon className="size-4" />
             </Link>
           </div>}
-          <div className="mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20">
-            {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid, bible, chapter, mockNotes, handleNoteClick) : <div className='flex items-center justify-center h-full text-center'>
-              Select a Bible and Chapter to view the content
-            </div>}
+          <div className={cn("mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out", {
+            'flex items-start justify-between *:w-1/2 gap-10': openNotes,
+          })}>
+            <div className={cn("transition-all duration-500 ease-in-out", {
+              'w-full': !openNotes,
+              'w-1/2': openNotes,
+            })}>
+              {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid, bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
+                Select a Bible and Chapter to view the content
+              </div>}
+            </div>
+            <div className={cn("transition-all duration-500 ease-in-out overflow-hidden", {
+              'w-1/2 opacity-100 max-h-screen': openNotes,
+              'w-0 opacity-0 max-h-0': !openNotes,
+            })}>
+              <h1>Notes here</h1>
+            </div>
           </div>
         </div>}
       </div>
