@@ -13,4 +13,9 @@ export default defineSchema({
     verseText: v.string(),
     collectionId: v.id("collections"),
   }).index("by_collection_id", ["collectionId"]),
+  notes: defineTable({
+    chapterId: v.string(),
+    content: v.string(),
+    userId: v.string(),
+  }).index("by_chapter_id", ["chapterId"]),
 });

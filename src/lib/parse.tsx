@@ -4,7 +4,12 @@ import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
 import { BookmarkPlus } from 'lucide-react';
 
-export function parseBible(content: string, highlightSid?: string, bibleId?: string, chapterId?: string) {
+export function parseBible(
+  content: string,
+  highlightSid?: string,
+  bibleId?: string,
+  chapterId?: string,
+) {
   return parse(content ?? '', {
     replace: (domNode) => {
       if (domNode.type === 'tag' && domNode.name === 'span' && domNode.attribs?.class?.split(' ').includes('v')) {
@@ -51,7 +56,6 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
             const verseNumber = child.children[0] as Text;
             acc.push({ number: verseNumber.data, text: '', id: child.attribs['data-sid'] });
           } else if (child.type === 'text') {
-            // If acc is empty, create a default verse container
             if (acc.length === 0) {
               acc.push({ number: '', text: '', id: '' });
             }
@@ -70,16 +74,17 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
                   key={index}
                   className={cn(
                     'leading-relaxed text-foreground group',
-                    isHighlighted && 'bg-yellow-200 rounded px-1'
+                    isHighlighted && 'bg-yellow-200 rounded px-1',
                   )}
                   id={isHighlighted ? 'highlighted-verse' : undefined}
                   tabIndex={0}
                   aria-label={`Verse ${verse.number}${isHighlighted ? ' (selected)' : ''}`}
                 >
-                  <div className="inline-flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1">
                     <span className="inline-block font-bold text-primary mr-3">
                       {verse.number}
                     </span>
+                    {/* Add to Collection always visible */}
                     <AddToCollectionDialog
                       chapterId={chapterId ?? ''}
                       bibleId={bibleId ?? ''}
@@ -96,7 +101,7 @@ export function parseBible(content: string, highlightSid?: string, bibleId?: str
                         </Button>
                       }
                     />
-                  </div>
+                  </span>
                   {verse.text.trim()}
                 </p>
               );
