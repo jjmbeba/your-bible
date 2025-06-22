@@ -1,5 +1,6 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
+import NoteViewer from '@/components/bible/note-viewer'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { parseBible, verseParamToDataSid } from '@/lib/parse'
 import { cn } from '@/lib/utils'
@@ -46,8 +47,8 @@ function RouteComponent() {
         {isLoadingChapter ? <Loader2 className="size-4 animate-spin" /> : <div className={cn("w-full", {
           'max-w-3xl': !openNotes,
         })}>
-         <div className="flex items-center justify-between">
-          <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{chapterData?.reference}</h1>
+         <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold">{chapterData?.reference}</h1>
           <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
             <NotebookTextIcon className="size-4" />
             {openNotes ? 'Close Notes' : 'Open Notes'}
@@ -92,7 +93,7 @@ function RouteComponent() {
               'w-1/2 opacity-100 max-h-screen': openNotes,
               'w-0 opacity-0 max-h-0': !openNotes,
             })}>
-              <h1>Notes here</h1>
+              <NoteViewer chapterId={chapterData?.id ?? ''} />
             </div>
           </div>
         </div>}
