@@ -1,4 +1,4 @@
-import { useCreateNote } from '@/hooks/notes'
+import { useCreateNote, useUpdateNote } from '@/hooks/notes'
 import { createNoteSchema } from '@/schemas/notes'
 import { useForm } from '@tanstack/react-form'
 import { Id } from 'convex/_generated/dataModel'
@@ -22,6 +22,7 @@ type NotesFormProps = {
 const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
     const { data: session } = useSession()
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
+    const { mutate: updateNote, isPending: isUpdating } = useUpdateNote()
 
     const form = useForm({
         defaultValues: defaultValues ?? {
@@ -34,7 +35,11 @@ const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
         onSubmit: ({ value }) => {
             if (!session?.session.userId) return;
             if (defaultValues) {
-                console.log('update', value)
+                updateNote({
+                    id: defaultValues._id,
+                    content: value.content,
+                    userId: session.session.userId,
+                })
             } else {
                 createNote({
                     chapterId,
@@ -77,7 +82,7 @@ const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
                 children={([canSubmit, isSubmitting]) => (
                     <div className="mt-6 flex justify-end gap-2">
                         <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Clear</Button>
-                        <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
+                        <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating || isUpdating}>{isSubmitting || isCreating || isUpdating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
                     </div>
                 )}
             />

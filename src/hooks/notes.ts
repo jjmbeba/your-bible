@@ -14,3 +14,15 @@ export const useCreateNote = () => {
         },
     })
 }
+
+export const useUpdateNote = () => {
+    return useMutation({
+        mutationFn: useConvexMutation(api.notes.updateNote),
+        onSuccess: () => {
+            toast.success('Note updated successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        },
+    })
+}

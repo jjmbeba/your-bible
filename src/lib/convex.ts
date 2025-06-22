@@ -15,3 +15,21 @@ export const validateCollectionAccess = async (
     }
     return collection;
   };
+
+  export const validateNoteAccess = async (
+    ctx: QueryCtx,
+    noteId: Id<"notes">,
+    userId: string
+  ) => {
+    const note = await ctx.db.get(noteId);
+
+    if (!note) {
+        throw new Error("Note not found");
+    }
+
+    if (note.userId !== userId) {
+        throw new Error("You are not authorized to access this note");
+    }
+
+    return note;
+  }
