@@ -1,18 +1,28 @@
-import { createNoteSchema, noteSchema } from '@/schemas/notes'
+import { useCreateNote } from '@/hooks/notes'
+import { createNoteSchema } from '@/schemas/notes'
 import { useForm } from '@tanstack/react-form'
+import { Id } from 'convex/_generated/dataModel'
 import { Loader2 } from 'lucide-react'
-import { z } from 'zod'
 import { Button } from '../ui/button'
-import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
+import { useSession } from '@/lib/auth-client'
 
 type NotesFormProps = {
-    defaultValues?: z.infer<typeof noteSchema>,
+    defaultValues?: {
+        _id: Id<"notes">;
+        _creationTime: number;
+        chapterId: string;
+        content: string;
+        userId: string;
+    },
     chapterId: string
 }
 
 const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
+    const { data: session } = useSession()
+    const { mutate: createNote, isPending: isCreating } = useCreateNote()
+
     const form = useForm({
         defaultValues: defaultValues ?? {
             chapterId,
@@ -22,7 +32,16 @@ const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
             onSubmit: createNoteSchema,
         },
         onSubmit: ({ value }) => {
-            console.log(value)
+            if (!session?.session.userId) return;
+            if (defaultValues) {
+                console.log('update', value)
+            } else {
+                createNote({
+                    chapterId,
+                    content: value.content,
+                    userId: session.session.userId,
+                })
+            }
         },
     })
 
@@ -58,7 +77,7 @@ const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
                 children={([canSubmit, isSubmitting]) => (
                     <div className="mt-6 flex justify-end gap-2">
                         <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Clear</Button>
-                        <Button type="submit" disabled={!canSubmit || isSubmitting}>{isSubmitting ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
+                        <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating}>{isSubmitting || isCreating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
                     </div>
                 )}
             />

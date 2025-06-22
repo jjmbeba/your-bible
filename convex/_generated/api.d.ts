@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as collections from "../collections.js";
+import type * as notes from "../notes.js";
 import type * as verseCollections from "../verseCollections.js";
 
 /**
@@ -26,6 +27,7 @@ import type * as verseCollections from "../verseCollections.js";
  */
 declare const fullApi: ApiFromModules<{
   collections: typeof collections;
+  notes: typeof notes;
   verseCollections: typeof verseCollections;
 }>;
 export declare const api: FilterApi<
