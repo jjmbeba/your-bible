@@ -54,35 +54,61 @@ const NotesForm = ({ defaultValues, chapterId }: NotesFormProps) => {
         <form onSubmit={(e) => {
             e.preventDefault()
             form.handleSubmit()
-        }}>
-            <div className="grid gap-2">
-                <Label htmlFor="content">Content</Label>
-                <form.Field
-                    name="content"
-                    children={(field) => (
-                        <>
-                            <Textarea
-                                id="content"
-                                placeholder="Note Content"
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                            />
-                            {field.state.meta.errors.map((error, i) => (
-                                <div key={i} className="text-red-500 text-sm">
-                                    {error?.message}
-                                </div>
-                            ))}
-                        </>
-                    )}
-                />
+        }} className="h-full flex flex-col">
+            <div className="grid gap-3 sm:gap-4 flex-1">
+                <div className="space-y-2">
+                    <Label htmlFor="content" className="text-sm sm:text-base font-medium">Content</Label>
+                    <form.Field
+                        name="content"
+                        children={(field) => (
+                            <div className="space-y-2">
+                                <Textarea
+                                    id="content"
+                                    placeholder="Enter your notes here..."
+                                    value={field.state.value}
+                                    onBlur={field.handleBlur}
+                                    onChange={(e) => field.handleChange(e.target.value)}
+                                    className="min-h-[120px] sm:min-h-[150px] resize-none text-sm sm:text-base"
+                                />
+                                {field.state.meta.errors.map((error, i) => (
+                                    <div key={i} className="text-red-500 text-xs sm:text-sm">
+                                        {error?.message}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    />
+                </div>
             </div>
             <form.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
-                    <div className="mt-6 flex justify-end gap-2">
-                        <Button type="button" variant="outline" disabled={isSubmitting} onClick={() => form.reset()}>Clear</Button>
-                        <Button type="submit" disabled={!canSubmit || isSubmitting || isCreating || isUpdating}>{isSubmitting || isCreating || isUpdating ? <Loader2 className="animate-spin" /> : 'Save'}</Button>
+                    <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 border-t">
+                        <Button 
+                            type="button" 
+                            variant="outline" 
+                            disabled={isSubmitting} 
+                            onClick={() => form.reset()}
+                            size='sm' 
+                            className="order-2 sm:order-1"
+                        >
+                            Clear
+                        </Button>
+                        <Button 
+                            type="submit" 
+                            disabled={!canSubmit || isSubmitting || isCreating || isUpdating}
+                            size='sm'
+                            className="order-1 sm:order-2"
+                        >
+                            {isSubmitting || isCreating || isUpdating ? (
+                                <>
+                                    <Loader2 className="animate-spin size-4 mr-2" />
+                                    Saving...
+                                </>
+                            ) : (
+                                'Save Note'
+                            )}
+                        </Button>
                     </div>
                 )}
             />
