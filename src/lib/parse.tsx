@@ -2,20 +2,13 @@ import AddToCollectionDialog from '@/components/bible/add-to-collection-dialog';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import parse, { Element, Text } from 'html-react-parser';
-import { BookmarkPlus, NotebookText } from 'lucide-react';
-
-export type Note = {
-  verseId: string;
-  // Optionally add more fields as needed (noteId, content, etc.)
-};
+import { BookmarkPlus } from 'lucide-react';
 
 export function parseBible(
   content: string,
   highlightSid?: string,
   bibleId?: string,
   chapterId?: string,
-  notes: Note[] = [],
-  onNoteClick?: (verseId: string) => void
 ) {
   return parse(content ?? '', {
     replace: (domNode) => {
@@ -75,18 +68,6 @@ export function parseBible(
           <div className="space-y-4">
             {verses.map((verse, index) => {
               const isHighlighted = highlightSid && verse.id === highlightSid;
-              const hasNote = notes.some((note) => note.verseId === verse.id);
-
-              // Accessibility handlers for note
-              const handleClick = () => {
-                if (hasNote && onNoteClick) onNoteClick(verse.id);
-              };
-              const handleKeyDown = (e: React.KeyboardEvent) => {
-                if ((e.key === 'Enter' || e.key === ' ') && hasNote && onNoteClick) {
-                  e.preventDefault();
-                  onNoteClick(verse.id);
-                }
-              };
 
               return (
                 <p
@@ -94,14 +75,10 @@ export function parseBible(
                   className={cn(
                     'leading-relaxed text-foreground group',
                     isHighlighted && 'bg-yellow-200 rounded px-1',
-                    hasNote && 'bg-yellow-100/80 rounded px-1 cursor-pointer transition',
                   )}
                   id={isHighlighted ? 'highlighted-verse' : undefined}
-                  tabIndex={hasNote ? 0 : undefined}
-                  aria-label={`Verse ${verse.number}${hasNote ? ' (note attached)' : ''}${isHighlighted ? ' (selected)' : ''}`}
-                  onClick={hasNote ? handleClick : undefined}
-                  onKeyDown={hasNote ? handleKeyDown : undefined}
-                  role={hasNote ? 'button' : undefined}
+                  tabIndex={0}
+                  aria-label={`Verse ${verse.number}${isHighlighted ? ' (selected)' : ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
                     <span className="inline-block font-bold text-primary mr-3">
@@ -124,17 +101,6 @@ export function parseBible(
                         </Button>
                       }
                     />
-                    {/* Note indicator if note exists */}
-                    {hasNote && (
-                      <span
-                        className="inline-flex items-center group-hover:text-blue-500 text-gray-500 h-4 w-4 ml-1"
-                        tabIndex={-1}
-                        aria-label="View Note"
-                        title="View Note"
-                      >
-                        <NotebookText className="h-4 w-4" />
-                      </span>
-                    )}
                   </span>
                   {verse.text.trim()}
                 </p>
