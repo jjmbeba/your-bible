@@ -9,7 +9,8 @@ import { convexQuery } from '@convex-dev/react-query';
 import { useForm } from '@tanstack/react-form';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
-import { HighlighterIcon, Loader2 } from 'lucide-react';
+import { BoldIcon, HighlighterIcon, ItalicIcon, Loader2, QuoteIcon, UnderlineIcon } from 'lucide-react';
+import { KEYS } from 'platejs';
 import { Plate } from 'platejs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -18,7 +19,6 @@ import { Editor, EditorContainer } from '../ui/editor';
 import { LinkToolbarButton } from '../ui/link-toolbar-button';
 import { BulletedListToolbarButton, NumberedListToolbarButton, TodoListToolbarButton } from '../ui/list-toolbar-button';
 import { MediaToolbarButton } from '../ui/media-toolbar-button';
-import { KEYS } from 'platejs';
 
 type NoteEditorProps = {
     chapterId: string,
@@ -80,20 +80,36 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                         field.handleChange(JSON.stringify(e.value))
                     }}>
                         <FixedToolbar className="justify-start rounded-t-lg">
-                            <ToolbarButton onClick={() => editor.tf.h1.toggle()}>H1</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.h2.toggle()}>H2</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.h3.toggle()}>H3</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>Quote</ToolbarButton>
-                            <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">B</MarkToolbarButton>
-                            <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">I</MarkToolbarButton>
-                            <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">U</MarkToolbarButton>
-                            <LinkToolbarButton />
-                            <BulletedListToolbarButton />
-                            <NumberedListToolbarButton />
-                            <TodoListToolbarButton />
-                            <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
-                                <HighlighterIcon />
-                            </MarkToolbarButton>
+                            <ToolbarGroup>
+                                <ToolbarButton onClick={() => editor.tf.h1.toggle()}>H1</ToolbarButton>
+                                <ToolbarButton onClick={() => editor.tf.h2.toggle()}>H2</ToolbarButton>
+                                <ToolbarButton onClick={() => editor.tf.h3.toggle()}>H3</ToolbarButton>
+                            </ToolbarGroup>
+                            <ToolbarGroup>
+                                <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">
+                                    <BoldIcon />
+                                </MarkToolbarButton>
+                                <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">
+                                    <ItalicIcon />
+                                </MarkToolbarButton>
+                                <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">
+                                    <UnderlineIcon />
+                                </MarkToolbarButton>
+                            </ToolbarGroup>
+                            <ToolbarGroup>
+                                <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
+                                    <QuoteIcon />
+                                </ToolbarButton>
+                                <LinkToolbarButton />
+                                <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
+                                    <HighlighterIcon />
+                                </MarkToolbarButton>
+                            </ToolbarGroup>
+                            <ToolbarGroup>
+                                <BulletedListToolbarButton />
+                                <NumberedListToolbarButton />
+                                <TodoListToolbarButton />
+                            </ToolbarGroup>
                             <ToolbarGroup>
                                 <MediaToolbarButton nodeType={KEYS.img} />
                                 <MediaToolbarButton nodeType={KEYS.video} />
