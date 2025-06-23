@@ -10,6 +10,7 @@ import { ToolbarButton, ToolbarGroup } from '../ui/toolbar';
 import { MarkToolbarButton } from '../ui/mark-toolbar-button';
 import type { Editor } from 'platejs';
 import { TurnIntoToolbarButton } from '../ui/turn-into-toolbar-button';
+import { RedoToolbarButton, UndoToolbarButton } from '../ui/history-toolbar-button';
 
 type Props = {
     editor: Editor
@@ -18,6 +19,10 @@ type Props = {
 const NoteEditorToolbar = ({ editor }: Props) => {
     return (
         <FixedToolbar className="justify-start rounded-t-lg">
+            <ToolbarGroup>
+            <UndoToolbarButton />
+            <RedoToolbarButton />
+          </ToolbarGroup>
             <ToolbarGroup>
                 <TurnIntoToolbarButton />
             </ToolbarGroup>
