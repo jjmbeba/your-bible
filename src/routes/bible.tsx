@@ -27,7 +27,7 @@ function RouteComponent() {
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
   const highlightSid = verseParamToDataSid(verse)
 
-  const [openNotes, setOpenNotes] = useState(true)
+  const [openNotes, setOpenNotes] = useState(false)
   const isMobile = useIsMobile()
 
   useEffect(() => {
@@ -52,10 +52,10 @@ function RouteComponent() {
         })}>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl font-bold">{chapterData?.reference}</h1>
-            <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
+           {bible && chapter && <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
               <NotebookTextIcon className="size-4" />
               {openNotes ? 'Close Notes' : 'Open Notes'}
-            </Button>
+            </Button>}
           </div>
           {chapterData && <div className="flex justify-end items-center gap-2 sm:gap-4">
             {isMobile && (
@@ -103,7 +103,7 @@ function RouteComponent() {
               'hidden w-0 sm:block sm:w-1/2 opacity-100 max-h-screen': openNotes,
               'w-0 opacity-0 max-h-0': !openNotes,
             })}>
-              <NoteEditor chapterId={chapterData?.id ?? ''} />
+              {bible && chapter && <NoteEditor chapterId={chapterData?.id ?? ''} />}
             </div>
           </div>
         </div>}

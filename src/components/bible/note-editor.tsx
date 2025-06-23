@@ -1,31 +1,26 @@
-import { BlockquoteElement } from '@/components/ui/blockquote-node';
 import { FixedToolbar } from '@/components/ui/fixed-toolbar';
-import { H1Element, H2Element, H3Element } from '@/components/ui/heading-node';
 import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
 import { ToolbarButton } from '@/components/ui/toolbar';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
 import { useSession } from '@/lib/auth-client';
 import { createNoteSchema } from '@/schemas/notes';
 import { convexQuery } from '@convex-dev/react-query';
-import {
-    BlockquotePlugin,
-    BoldPlugin,
-    H1Plugin,
-    H2Plugin,
-    H3Plugin,
-    ItalicPlugin,
-    UnderlinePlugin,
-} from '@platejs/basic-nodes/react';
+import { BlockquotePlugin, BoldPlugin, H1Plugin, H2Plugin, H3Plugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
 import { useForm } from '@tanstack/react-form';
 import { useQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
 import type { Value } from 'platejs';
 import { Plate, usePlateEditor } from 'platejs/react';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { BasicBlocksKit } from '../basic-blocks-kit';
+import { LinkKit } from '../link-kit';
+import { BlockquoteElement } from '../ui/blockquote-node';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
-import { useEffect } from 'react';
+import { H1Element, H2Element, H3Element } from '../ui/heading-node';
+import { LinkToolbarButton } from '../ui/link-toolbar-button';
 
 type NoteEditorProps = {
     chapterId: string
@@ -65,6 +60,8 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
 
     const editor = usePlateEditor({
         plugins: [
+            ...BasicBlocksKit,
+            ...LinkKit,
             BoldPlugin,
             ItalicPlugin,
             UnderlinePlugin,
@@ -73,7 +70,7 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
             H3Plugin.withComponent(H3Element),
             BlockquotePlugin.withComponent(BlockquoteElement),
         ],
-        value: notes?.content ? JSON.parse(notes.content) : initialValue,
+        value: JSON.parse(notes?.content ?? '[]'),
     });
 
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
@@ -134,6 +131,7 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
                             <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">B</MarkToolbarButton>
                             <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">I</MarkToolbarButton>
                             <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">U</MarkToolbarButton>
+                            <LinkToolbarButton />
                         </FixedToolbar>
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />
