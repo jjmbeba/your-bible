@@ -20,11 +20,11 @@ export const Route = createFileRoute('/bible')({
 })
 
 function RouteComponent() {
-  const { chapter, bible, verse } = Route.useSearch()
+  const { chapter, bible, verse, notes } = Route.useSearch()
   const { data: chapterData, isLoading: isLoadingChapter } = useChapter(bible, chapter)
   const highlightSid = verseParamToDataSid(verse)
 
-  const [openNotes, setOpenNotes] = useState(false)
+  const [openNotes, setOpenNotes] = useState(notes ?? false)
   const isMobile = useIsMobile()
   const { data: session } = useSession()
   const userId = session?.session.userId
