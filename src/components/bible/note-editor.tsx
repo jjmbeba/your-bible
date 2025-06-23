@@ -25,6 +25,7 @@ import { Plate, usePlateEditor } from 'platejs/react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
+import { useEffect } from 'react';
 
 type NoteEditorProps = {
     chapterId: string
@@ -56,9 +57,11 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
         enabled: !!session?.session.userId
     })
 
-    if (error) {
-        toast.error(error.message)
-    }
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message)
+        }
+    }, [error])
 
     const editor = usePlateEditor({
         plugins: [
