@@ -1,49 +1,27 @@
 import { FixedToolbar } from '@/components/ui/fixed-toolbar';
 import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
 import { ToolbarButton } from '@/components/ui/toolbar';
+import { useEditor } from '@/hooks/editor';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
+import { INITIAL_VALUE } from '@/lib/constants';
 import { createNoteSchema } from '@/schemas/notes';
 import { convexQuery } from '@convex-dev/react-query';
-import { BlockquotePlugin, BoldPlugin, H1Plugin, H2Plugin, H3Plugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
 import { useForm } from '@tanstack/react-form';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
-import type { Value } from 'platejs';
-import { Plate, usePlateEditor } from 'platejs/react';
+import { Plate } from 'platejs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { BasicBlocksKit } from '../basic-blocks-kit';
-import { LinkKit } from '../link-kit';
-import { BlockquoteElement } from '../ui/blockquote-node';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
-import { H1Element, H2Element, H3Element } from '../ui/heading-node';
 import { LinkToolbarButton } from '../ui/link-toolbar-button';
+import { BulletedListToolbarButton, NumberedListToolbarButton, TodoListToolbarButton } from '../ui/list-toolbar-button';
 
 type NoteEditorProps = {
     chapterId: string,
     userId: string
 }
-
-const initialValue: Value = [
-    {
-        children: [{ text: 'Title' }],
-        type: 'h3',
-    },
-    {
-        children: [{ text: 'This is a quote.' }],
-        type: 'blockquote',
-    },
-    {
-        children: [
-            { text: 'With some ' },
-            { bold: true, text: 'bold' },
-            { text: ' text for emphasis!' },
-        ],
-        type: 'p',
-    },
-];
 
 const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
     const { data: notes, error } = useSuspenseQuery({
@@ -56,20 +34,9 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
         }
     }, [error])
 
-    const editor = usePlateEditor({
-        plugins: [
-            ...BasicBlocksKit,
-            ...LinkKit,
-            BoldPlugin,
-            ItalicPlugin,
-            UnderlinePlugin,
-            H1Plugin.withComponent(H1Element),
-            H2Plugin.withComponent(H2Element),
-            H3Plugin.withComponent(H3Element),
-            BlockquotePlugin.withComponent(BlockquoteElement),
-        ],
-        value: notes?.content ? JSON.parse(notes.content) : initialValue,
-    });
+    const editor = useEditor({
+        defaultContent: notes?.content ? JSON.parse(notes.content) : INITIAL_VALUE,
+    })
 
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
     const { mutate: updateNote, isPending: isUpdating } = useUpdateNote()
@@ -119,6 +86,9 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                             <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">I</MarkToolbarButton>
                             <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">U</MarkToolbarButton>
                             <LinkToolbarButton />
+                            <BulletedListToolbarButton />
+                            <NumberedListToolbarButton />
+                            <TodoListToolbarButton />
                         </FixedToolbar>
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />

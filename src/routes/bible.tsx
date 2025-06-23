@@ -1,26 +1,22 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
-import NoteEditor from '@/components/bible/note-editor'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import ChapterNavigation from '@/components/bible/chapter-navigation'
+import MobileNotesSheet from '@/components/bible/mobile-notes-sheet'
+import NotesToggle from '@/components/bible/notes-toggle'
+import NotesView from '@/components/bible/notes-view'
 import { useIsMobile } from '@/hooks/utils'
+import { useSession } from '@/lib/auth-client'
 import { parseBible, verseParamToDataSid } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useSession } from '@/lib/auth-client'
-import { ChevronLeftIcon, ChevronRightIcon, Loader2, NotebookTextIcon } from 'lucide-react'
-import { Suspense, useEffect, useState } from 'react'
-import { z } from 'zod'
+import { bibleSearchSchema } from '@/schemas/routes-search'
+import { createFileRoute } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/bible')({
   component: RouteComponent,
-  validateSearch: z.object({
-    book: z.string().optional(),
-    chapter: z.string().optional(),
-    bible: z.string().optional(),
-    verse: z.string().optional(),
-  })
+  validateSearch: bibleSearchSchema
 })
 
 function RouteComponent() {
@@ -43,6 +39,8 @@ function RouteComponent() {
     }
   }, [highlightSid, chapterData?.content])
 
+  const userChapterBibleExists = Boolean(bible && userId && chapter)
+
   return (
     <div className="w-full px-2 sm:px-4">
       <div className="p-3 sm:p-5 border rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -55,45 +53,13 @@ function RouteComponent() {
         })}>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl font-bold">{chapterData?.reference}</h1>
-            {bible && chapter && userId && <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
-              <NotebookTextIcon className="size-4" />
-              {openNotes ? 'Close Notes' : 'Open Notes'}
-            </Button>}
+            {userChapterBibleExists && <NotesToggle openNotes={openNotes} setOpenNotes={setOpenNotes} />}
           </div>
           {chapterData && <div className="flex justify-end items-center gap-2 sm:gap-4">
             {isMobile && (
-              <Sheet open={openNotes} onOpenChange={setOpenNotes}>
-                <SheetContent>
-                  {<Suspense fallback={<div className='flex items-center justify-center h-full text-center'>
-                    <Loader2 className="size-4 animate-spin" />
-                  </div>}>
-                    {bible && chapter && userId && <NoteEditor chapterId={chapterData?.id ?? ''} userId={userId} />}
-                  </Suspense>}
-                </SheetContent>
-              </Sheet>
+             <MobileNotesSheet openNotes={openNotes} setOpenNotes={setOpenNotes} userChapterBibleExists={userChapterBibleExists} chapterId={chapterData?.id ?? ''}  userId={userId ?? ''}/>
             )}
-            <Link className={cn(buttonVariants({
-              variant: 'outline',
-              size: 'icon'
-            }), {
-              'opacity-50 cursor-not-allowed': !chapterData?.previous,
-            })} disabled={!chapterData?.previous} to="/bible" search={(prev) => ({
-              ...prev,
-              chapter: chapterData?.previous?.id ?? ''
-            })}>
-              <ChevronLeftIcon className="size-4" />
-            </Link>
-            <Link className={cn(buttonVariants({
-              variant: 'outline',
-              size: 'icon'
-            }), {
-              'opacity-50 cursor-not-allowed': !chapterData?.next,
-            })} disabled={!chapterData?.next} to="/bible" search={(prev) => ({
-              ...prev,
-              chapter: chapterData?.next?.id ?? ''
-            })}>
-              <ChevronRightIcon className="size-4" />
-            </Link>
+            <ChapterNavigation previous={chapterData?.previous} next={chapterData?.next} />
           </div>}
           <div className={cn("mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out", {
             'flex items-start justify-between gap-10': openNotes,
@@ -106,16 +72,7 @@ function RouteComponent() {
                 Select a Bible and Chapter to view the content
               </div>}
             </div>
-            <div className={cn("transition-all duration-500 ease-in-out overflow-hidden", {
-              'hidden w-0 sm:block sm:w-1/2 opacity-100 max-h-screen': openNotes,
-              'w-0 opacity-0 max-h-0': !openNotes,
-            })}>
-              <Suspense fallback={<div className='flex items-center justify-center h-full text-center'>
-                <Loader2 className="size-4 animate-spin" />
-              </div>}>
-                {bible && chapter && userId && <NoteEditor chapterId={chapterData?.id ?? ''} userId={userId} />}
-              </Suspense>
-            </div>
+            <NotesView openNotes={openNotes} userChapterBibleExists={userChapterBibleExists} chapterId={chapterData?.id ?? ''} userId={userId ?? ''} />
           </div>
         </div>}
       </div>
