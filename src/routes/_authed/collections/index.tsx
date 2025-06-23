@@ -6,6 +6,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { type Session } from 'better-auth'
 import { api } from 'convex/_generated/api'
 import { Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 export const Route = createFileRoute('/_authed/collections/')({
@@ -28,9 +29,11 @@ function RouteComponent() {
     enabled: !!session?.session.userId
   })
 
-  if (error) {
-    toast.error(error.message)
-  }
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message)
+    }
+  }, [error])
 
   return (
     <div className="w-full px-2 sm:px-4">
