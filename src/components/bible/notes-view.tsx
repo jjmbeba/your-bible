@@ -13,7 +13,7 @@ type Props = {
 const NotesView = ({ openNotes, userChapterBibleExists, chapterId, userId }: Props) => {
   return (
     <div className={cn("transition-all duration-500 ease-in-out overflow-hidden", {
-        'hidden w-0 sm:block sm:w-1/2 opacity-100 max-h-screen': openNotes,
+        'hidden w-0 sm:block sm:w-1/2 opacity-100': openNotes,
         'w-0 opacity-0 max-h-0': !openNotes,
       })}>
         <Suspense fallback={<div className='flex items-center justify-center h-full text-center'>

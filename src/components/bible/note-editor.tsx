@@ -1,6 +1,6 @@
 import { FixedToolbar } from '@/components/ui/fixed-toolbar';
 import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
-import { ToolbarButton } from '@/components/ui/toolbar';
+import { ToolbarButton, ToolbarGroup } from '@/components/ui/toolbar';
 import { useEditor } from '@/hooks/editor';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
 import { INITIAL_VALUE } from '@/lib/constants';
@@ -17,6 +17,8 @@ import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
 import { LinkToolbarButton } from '../ui/link-toolbar-button';
 import { BulletedListToolbarButton, NumberedListToolbarButton, TodoListToolbarButton } from '../ui/list-toolbar-button';
+import { MediaToolbarButton } from '../ui/media-toolbar-button';
+import { KEYS } from 'platejs';
 
 type NoteEditorProps = {
     chapterId: string,
@@ -89,6 +91,12 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                             <BulletedListToolbarButton />
                             <NumberedListToolbarButton />
                             <TodoListToolbarButton />
+                            <ToolbarGroup>
+                                <MediaToolbarButton nodeType={KEYS.img} />
+                                <MediaToolbarButton nodeType={KEYS.video} />
+                                <MediaToolbarButton nodeType={KEYS.audio} />
+                                <MediaToolbarButton nodeType={KEYS.file} />
+                            </ToolbarGroup>
                         </FixedToolbar>
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />

@@ -1,6 +1,7 @@
 import { BasicBlocksKit } from '@/components/basic-blocks-kit';
 import { LinkKit } from '@/components/link-kit';
 import { ListKit } from '@/components/list-kit';
+import { MediaKit } from '@/components/media-kit';
 import { BlockquoteElement } from '@/components/ui/blockquote-node';
 import { H1Element, H2Element, H3Element } from '@/components/ui/heading-node';
 import { BlockquotePlugin, BoldPlugin, H1Plugin, H2Plugin, H3Plugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
@@ -17,6 +18,7 @@ export const useEditor = ({ defaultContent }: Props) => {
             ...BasicBlocksKit,
             ...LinkKit,
             ...ListKit,
+            ...MediaKit,
             BoldPlugin,
             ItalicPlugin,
             UnderlinePlugin,
