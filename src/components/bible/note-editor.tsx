@@ -9,13 +9,14 @@ import { convexQuery } from '@convex-dev/react-query';
 import { useForm } from '@tanstack/react-form';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
-import { BoldIcon, HighlighterIcon, ItalicIcon, Loader2, QuoteIcon, UnderlineIcon } from 'lucide-react';
+import { BoldIcon, HighlighterIcon, ItalicIcon, Loader2, QuoteIcon, StrikethroughIcon, UnderlineIcon } from 'lucide-react';
 import { KEYS } from 'platejs';
 import { Plate } from 'platejs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
+import { EmojiToolbarButton } from '../ui/emoji-toolbar-button';
 import { LinkToolbarButton } from '../ui/link-toolbar-button';
 import { BulletedListToolbarButton, NumberedListToolbarButton, TodoListToolbarButton } from '../ui/list-toolbar-button';
 import { MediaToolbarButton } from '../ui/media-toolbar-button';
@@ -95,6 +96,9 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                                 <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">
                                     <UnderlineIcon />
                                 </MarkToolbarButton>
+                                <MarkToolbarButton nodeType="strikethrough" tooltip="Strikethrough (⌘+S)">
+                                    <StrikethroughIcon />
+                                </MarkToolbarButton>
                             </ToolbarGroup>
                             <ToolbarGroup>
                                 <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
@@ -104,6 +108,7 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                                 <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
                                     <HighlighterIcon />
                                 </MarkToolbarButton>
+                                <EmojiToolbarButton />
                             </ToolbarGroup>
                             <ToolbarGroup>
                                 <BulletedListToolbarButton />
