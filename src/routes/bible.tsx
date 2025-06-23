@@ -1,7 +1,6 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
 import NoteEditor from '@/components/bible/note-editor'
-import NoteViewer from '@/components/bible/note-viewer'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { useIsMobile } from '@/hooks/utils'
