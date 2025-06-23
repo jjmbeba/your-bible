@@ -1,60 +1,28 @@
-import { BlockquoteElement } from '@/components/ui/blockquote-node';
-import { FixedToolbar } from '@/components/ui/fixed-toolbar';
-import { H1Element, H2Element, H3Element } from '@/components/ui/heading-node';
-import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
-import { ToolbarButton } from '@/components/ui/toolbar';
+import { useEditor } from '@/hooks/editor';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
-import { useSession } from '@/lib/auth-client';
+import { INITIAL_VALUE } from '@/lib/constants';
 import { createNoteSchema } from '@/schemas/notes';
 import { convexQuery } from '@convex-dev/react-query';
-import {
-    BlockquotePlugin,
-    BoldPlugin,
-    H1Plugin,
-    H2Plugin,
-    H3Plugin,
-    ItalicPlugin,
-    UnderlinePlugin,
-} from '@platejs/basic-nodes/react';
 import { useForm } from '@tanstack/react-form';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
-import type { Value } from 'platejs';
-import { Plate, usePlateEditor } from 'platejs/react';
+import { Plate } from 'platejs/react';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
-import { useEffect } from 'react';
+import NoteEditorToolbar from './note-editor-toolbar';
+
 
 type NoteEditorProps = {
-    chapterId: string
+    chapterId: string,
+    userId: string
 }
 
-const initialValue: Value = [
-    {
-        children: [{ text: 'Title' }],
-        type: 'h3',
-    },
-    {
-        children: [{ text: 'This is a quote.' }],
-        type: 'blockquote',
-    },
-    {
-        children: [
-            { text: 'With some ' },
-            { bold: true, text: 'bold' },
-            { text: ' text for emphasis!' },
-        ],
-        type: 'p',
-    },
-];
-
-const NoteEditor = ({ chapterId }: NoteEditorProps) => {
-    const { data: session } = useSession()
-    const { data: notes, isLoading, error } = useQuery({
-        ...convexQuery(api.notes.getNotes, { chapterId, userId: session?.session.userId ?? '' }),
-        enabled: !!session?.session.userId
+const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
+    const { data: notes, error } = useSuspenseQuery({
+        ...convexQuery(api.notes.getNotes, { chapterId, userId }),
     })
 
     useEffect(() => {
@@ -63,18 +31,16 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
         }
     }, [error])
 
-    const editor = usePlateEditor({
-        plugins: [
-            BoldPlugin,
-            ItalicPlugin,
-            UnderlinePlugin,
-            H1Plugin.withComponent(H1Element),
-            H2Plugin.withComponent(H2Element),
-            H3Plugin.withComponent(H3Element),
-            BlockquotePlugin.withComponent(BlockquoteElement),
-        ],
-        value: notes?.content ? JSON.parse(notes.content) : initialValue,
-    });
+    const editor = useEditor({
+        defaultContent: notes?.content ? (() => {
+            try {
+                return JSON.parse(notes.content);
+            } catch (e) {
+                console.error('Failed to parse note content:', e);
+                return INITIAL_VALUE;
+            }
+        })() : INITIAL_VALUE,
+    })
 
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
     const { mutate: updateNote, isPending: isUpdating } = useUpdateNote()
@@ -88,32 +54,21 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
             onSubmit: createNoteSchema,
         },
         onSubmit: ({ value }) => {
-            if (!session?.session.userId) {
-                toast.info('Please login to save your notes')
-                return
-            };
-
             if (notes) {
                 updateNote({
                     id: notes._id,
                     content: value.content,
-                    userId: session.session.userId,
+                    userId,
                 })
             } else {
                 createNote({
                     chapterId,
                     content: value.content,
-                    userId: session.session.userId,
+                    userId,
                 })
             }
         },
     })
-
-    if (isLoading) {
-        return <div className="flex items-center justify-center h-full min-h-[200px] p-4">
-            <Loader2 className="animate-spin size-6" />
-        </div>
-    }
 
     return (
         <form action="" onSubmit={(e) => {
@@ -126,15 +81,7 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
                     <Plate editor={editor} onChange={(e) => {
                         field.handleChange(JSON.stringify(e.value))
                     }}>
-                        <FixedToolbar className="justify-start rounded-t-lg">
-                            <ToolbarButton onClick={() => editor.tf.h1.toggle()}>H1</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.h2.toggle()}>H2</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.h3.toggle()}>H3</ToolbarButton>
-                            <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>Quote</ToolbarButton>
-                            <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">B</MarkToolbarButton>
-                            <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">I</MarkToolbarButton>
-                            <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">U</MarkToolbarButton>
-                        </FixedToolbar>
+                        <NoteEditorToolbar />
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />
                         </EditorContainer>
