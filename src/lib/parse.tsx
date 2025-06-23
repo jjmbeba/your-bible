@@ -84,7 +84,6 @@ export function parseBible(
                     <span className="inline-block font-bold text-primary mr-3">
                       {verse.number}
                     </span>
-                    {/* Add to Collection always visible */}
                     <AddToCollectionDialog
                       chapterId={chapterId ?? ''}
                       bibleId={bibleId ?? ''}

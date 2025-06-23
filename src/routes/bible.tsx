@@ -1,5 +1,6 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
+import NoteEditor from '@/components/bible/note-editor'
 import NoteViewer from '@/components/bible/note-viewer'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
@@ -61,7 +62,7 @@ function RouteComponent() {
             {isMobile && (
               <Sheet open={openNotes} onOpenChange={setOpenNotes}>
                 <SheetContent>
-                  <NoteViewer chapterId={chapterData?.id ?? ''} />
+                  <NoteEditor chapterId={chapterData?.id ?? ''} />
                 </SheetContent>
               </Sheet>
             )}
@@ -103,7 +104,7 @@ function RouteComponent() {
               'hidden w-0 sm:block sm:w-1/2 opacity-100 max-h-screen': openNotes,
               'w-0 opacity-0 max-h-0': !openNotes,
             })}>
-              <NoteViewer chapterId={chapterData?.id ?? ''} />
+              <NoteEditor chapterId={chapterData?.id ?? ''} />
             </div>
           </div>
         </div>}
