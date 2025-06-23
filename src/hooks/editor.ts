@@ -1,4 +1,5 @@
 import { BasicBlocksKit } from '@/components/basic-blocks-kit';
+import { BasicMarksKit } from '@/components/basic-marks-kit';
 import { LinkKit } from '@/components/link-kit';
 import { ListKit } from '@/components/list-kit';
 import { MediaKit } from '@/components/media-kit';
@@ -19,6 +20,7 @@ export const useEditor = ({ defaultContent }: Props) => {
             ...LinkKit,
             ...ListKit,
             ...MediaKit,
+            ...BasicMarksKit,
             BoldPlugin,
             ItalicPlugin,
             UnderlinePlugin,

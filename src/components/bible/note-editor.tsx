@@ -9,7 +9,7 @@ import { convexQuery } from '@convex-dev/react-query';
 import { useForm } from '@tanstack/react-form';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
-import { Loader2 } from 'lucide-react';
+import { HighlighterIcon, Loader2 } from 'lucide-react';
 import { Plate } from 'platejs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -91,6 +91,9 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                             <BulletedListToolbarButton />
                             <NumberedListToolbarButton />
                             <TodoListToolbarButton />
+                            <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
+                                <HighlighterIcon />
+                            </MarkToolbarButton>
                             <ToolbarGroup>
                                 <MediaToolbarButton nodeType={KEYS.img} />
                                 <MediaToolbarButton nodeType={KEYS.video} />
