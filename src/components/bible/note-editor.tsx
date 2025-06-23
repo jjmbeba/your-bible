@@ -1,6 +1,3 @@
-import { FixedToolbar } from '@/components/ui/fixed-toolbar';
-import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
-import { ToolbarButton, ToolbarGroup } from '@/components/ui/toolbar';
 import { useEditor } from '@/hooks/editor';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
 import { INITIAL_VALUE } from '@/lib/constants';
@@ -9,17 +6,14 @@ import { convexQuery } from '@convex-dev/react-query';
 import { useForm } from '@tanstack/react-form';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
-import { BoldIcon, HighlighterIcon, ItalicIcon, Loader2, QuoteIcon, StrikethroughIcon, UnderlineIcon } from 'lucide-react';
-import { KEYS } from 'platejs';
+import { Loader2 } from 'lucide-react';
 import { Plate } from 'platejs/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Editor, EditorContainer } from '../ui/editor';
-import { EmojiToolbarButton } from '../ui/emoji-toolbar-button';
-import { LinkToolbarButton } from '../ui/link-toolbar-button';
-import { BulletedListToolbarButton, NumberedListToolbarButton, TodoListToolbarButton } from '../ui/list-toolbar-button';
-import { MediaToolbarButton } from '../ui/media-toolbar-button';
+import NoteEditorToolbar from './note-editor-toolbar';
+
 
 type NoteEditorProps = {
     chapterId: string,
@@ -80,48 +74,7 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                     <Plate editor={editor} onChange={(e) => {
                         field.handleChange(JSON.stringify(e.value))
                     }}>
-                        <FixedToolbar className="justify-start rounded-t-lg">
-                            <ToolbarGroup>
-                                <ToolbarButton onClick={() => editor.tf.h1.toggle()}>H1</ToolbarButton>
-                                <ToolbarButton onClick={() => editor.tf.h2.toggle()}>H2</ToolbarButton>
-                                <ToolbarButton onClick={() => editor.tf.h3.toggle()}>H3</ToolbarButton>
-                            </ToolbarGroup>
-                            <ToolbarGroup>
-                                <MarkToolbarButton nodeType="bold" tooltip="Bold (⌘+B)">
-                                    <BoldIcon />
-                                </MarkToolbarButton>
-                                <MarkToolbarButton nodeType="italic" tooltip="Italic (⌘+I)">
-                                    <ItalicIcon />
-                                </MarkToolbarButton>
-                                <MarkToolbarButton nodeType="underline" tooltip="Underline (⌘+U)">
-                                    <UnderlineIcon />
-                                </MarkToolbarButton>
-                                <MarkToolbarButton nodeType="strikethrough" tooltip="Strikethrough (⌘+S)">
-                                    <StrikethroughIcon />
-                                </MarkToolbarButton>
-                            </ToolbarGroup>
-                            <ToolbarGroup>
-                                <ToolbarButton onClick={() => editor.tf.blockquote.toggle()}>
-                                    <QuoteIcon />
-                                </ToolbarButton>
-                                <LinkToolbarButton />
-                                <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
-                                    <HighlighterIcon />
-                                </MarkToolbarButton>
-                                <EmojiToolbarButton />
-                            </ToolbarGroup>
-                            <ToolbarGroup>
-                                <BulletedListToolbarButton />
-                                <NumberedListToolbarButton />
-                                <TodoListToolbarButton />
-                            </ToolbarGroup>
-                            <ToolbarGroup>
-                                <MediaToolbarButton nodeType={KEYS.img} />
-                                <MediaToolbarButton nodeType={KEYS.video} />
-                                <MediaToolbarButton nodeType={KEYS.audio} />
-                                <MediaToolbarButton nodeType={KEYS.file} />
-                            </ToolbarGroup>
-                        </FixedToolbar>
+                        <NoteEditorToolbar editor={editor} />
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />
                         </EditorContainer>
