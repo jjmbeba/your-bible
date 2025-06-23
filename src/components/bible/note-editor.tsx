@@ -74,7 +74,7 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
                     <Plate editor={editor} onChange={(e) => {
                         field.handleChange(JSON.stringify(e.value))
                     }}>
-                        <NoteEditorToolbar editor={editor} />
+                        <NoteEditorToolbar />
                         <EditorContainer>
                             <Editor placeholder="Type your amazing content here..." />
                         </EditorContainer>
