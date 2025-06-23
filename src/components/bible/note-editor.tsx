@@ -32,7 +32,14 @@ const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
     }, [error])
 
     const editor = useEditor({
-        defaultContent: notes?.content ? JSON.parse(notes.content) : INITIAL_VALUE,
+        defaultContent: notes?.content ? (() => {
+            try {
+                return JSON.parse(notes.content);
+            } catch (e) {
+                console.error('Failed to parse note content:', e);
+                return INITIAL_VALUE;
+            }
+        })() : INITIAL_VALUE,
     })
 
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
