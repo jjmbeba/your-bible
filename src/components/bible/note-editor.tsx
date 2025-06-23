@@ -2,12 +2,11 @@ import { FixedToolbar } from '@/components/ui/fixed-toolbar';
 import { MarkToolbarButton } from '@/components/ui/mark-toolbar-button';
 import { ToolbarButton } from '@/components/ui/toolbar';
 import { useCreateNote, useUpdateNote } from '@/hooks/notes';
-import { useSession } from '@/lib/auth-client';
 import { createNoteSchema } from '@/schemas/notes';
 import { convexQuery } from '@convex-dev/react-query';
 import { BlockquotePlugin, BoldPlugin, H1Plugin, H2Plugin, H3Plugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
 import { useForm } from '@tanstack/react-form';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
 import type { Value } from 'platejs';
@@ -23,7 +22,8 @@ import { H1Element, H2Element, H3Element } from '../ui/heading-node';
 import { LinkToolbarButton } from '../ui/link-toolbar-button';
 
 type NoteEditorProps = {
-    chapterId: string
+    chapterId: string,
+    userId: string
 }
 
 const initialValue: Value = [
@@ -45,11 +45,9 @@ const initialValue: Value = [
     },
 ];
 
-const NoteEditor = ({ chapterId }: NoteEditorProps) => {
-    const { data: session } = useSession()
-    const { data: notes, isLoading, error } = useQuery({
-        ...convexQuery(api.notes.getNotes, { chapterId, userId: session?.session.userId ?? '' }),
-        enabled: !!session?.session.userId
+const NoteEditor = ({ chapterId, userId }: NoteEditorProps) => {
+    const { data: notes, error } = useSuspenseQuery({
+        ...convexQuery(api.notes.getNotes, { chapterId, userId }),
     })
 
     useEffect(() => {
@@ -70,7 +68,7 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
             H3Plugin.withComponent(H3Element),
             BlockquotePlugin.withComponent(BlockquoteElement),
         ],
-        value: JSON.parse(notes?.content ?? '[]'),
+        value: notes?.content ? JSON.parse(notes.content) : initialValue,
     });
 
     const { mutate: createNote, isPending: isCreating } = useCreateNote()
@@ -85,32 +83,21 @@ const NoteEditor = ({ chapterId }: NoteEditorProps) => {
             onSubmit: createNoteSchema,
         },
         onSubmit: ({ value }) => {
-            if (!session?.session.userId) {
-                toast.info('Please login to save your notes')
-                return
-            };
-
             if (notes) {
                 updateNote({
                     id: notes._id,
                     content: value.content,
-                    userId: session.session.userId,
+                    userId,
                 })
             } else {
                 createNote({
                     chapterId,
                     content: value.content,
-                    userId: session.session.userId,
+                    userId,
                 })
             }
         },
     })
-
-    if (isLoading) {
-        return <div className="flex items-center justify-center h-full min-h-[200px] p-4">
-            <Loader2 className="animate-spin size-6" />
-        </div>
-    }
 
     return (
         <form action="" onSubmit={(e) => {

@@ -8,8 +8,9 @@ import { parseBible, verseParamToDataSid } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useSession } from '@/lib/auth-client'
 import { ChevronLeftIcon, ChevronRightIcon, Loader2, NotebookTextIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { z } from 'zod'
 
 export const Route = createFileRoute('/bible')({
@@ -29,6 +30,8 @@ function RouteComponent() {
 
   const [openNotes, setOpenNotes] = useState(false)
   const isMobile = useIsMobile()
+  const { data: session } = useSession()
+  const userId = session?.session.userId
 
   useEffect(() => {
     if (highlightSid) {
@@ -52,7 +55,7 @@ function RouteComponent() {
         })}>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h1 className="text-xl sm:text-2xl font-bold">{chapterData?.reference}</h1>
-           {bible && chapter && <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
+            {bible && chapter && userId && <Button variant="outline" size="sm" onClick={() => setOpenNotes(!openNotes)}>
               <NotebookTextIcon className="size-4" />
               {openNotes ? 'Close Notes' : 'Open Notes'}
             </Button>}
@@ -61,7 +64,11 @@ function RouteComponent() {
             {isMobile && (
               <Sheet open={openNotes} onOpenChange={setOpenNotes}>
                 <SheetContent>
-                  <NoteEditor chapterId={chapterData?.id ?? ''} />
+                  {<Suspense fallback={<div className='flex items-center justify-center h-full text-center'>
+                    <Loader2 className="size-4 animate-spin" />
+                  </div>}>
+                    {bible && chapter && userId && <NoteEditor chapterId={chapterData?.id ?? ''} userId={userId} />}
+                  </Suspense>}
                 </SheetContent>
               </Sheet>
             )}
@@ -103,7 +110,11 @@ function RouteComponent() {
               'hidden w-0 sm:block sm:w-1/2 opacity-100 max-h-screen': openNotes,
               'w-0 opacity-0 max-h-0': !openNotes,
             })}>
-              {bible && chapter && <NoteEditor chapterId={chapterData?.id ?? ''} />}
+              <Suspense fallback={<div className='flex items-center justify-center h-full text-center'>
+                <Loader2 className="size-4 animate-spin" />
+              </div>}>
+                {bible && chapter && userId && <NoteEditor chapterId={chapterData?.id ?? ''} userId={userId} />}
+              </Suspense>
             </div>
           </div>
         </div>}
