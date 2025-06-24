@@ -13,10 +13,10 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as BibleRouteImport } from './routes/bible'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedStoriesIndexRouteImport } from './routes/_authed/stories/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
 import { Route as AuthedCollectionsCollectionIdRouteImport } from './routes/_authed/collections/$collectionId'
 import { ServerRoute as ApiUploadthingServerRouteImport } from './routes/api/uploadthing'
@@ -34,11 +34,6 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoadmapRoute = RoadmapRouteImport.update({
-  id: '/roadmap',
-  path: '/roadmap',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BibleRoute = BibleRouteImport.update({
   id: '/bible',
   path: '/bible',
@@ -52,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedStoriesIndexRoute = AuthedStoriesIndexRouteImport.update({
+  id: '/stories/',
+  path: '/stories/',
+  getParentRoute: () => AuthedRouteRoute,
 } as any)
 const AuthedCollectionsIndexRoute = AuthedCollectionsIndexRouteImport.update({
   id: '/collections/',
@@ -79,32 +79,32 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/collections': typeof AuthedCollectionsIndexRoute
+  '/stories': typeof AuthedStoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/collections': typeof AuthedCollectionsIndexRoute
+  '/stories': typeof AuthedStoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/_authed/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/_authed/collections/': typeof AuthedCollectionsIndexRoute
+  '/_authed/stories/': typeof AuthedStoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -112,38 +112,37 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
     | '/collections'
+    | '/stories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
     | '/collections'
+    | '/stories'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/_authed/collections/$collectionId'
     | '/_authed/collections/'
+    | '/_authed/stories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
   BibleRoute: typeof BibleRoute
-  RoadmapRoute: typeof RoadmapRoute
   SearchRoute: typeof SearchRoute
   SignInRoute: typeof SignInRoute
 }
@@ -189,13 +188,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/roadmap': {
-      id: '/roadmap'
-      path: '/roadmap'
-      fullPath: '/roadmap'
-      preLoaderRoute: typeof RoadmapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/bible': {
       id: '/bible'
       path: '/bible'
@@ -216,6 +208,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authed/stories/': {
+      id: '/_authed/stories/'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof AuthedStoriesIndexRouteImport
+      parentRoute: typeof AuthedRouteRoute
     }
     '/_authed/collections/': {
       id: '/_authed/collections/'
@@ -255,11 +254,13 @@ declare module '@tanstack/react-start/server' {
 interface AuthedRouteRouteChildren {
   AuthedCollectionsCollectionIdRoute: typeof AuthedCollectionsCollectionIdRoute
   AuthedCollectionsIndexRoute: typeof AuthedCollectionsIndexRoute
+  AuthedStoriesIndexRoute: typeof AuthedStoriesIndexRoute
 }
 
 const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
   AuthedCollectionsCollectionIdRoute: AuthedCollectionsCollectionIdRoute,
   AuthedCollectionsIndexRoute: AuthedCollectionsIndexRoute,
+  AuthedStoriesIndexRoute: AuthedStoriesIndexRoute,
 }
 
 const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
@@ -270,7 +271,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
   BibleRoute: BibleRoute,
-  RoadmapRoute: RoadmapRoute,
   SearchRoute: SearchRoute,
   SignInRoute: SignInRoute,
 }

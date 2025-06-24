@@ -28,8 +28,8 @@ const Header = () => {
             label: 'Collections',
         },
         {
-            to: '/roadmap',
-            label: 'Roadmap',
+            to: '/stories',
+            label: 'Stories',
         },
     ]);
 
