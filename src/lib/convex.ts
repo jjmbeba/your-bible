@@ -33,3 +33,21 @@ export const validateCollectionAccess = async (
 
     return note;
   }
+
+export const validateStoryAccess = async (
+    ctx: QueryCtx,
+    storyId: Id<"stories">,
+    userId: string
+  ) => {
+    const story = await ctx.db.get(storyId);
+
+    if (!story) {
+        throw new Error("Story not found");
+    }
+
+    if (story.userId !== userId) {
+        throw new Error("You are not authorized to access this story");
+    }
+
+    return story;
+  }

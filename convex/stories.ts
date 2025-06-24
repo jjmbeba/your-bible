@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { validateStoryAccess } from "@/lib/convex";
 
 export const createStory = mutation({
   args: {
@@ -34,5 +35,27 @@ export const getStories = query({
   },
   handler: async (ctx, args) => {
     return await ctx.db.query("stories").filter((q) => q.eq(q.field("userId"), args.userId)).collect();
+  }
+});
+
+export const getStory = query({
+  args: {
+    id: v.id("stories"),
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await validateStoryAccess(ctx, args.id, args.userId);
+  }
+});
+
+export const deleteStory = mutation({
+  args: {
+    id: v.id("stories"),
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await validateStoryAccess(ctx, args.id, args.userId);
+
+    return await ctx.db.delete(args.id);
   }
 });

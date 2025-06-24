@@ -1,32 +1,29 @@
-import { useDeleteCollection } from '@/hooks/collections'
-import { useSession } from '@/lib/auth-client'
-import { cn } from '@/lib/utils'
-import { Id } from 'convex/_generated/dataModel'
-import { Loader2, TrashIcon } from 'lucide-react'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog'
-import { Button, buttonVariants } from '../ui/button'
+import { Button } from "@/components/ui/button"
+import { useDeleteStory } from "@/hooks/stories"
+import { useSession } from "@/lib/auth-client"
+import { cn } from "@/lib/utils"
+import { Id } from "convex/_generated/dataModel"
+import { Loader2, TrashIcon } from "lucide-react"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
+import { buttonVariants } from "../ui/button"
 
-type Props = {
-    id: Id<'collections'>
-}
+const DeleteStoryButton = ({ id }: { id: Id<"stories"> }) => {
+  const { mutate: deleteStory, isPending } = useDeleteStory()
+  const { data: session, isPending: isSessionPending } = useSession()
 
-const DeleteCollectionButton = ({ id }: Props) => {
-    const { data: session, isPending: isSessionPending } = useSession()
-    const { mutate: deleteCollection, isPending } = useDeleteCollection()
-
-    return (
-        <AlertDialog>
+  return (
+    <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="sm">
                     <TrashIcon className="w-4 h-4" />
-                    <span className='hidden sm:block'>Delete Collection</span>
+                    <span className='hidden sm:block'>Delete Story</span>
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the collection and all its contents.
+                        This action cannot be undone. This will permanently delete the story and all its contents.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -39,7 +36,7 @@ const DeleteCollectionButton = ({ id }: Props) => {
                         size: 'sm'
                     }))} onClick={() => {
                         if (!session?.session.userId) return;
-                        deleteCollection({
+                        deleteStory({
                             id,
                             userId: session?.session.userId
                         })
@@ -49,7 +46,7 @@ const DeleteCollectionButton = ({ id }: Props) => {
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
+  )
 }
 
-export default DeleteCollectionButton
+export default DeleteStoryButton
