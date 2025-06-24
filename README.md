@@ -36,7 +36,6 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 ### 🎨 Modern UI/UX
 - **Tailwind CSS**: Beautiful, responsive design with Tailwind CSS v4
 - **Shadcn/ui Components**: High-quality, accessible UI components
-- **Dark/Light Mode**: Theme support with next-themes
 - **Loading States**: Smooth loading indicators and skeleton screens
 - **Toast Notifications**: User feedback with Sonner toast notifications
 
