@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const createStory = mutation({
   args: {
@@ -25,5 +25,14 @@ export const createStory = mutation({
       storyLength: args.storyLength,
       story: args.story,
     });
+  }
+});
+
+export const getStories = query({
+  args: {
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.query("stories").filter((q) => q.eq(q.field("userId"), args.userId)).collect();
   }
 });
