@@ -22,6 +22,7 @@ export default defineSchema({
     title: v.string(),
     bibleId: v.string(),
     chapterId: v.string(),
+    chapterReference: v.string(),
     userId: v.string(),
     perspective: v.string(),
     setting: v.string(),

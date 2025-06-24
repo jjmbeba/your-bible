@@ -21,6 +21,7 @@ export const storiesSchema = z.object({
     }),
     bibleId: z.string().min(1),
     chapterId: z.string().min(1),
+    chapterReference: z.string().min(1),
     perspective: z.string().min(1, {
         message: "Perspective is required",
     }).or(StoryPerspectiveEnum),

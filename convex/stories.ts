@@ -6,6 +6,7 @@ export const createStory = mutation({
   args: {
     bibleId: v.string(),
     chapterId: v.string(),
+    chapterReference: v.string(),
     userId: v.string(),
     perspective: v.string(),
     setting: v.string(),
@@ -18,6 +19,7 @@ export const createStory = mutation({
     return await ctx.db.insert("stories", {
       bibleId: args.bibleId,
       chapterId: args.chapterId,
+      chapterReference: args.chapterReference,
       userId: args.userId,
       title: args.title,
       perspective: args.perspective,

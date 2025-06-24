@@ -1,3 +1,5 @@
+import { useCreateStory } from '@/hooks/stories'
+import { useSession } from '@/lib/auth-client'
 import { storiesSchema } from '@/schemas/stories'
 import { useForm } from '@tanstack/react-form'
 import { Loader2, SparklesIcon } from 'lucide-react'
@@ -5,15 +7,14 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { useCreateStory } from '@/hooks/stories'
-import { useSession } from '@/lib/auth-client'
 
 type Props = {
   bible: string,
   chapter: string,
+  chapterReference: string,
 }
 
-const StoriesForm = ({ bible, chapter }: Props) => {
+const StoriesForm = ({ bible, chapter, chapterReference }: Props) => {
   const { mutate: createStory, isPending: isCreatingStory } = useCreateStory()
   const { data: session } = useSession()
   const userId = session?.user.id
@@ -23,6 +24,7 @@ const StoriesForm = ({ bible, chapter }: Props) => {
       title: "",
       bibleId: bible,
       chapterId: chapter,
+      chapterReference,
       perspective: "Observer",
       setting: "",
       tone: "",

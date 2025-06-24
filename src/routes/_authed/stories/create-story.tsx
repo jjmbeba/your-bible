@@ -42,7 +42,7 @@ function RouteComponent() {
         <BibleDropDown bible={bible} chapter={chapter} />
         <BibleSelector value={bible} />
       </div>
-      {bible && chapter ? <StoriesForm bible={bible} chapter={chapter} /> : <div className='text-center text-sm text-muted-foreground'>Select a Bible and Chapter to start</div>}
+      {bible && chapter ? <StoriesForm bible={bible} chapter={chapter} chapterReference={chapterData?.reference ?? ''} /> : <div className='text-center text-sm text-muted-foreground'>Select a Bible and Chapter to start</div>}
     </div>
     <div className={cn("mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out flex items-start justify-between gap-10")}>
       <div className={cn("transition-all duration-500 ease-in-out sm:w-1/2")}>
