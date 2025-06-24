@@ -22,6 +22,12 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 - **Manage Collections**: Edit collection names and delete unwanted collections
 - **Verse Management**: Remove individual verses from collections
 
+### ✍️ Personal Notes
+- **Chapter-Specific Notes**: Create and edit notes for each Bible chapter.
+- **Rich Text Editor**: Format your notes with bold, italics, lists, and more, powered by Plate.js.
+- **Side-by-Side View**: View your notes alongside the Bible text on desktop for an integrated study experience.
+- **Private and Secure**: Notes are tied to your user account and are kept private.
+
 ### 🔐 User Authentication
 - **Secure Sign In/Sign Up**: Email-based authentication with Better Auth
 - **Protected Routes**: Collections are only accessible to authenticated users
@@ -46,6 +52,7 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 - **Tailwind CSS v4** - Utility-first CSS framework
 - **Shadcn/ui** - High-quality component library
 - **Lucide React** - Beautiful icons
+- **Plate.js** - Rich text editor framework
 
 ### Backend & Database
 - **Convex** - Real-time backend with automatic sync
@@ -139,6 +146,7 @@ This application uses TanStack Start for full-stack React development with:
 The application uses Convex for real-time data synchronization. The schema includes:
 - `collections` - User-created verse collections
 - `collectionVerses` - Individual verses within collections
+- `notes` - User-created notes for each chapter
 
 ### API Integration
 The app integrates with API.Bible for:
@@ -165,6 +173,12 @@ The app integrates with API.Bible for:
 2. Create a new collection
 3. Add verses from Bible reading or search results
 4. Organize and manage your personal verse collections
+
+### Taking Notes
+1. Navigate to a Bible chapter while signed in.
+2. Click "Open Notes" to reveal the notes panel.
+3. Use the rich text editor to write and format your thoughts.
+4. Your notes are saved automatically.
 
 ## 🤝 Contributing
 
