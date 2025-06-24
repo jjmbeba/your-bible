@@ -45,17 +45,9 @@ function RouteComponent() {
       {bible && chapter ? <StoriesForm bible={bible} chapter={chapter} chapterReference={chapterData?.reference ?? ''} originalText={chapterData?.content ?? ''} /> : <div className='text-center text-sm text-muted-foreground'>Select a Bible and Chapter to start</div>}
     </div>
     <div className={cn("mt-4 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out flex items-start justify-between gap-10")}>
-      <div className={cn("transition-all duration-500 ease-in-out sm:w-1/2")}>
+      <div className={cn("transition-all duration-500 ease-in-out")}>
         <h3 className='text-lg font-semibold mb-4'>
           Original Text
-        </h3>
-        {bible && chapter ? parseBible(chapterData?.content ?? '', '', bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
-          Select a Bible and Chapter to view the content
-        </div>}
-      </div>
-      <div className={cn("transition-all duration-500 ease-in-out sm:w-1/2")}>
-        <h3 className='text-lg font-semibold mb-4'>
-          Generated Story
         </h3>
         {bible && chapter ? parseBible(chapterData?.content ?? '', '', bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
           Select a Bible and Chapter to view the content
