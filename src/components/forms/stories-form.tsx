@@ -35,7 +35,7 @@ const StoriesForm = ({ bible, chapter }: Props) => {
 
       form.handleSubmit()
     }}>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="grid gap-2">
           <Label htmlFor="perspective">Perspective</Label>
           <form.Field
@@ -131,7 +131,7 @@ const StoriesForm = ({ bible, chapter }: Props) => {
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
         children={([canSubmit, isSubmitting]) => (
-          <Button className='mt-4' size='sm' type="submit" disabled={!canSubmit || isSubmitting}>
+          <Button className='mt-4 w-full md:w-auto' size='sm' type="submit" disabled={!canSubmit || isSubmitting}>
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <div className='flex items-center gap-2'>
               <SparklesIcon />
               Generate story
