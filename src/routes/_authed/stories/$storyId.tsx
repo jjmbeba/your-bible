@@ -1,4 +1,5 @@
 import DeleteStoryButton from '@/components/stories/delete-story-btn'
+import { useIsMobile } from '@/hooks/utils'
 import { useSession } from '@/lib/auth-client'
 import { parseBible } from '@/lib/parse'
 import { useChapter } from '@/queries/bible'
@@ -10,6 +11,7 @@ import { Id } from 'convex/_generated/dataModel'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export const Route = createFileRoute('/_authed/stories/$storyId')({
     component: RouteComponent,
@@ -18,6 +20,7 @@ export const Route = createFileRoute('/_authed/stories/$storyId')({
 function RouteComponent() {
     const { storyId } = Route.useParams()
     const { data: session, isPending: isSessionPending } = useSession()
+    const isMobile = useIsMobile()
     const { data: story, isLoading, error } = useQuery({
         ...convexQuery(api.stories.getStory, { id: storyId as Id<"stories">, userId: session?.session.userId ?? '' }),
         enabled: !!storyId && !!session?.session.userId
@@ -59,23 +62,41 @@ function RouteComponent() {
                 </div>
             </>
         </div>
-        <div className="mt-10 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out flex items-start justify-between gap-10">
-            <div className="transition-all duration-500 ease-in-out sm:w-1/2">
-                <h3 className='text-lg font-semibold mb-4'>
-                    Original Text
-                </h3>
-                {story.bibleId && story.chapterId ? parseBible(chapterData?.content ?? '', '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
-                    Select a Bible and Chapter to view the content
-                </div>}
-            </div>
-            <div className="transition-all duration-500 ease-in-out sm:w-1/2">
-                <h3 className='text-lg font-semibold mb-4'>
-                    Generated Story
-                </h3>
-                {story.story ? parseBible(story.story, '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
-                    Select a Bible and Chapter to view the content
-                </div>}
-            </div>
-        </div>
+        {isMobile ? (
+            <Tabs defaultValue="story" className="w-full">
+                <TabsList>
+                    <TabsTrigger value="story">Story</TabsTrigger>
+                    <TabsTrigger value="original">Original</TabsTrigger>
+                </TabsList>
+                <TabsContent value="story">
+                    {story.story ? parseBible(story.story, '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
+                        Select a Bible and Chapter to view the content
+                    </div>}
+                </TabsContent>
+                <TabsContent value="original">
+                    {story.bibleId && story.chapterId ? parseBible(chapterData?.content ?? '', '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
+                        Select a Bible and Chapter to view the content
+                    </div>}
+                </TabsContent>
+            </Tabs>
+        ) : (
+            <div className="mt-10 prose prose-lg max-w-none prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg prose-headings:scroll-mt-20 w-full transition-all duration-500 ease-in-out flex items-start justify-between gap-10">
+                <div className="transition-all duration-500 ease-in-out sm:w-1/2">
+                    <h3 className='text-lg font-semibold mb-4'>
+                        Original Text
+                    </h3>
+                    {story.bibleId && story.chapterId ? parseBible(chapterData?.content ?? '', '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
+                        Select a Bible and Chapter to view the content
+                    </div>}
+                </div>
+                <div className="transition-all duration-500 ease-in-out sm:w-1/2">
+                    <h3 className='text-lg font-semibold mb-4'>
+                        Generated Story
+                    </h3>
+                    {story.story ? parseBible(story.story, '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
+                        Select a Bible and Chapter to view the content
+                    </div>}
+                </div>
+            </div>)}
     </div>
 }
