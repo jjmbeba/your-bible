@@ -18,4 +18,15 @@ export default defineSchema({
     content: v.string(),
     userId: v.string(),
   }).index("by_chapter_id", ["chapterId"]),
+  stories: defineTable({
+    title: v.string(),
+    bibleId: v.string(),
+    chapterId: v.string(),
+    userId: v.string(),
+    perspective: v.string(),
+    setting: v.string(),
+    tone: v.string(),
+    storyLength: v.string(),
+    story: v.string(),
+  }).index("by_user_id", ["userId"]),
 });

@@ -5,6 +5,8 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { useCreateStory } from '@/hooks/stories'
+import { useSession } from '@/lib/auth-client'
 
 type Props = {
   bible: string,
@@ -12,8 +14,13 @@ type Props = {
 }
 
 const StoriesForm = ({ bible, chapter }: Props) => {
+  const { mutate: createStory, isPending: isCreatingStory } = useCreateStory()
+  const { data: session } = useSession()
+  const userId = session?.user.id
+
   const form = useForm({
     defaultValues: {
+      title: "",
       bibleId: bible,
       chapterId: chapter,
       perspective: "Observer",
@@ -25,7 +32,13 @@ const StoriesForm = ({ bible, chapter }: Props) => {
       onSubmit: storiesSchema
     },
     onSubmit: ({ value }) => {
-      console.log(value)
+      if (!userId) return;
+
+      createStory({
+        ...value,
+        story: 'story',
+        userId
+      })
     }
   })
 
@@ -36,6 +49,28 @@ const StoriesForm = ({ bible, chapter }: Props) => {
       form.handleSubmit()
     }}>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="title">Title</Label>
+          <form.Field
+            name="title"
+            children={(field) => (
+              <>
+                <Input
+                  id="title"
+                  placeholder="Title"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                {field.state.meta.errors.map((error, i) => (
+                  <div key={i} className="text-red-500 text-sm">
+                    {error?.message}
+                  </div>
+                ))}
+              </>
+            )}
+          />
+        </div>
         <div className="grid gap-2">
           <Label htmlFor="perspective">Perspective</Label>
           <form.Field
@@ -131,8 +166,8 @@ const StoriesForm = ({ bible, chapter }: Props) => {
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
         children={([canSubmit, isSubmitting]) => (
-          <Button className='mt-4 w-full md:w-auto' size='sm' type="submit" disabled={!canSubmit || isSubmitting}>
-            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <div className='flex items-center gap-2'>
+          <Button className='mt-4 w-full md:w-auto' size='sm' type="submit" disabled={!canSubmit || isSubmitting || isCreatingStory}>
+            {isSubmitting || isCreatingStory ? <Loader2 className="w-4 h-4 animate-spin" /> : <div className='flex items-center gap-2'>
               <SparklesIcon />
               Generate story
             </div>}

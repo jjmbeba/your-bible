@@ -14,6 +14,11 @@ export const StoryLengthEnum = z.enum([
 ]);
 
 export const storiesSchema = z.object({
+    title: z.string().min(1, {
+        message: "Title is required",
+    }).max(100, {
+        message: "Title must be less than 100 characters",
+    }),
     bibleId: z.string().min(1),
     chapterId: z.string().min(1),
     perspective: z.string().min(1, {

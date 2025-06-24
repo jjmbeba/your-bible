@@ -18,6 +18,7 @@ import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthedStoriesIndexRouteImport } from './routes/_authed/stories/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
+import { Route as AuthedStoriesCreateStoryRouteImport } from './routes/_authed/stories/create-story'
 import { Route as AuthedCollectionsCollectionIdRouteImport } from './routes/_authed/collections/$collectionId'
 import { ServerRoute as ApiUploadthingServerRouteImport } from './routes/api/uploadthing'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
@@ -58,6 +59,12 @@ const AuthedCollectionsIndexRoute = AuthedCollectionsIndexRouteImport.update({
   path: '/collections/',
   getParentRoute: () => AuthedRouteRoute,
 } as any)
+const AuthedStoriesCreateStoryRoute =
+  AuthedStoriesCreateStoryRouteImport.update({
+    id: '/stories/create-story',
+    path: '/stories/create-story',
+    getParentRoute: () => AuthedRouteRoute,
+  } as any)
 const AuthedCollectionsCollectionIdRoute =
   AuthedCollectionsCollectionIdRouteImport.update({
     id: '/collections/$collectionId',
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/collections': typeof AuthedCollectionsIndexRoute
   '/stories': typeof AuthedStoriesIndexRoute
 }
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/collections': typeof AuthedCollectionsIndexRoute
   '/stories': typeof AuthedStoriesIndexRoute
 }
@@ -103,6 +112,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/_authed/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/_authed/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/_authed/collections/': typeof AuthedCollectionsIndexRoute
   '/_authed/stories/': typeof AuthedStoriesIndexRoute
 }
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
+    | '/stories/create-story'
     | '/collections'
     | '/stories'
   fileRoutesByTo: FileRoutesByTo
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
+    | '/stories/create-story'
     | '/collections'
     | '/stories'
   id:
@@ -135,6 +147,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/sign-in'
     | '/_authed/collections/$collectionId'
+    | '/_authed/stories/create-story'
     | '/_authed/collections/'
     | '/_authed/stories/'
   fileRoutesById: FileRoutesById
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedCollectionsIndexRouteImport
       parentRoute: typeof AuthedRouteRoute
     }
+    '/_authed/stories/create-story': {
+      id: '/_authed/stories/create-story'
+      path: '/stories/create-story'
+      fullPath: '/stories/create-story'
+      preLoaderRoute: typeof AuthedStoriesCreateStoryRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
     '/_authed/collections/$collectionId': {
       id: '/_authed/collections/$collectionId'
       path: '/collections/$collectionId'
@@ -253,12 +273,14 @@ declare module '@tanstack/react-start/server' {
 
 interface AuthedRouteRouteChildren {
   AuthedCollectionsCollectionIdRoute: typeof AuthedCollectionsCollectionIdRoute
+  AuthedStoriesCreateStoryRoute: typeof AuthedStoriesCreateStoryRoute
   AuthedCollectionsIndexRoute: typeof AuthedCollectionsIndexRoute
   AuthedStoriesIndexRoute: typeof AuthedStoriesIndexRoute
 }
 
 const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
   AuthedCollectionsCollectionIdRoute: AuthedCollectionsCollectionIdRoute,
+  AuthedStoriesCreateStoryRoute: AuthedStoriesCreateStoryRoute,
   AuthedCollectionsIndexRoute: AuthedCollectionsIndexRoute,
   AuthedStoriesIndexRoute: AuthedStoriesIndexRoute,
 }
