@@ -59,14 +59,14 @@ function RouteComponent() {
                   {story.title}
                 </h2>
                 <div className="mt-4 flex justify-end">
-                  {/* <Link
-                    to="/collections/$collectionId"
-                    params={{ collectionId: collection._id }}
+                  <Link
+                    to="/stories/$storyId"
+                    params={{ storyId: story._id }}
                     className="cursor-pointer text-sm text-primary hover:text-primary/80 transition-colors"
-                    aria-label={`View ${collection.name} collection`}
+                    aria-label={`View ${story.title} story`}
                   >
-                    View Collection
-                  </Link> */}
+                    View Story
+                  </Link>
                 </div>
               </div>
             ))}
