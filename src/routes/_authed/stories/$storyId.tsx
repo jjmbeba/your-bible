@@ -50,12 +50,10 @@ function RouteComponent() {
 
     if (!story) return <div>Story not found</div>;
 
-    const userId = session?.session.userId!
-
     return <div className="w-full px-1 sm:px-4">
         <div className="py-2 sm:py-5 rounded-lg flex flex-row justify-between items-center gap-2 sm:gap-4">
             <>
-                <h1 className="text-lg sm:text-2xl font-bold">{story.title} from {story.chapterReference}</h1>
+                <h1 className="text-lg sm:text-2xl font-bold">{story.title} ({story.chapterReference})</h1>
                 <div className='flex items-center gap-2'>
                     <DeleteStoryButton id={story._id as Id<'stories'>} />
                 </div>
@@ -74,9 +72,9 @@ function RouteComponent() {
                 <h3 className='text-lg font-semibold mb-4'>
                     Generated Story
                 </h3>
-                {/* {bible && chapter ? parseBible(chapterData?.content ?? '', '', bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
+                {story.story ? parseBible(story.story, '', story.bibleId, story.chapterId) : <div className='flex items-center justify-center h-full text-center'>
                     Select a Bible and Chapter to view the content
-                </div>} */}
+                </div>}
             </div>
         </div>
     </div>

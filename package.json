@@ -15,6 +15,7 @@
     "@ariakit/react": "^0.4.17",
     "@convex-dev/react-query": "0.0.0-alpha.8",
     "@emoji-mart/data": "1.2.1",
+    "@google/genai": "^1.6.0",
     "@neondatabase/serverless": "^1.0.1",
     "@platejs/basic-nodes": "^49.0.0",
     "@platejs/callout": "^49.0.0",

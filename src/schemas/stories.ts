@@ -7,12 +7,6 @@ export const StoryPerspectiveEnum = z.enum([
     "nonHumanElement",
 ]);
 
-export const StoryLengthEnum = z.enum([
-    "short",
-    "medium",
-    "long",
-]);
-
 export const storiesSchema = z.object({
     title: z.string().min(1, {
         message: "Title is required",
@@ -35,5 +29,5 @@ export const storiesSchema = z.object({
     }).max(1000, {
         message: "Tone must be less than 1000 characters",
     }),
-    storyLength: StoryLengthEnum,
+    storyLength: z.string().min(1),
 })

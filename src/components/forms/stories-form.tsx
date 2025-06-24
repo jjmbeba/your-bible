@@ -12,9 +12,10 @@ type Props = {
   bible: string,
   chapter: string,
   chapterReference: string,
+  originalText: string,
 }
 
-const StoriesForm = ({ bible, chapter, chapterReference }: Props) => {
+const StoriesForm = ({ bible, chapter, chapterReference, originalText }: Props) => {
   const { mutate: createStory, isPending: isCreatingStory } = useCreateStory()
   const { data: session } = useSession()
   const userId = session?.user.id
@@ -38,7 +39,8 @@ const StoriesForm = ({ bible, chapter, chapterReference }: Props) => {
 
       createStory({
         ...value,
-        story: 'story',
+        originalText,
+        chapterReference,
         userId
       })
     }
