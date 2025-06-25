@@ -1,9 +1,11 @@
 import BibleDropDown from '@/components/bible/bible-dropdown'
 import BibleSelector from '@/components/bible/bible-selector'
 import StoriesForm from '@/components/forms/stories-form'
+import { buttonVariants } from '@/components/ui/button'
 import { parseBible } from '@/lib/parse'
 import { cn } from '@/lib/utils'
 import { useChapter } from '@/queries/bible'
+import { Link } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
 import { z } from 'zod'
@@ -31,9 +33,14 @@ function RouteComponent() {
   }
 
   return <div className="w-full px-2 sm:px-4 pb-10">
-    <h2 className='text-2xl font-bold'>
-      Generate a story
-    </h2>
+    <div className='flex items-center justify-between'>
+      <h2 className='text-2xl font-bold'>
+        Generate a story
+      </h2>
+      <Link to="/stories" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+        View stories
+      </Link>
+    </div>
     <p className='text-sm text-muted-foreground'>
       Generate a story based on the following details.
     </p>

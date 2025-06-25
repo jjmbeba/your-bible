@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-export const StoryPerspectiveEnum = z.enum([
-    "narrator",
-    "specificCharacter",
-    "observer",
-    "nonHumanElement",
-]);
-
 export const storiesSchema = z.object({
     title: z.string().min(1, {
         message: "Title is required",
@@ -18,7 +11,7 @@ export const storiesSchema = z.object({
     chapterReference: z.string().min(1),
     perspective: z.string().min(1, {
         message: "Perspective is required",
-    }).or(StoryPerspectiveEnum),
+    }),
     setting: z.string().min(1, {
         message: "Setting is required",
     }).max(1000, {

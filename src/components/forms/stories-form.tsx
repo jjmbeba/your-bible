@@ -26,7 +26,7 @@ const StoriesForm = ({ bible, chapter, chapterReference, originalText }: Props) 
       bibleId: bible,
       chapterId: chapter,
       chapterReference,
-      perspective: "Observer",
+      perspective: "observer",
       setting: "",
       tone: "",
       storyLength: "short",
