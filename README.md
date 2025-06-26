@@ -1,6 +1,6 @@
 # Your Bible 📖
 
-A modern, feature-rich Bible application built with TanStack Start, TypeScript, and TanStack Router. Access multiple Bible translations, search scriptures, and create personal verse collections.
+A modern, feature-rich Bible application built with TanStack Start, TypeScript, and TanStack Router. Access multiple Bible translations, search scriptures, create personal verse collections, and generate AI-powered stories based on biblical passages.
 
 ## ✨ Features
 
@@ -28,9 +28,17 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 - **Side-by-Side View**: View your notes alongside the Bible text on desktop for an integrated study experience.
 - **Private and Secure**: Notes are tied to your user account and are kept private.
 
+### 🎭 AI Story Generation
+- **Creative Story Creation**: Generate unique stories based on biblical passages using AI
+- **Customizable Parameters**: Control story perspective, setting, tone, and length
+- **Rate Limiting**: Built-in rate limiting to ensure fair usage and API cost management
+- **Story Management**: Create, view, and delete your generated stories
+- **Side-by-Side Comparison**: View original biblical text alongside your generated story
+- **Mobile-Friendly**: Responsive design with tabs for mobile viewing
+
 ### 🔐 User Authentication
 - **Secure Sign In/Sign Up**: Email-based authentication with Better Auth
-- **Protected Routes**: Collections are only accessible to authenticated users
+- **Protected Routes**: Collections and stories are only accessible to authenticated users
 - **User Sessions**: Persistent login sessions across browser sessions
 
 ### 🎨 Modern UI/UX
@@ -58,6 +66,8 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 - **Better Auth** - Authentication solution
 - **Drizzle ORM** - Type-safe database queries
 - **PostgreSQL** - Primary database (via Neon)
+- **Google Gemini AI** - AI-powered story generation
+- **Redis** - Rate limiting and caching
 
 ### Development Tools
 - **Vite** - Fast build tool and dev server
@@ -72,6 +82,8 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 - pnpm (recommended) or npm
 - Convex account
 - API.Bible API key
+- Google Gemini API key
+- Redis instance (for rate limiting)
 
 ### Installation
 
@@ -97,6 +109,13 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
    
    # Database
    DATABASE_URL=your_database_url_here
+   
+   # Google Gemini AI
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-1.5-flash
+   
+   # Redis (for rate limiting)
+   REDIS_URL=your_redis_url_here
    ```
 
 4. **Convex Setup**
@@ -121,6 +140,7 @@ src/
 │   ├── collections/ # Collection management
 │   ├── forms/       # Form components
 │   ├── search/      # Search functionality
+│   ├── stories/     # Story management components
 │   ├── ui/          # Reusable UI components
 │   └── skeletons/   # Loading skeletons
 ├── hooks/           # Custom React hooks
@@ -128,6 +148,7 @@ src/
 ├── queries/         # TanStack Query configurations
 ├── routes/          # TanStack Router routes
 ├── schemas/         # Zod validation schemas
+├── server/          # Server-side functions
 ├── styles/          # Global styles
 └── types/           # TypeScript type definitions
 ```
@@ -146,12 +167,13 @@ The application uses Convex for real-time data synchronization. The schema inclu
 - `collections` - User-created verse collections
 - `collectionVerses` - Individual verses within collections
 - `notes` - User-created notes for each chapter
+- `stories` - AI-generated stories based on biblical passages
 
 ### API Integration
-The app integrates with API.Bible for:
-- Bible translations and metadata
-- Chapter content retrieval
-- Verse search functionality
+The app integrates with multiple APIs:
+- **API.Bible** - Bible translations and metadata, chapter content retrieval, verse search functionality
+- **Google Gemini AI** - AI-powered story generation with theological guidelines
+- **Redis** - Rate limiting for story generation to manage API costs
 
 ## 🎯 Usage
 
@@ -179,6 +201,20 @@ The app integrates with API.Bible for:
 3. Use the rich text editor to write and format your thoughts.
 4. Your notes are saved automatically.
 
+### Generating Stories
+1. Navigate to the Stories section while signed in
+2. Click "Create Story" to start the story generation process
+3. Select a Bible translation and chapter
+4. Fill in the story parameters:
+   - **Title**: Give your story a meaningful title
+   - **Perspective**: Choose the narrative perspective (e.g., "first-person", "observer")
+   - **Setting**: Describe the setting or context for your story
+   - **Tone**: Specify the emotional tone (e.g., "contemplative", "adventurous")
+   - **Story Length**: Choose between short, medium, or long stories
+5. Click "Generate Story" to create your AI-powered narrative
+6. View your story alongside the original biblical text
+7. Manage your stories from the Stories dashboard
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -197,6 +233,7 @@ This project is licensed under the ISC License.
 - [Convex](https://convex.dev/) for the real-time backend
 - [TanStack](https://tanstack.com/) for excellent React libraries and TanStack Start
 - [Shadcn/ui](https://ui.shadcn.com/) for beautiful components
+- [Google Gemini](https://ai.google.dev/) for AI-powered story generation
 
 ## 📞 Support
 
