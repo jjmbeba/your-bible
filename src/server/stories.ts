@@ -12,7 +12,7 @@ export const generateStory = createServerFn({
     const { success, remaining } = await ratelimit.limit(userId)
 
     if (!success) {
-        throw new Error(`Rate limit exceeded. You have ${remaining} requests left.`)
+        throw new Error(`Rate limit exceeded. Try again in a few hours. Remaining requests: ${remaining}.`)
     }
 
     if (!API_MODEL) {
