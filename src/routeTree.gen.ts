@@ -13,11 +13,13 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as BibleRouteImport } from './routes/bible'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedStoriesIndexRouteImport } from './routes/_authed/stories/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
+import { Route as AuthedStoriesCreateStoryRouteImport } from './routes/_authed/stories/create-story'
+import { Route as AuthedStoriesStoryIdRouteImport } from './routes/_authed/stories/$storyId'
 import { Route as AuthedCollectionsCollectionIdRouteImport } from './routes/_authed/collections/$collectionId'
 import { ServerRoute as ApiUploadthingServerRouteImport } from './routes/api/uploadthing'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
@@ -34,11 +36,6 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RoadmapRoute = RoadmapRouteImport.update({
-  id: '/roadmap',
-  path: '/roadmap',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BibleRoute = BibleRouteImport.update({
   id: '/bible',
   path: '/bible',
@@ -53,9 +50,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedStoriesIndexRoute = AuthedStoriesIndexRouteImport.update({
+  id: '/stories/',
+  path: '/stories/',
+  getParentRoute: () => AuthedRouteRoute,
+} as any)
 const AuthedCollectionsIndexRoute = AuthedCollectionsIndexRouteImport.update({
   id: '/collections/',
   path: '/collections/',
+  getParentRoute: () => AuthedRouteRoute,
+} as any)
+const AuthedStoriesCreateStoryRoute =
+  AuthedStoriesCreateStoryRouteImport.update({
+    id: '/stories/create-story',
+    path: '/stories/create-story',
+    getParentRoute: () => AuthedRouteRoute,
+  } as any)
+const AuthedStoriesStoryIdRoute = AuthedStoriesStoryIdRouteImport.update({
+  id: '/stories/$storyId',
+  path: '/stories/$storyId',
   getParentRoute: () => AuthedRouteRoute,
 } as any)
 const AuthedCollectionsCollectionIdRoute =
@@ -79,32 +92,38 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/stories/$storyId': typeof AuthedStoriesStoryIdRoute
+  '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/collections': typeof AuthedCollectionsIndexRoute
+  '/stories': typeof AuthedStoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/stories/$storyId': typeof AuthedStoriesStoryIdRoute
+  '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/collections': typeof AuthedCollectionsIndexRoute
+  '/stories': typeof AuthedStoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteRouteWithChildren
   '/bible': typeof BibleRoute
-  '/roadmap': typeof RoadmapRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
   '/_authed/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
+  '/_authed/stories/$storyId': typeof AuthedStoriesStoryIdRoute
+  '/_authed/stories/create-story': typeof AuthedStoriesCreateStoryRoute
   '/_authed/collections/': typeof AuthedCollectionsIndexRoute
+  '/_authed/stories/': typeof AuthedStoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -112,38 +131,43 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
+    | '/stories/$storyId'
+    | '/stories/create-story'
     | '/collections'
+    | '/stories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/collections/$collectionId'
+    | '/stories/$storyId'
+    | '/stories/create-story'
     | '/collections'
+    | '/stories'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/bible'
-    | '/roadmap'
     | '/search'
     | '/sign-in'
     | '/_authed/collections/$collectionId'
+    | '/_authed/stories/$storyId'
+    | '/_authed/stories/create-story'
     | '/_authed/collections/'
+    | '/_authed/stories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
   BibleRoute: typeof BibleRoute
-  RoadmapRoute: typeof RoadmapRoute
   SearchRoute: typeof SearchRoute
   SignInRoute: typeof SignInRoute
 }
@@ -189,13 +213,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/roadmap': {
-      id: '/roadmap'
-      path: '/roadmap'
-      fullPath: '/roadmap'
-      preLoaderRoute: typeof RoadmapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/bible': {
       id: '/bible'
       path: '/bible'
@@ -217,11 +234,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/stories/': {
+      id: '/_authed/stories/'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof AuthedStoriesIndexRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
     '/_authed/collections/': {
       id: '/_authed/collections/'
       path: '/collections'
       fullPath: '/collections'
       preLoaderRoute: typeof AuthedCollectionsIndexRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
+    '/_authed/stories/create-story': {
+      id: '/_authed/stories/create-story'
+      path: '/stories/create-story'
+      fullPath: '/stories/create-story'
+      preLoaderRoute: typeof AuthedStoriesCreateStoryRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
+    '/_authed/stories/$storyId': {
+      id: '/_authed/stories/$storyId'
+      path: '/stories/$storyId'
+      fullPath: '/stories/$storyId'
+      preLoaderRoute: typeof AuthedStoriesStoryIdRouteImport
       parentRoute: typeof AuthedRouteRoute
     }
     '/_authed/collections/$collectionId': {
@@ -254,12 +292,18 @@ declare module '@tanstack/react-start/server' {
 
 interface AuthedRouteRouteChildren {
   AuthedCollectionsCollectionIdRoute: typeof AuthedCollectionsCollectionIdRoute
+  AuthedStoriesStoryIdRoute: typeof AuthedStoriesStoryIdRoute
+  AuthedStoriesCreateStoryRoute: typeof AuthedStoriesCreateStoryRoute
   AuthedCollectionsIndexRoute: typeof AuthedCollectionsIndexRoute
+  AuthedStoriesIndexRoute: typeof AuthedStoriesIndexRoute
 }
 
 const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
   AuthedCollectionsCollectionIdRoute: AuthedCollectionsCollectionIdRoute,
+  AuthedStoriesStoryIdRoute: AuthedStoriesStoryIdRoute,
+  AuthedStoriesCreateStoryRoute: AuthedStoriesCreateStoryRoute,
   AuthedCollectionsIndexRoute: AuthedCollectionsIndexRoute,
+  AuthedStoriesIndexRoute: AuthedStoriesIndexRoute,
 }
 
 const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
@@ -270,7 +314,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
   BibleRoute: BibleRoute,
-  RoadmapRoute: RoadmapRoute,
   SearchRoute: SearchRoute,
   SignInRoute: SignInRoute,
 }

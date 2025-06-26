@@ -1,14 +1,17 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useBooks } from '@/queries/bible'
 import { Book, ChapterSummary } from '@/types/responses'
-import { getRouteApi, useNavigate } from '@tanstack/react-router'
-import { Loader2, Search } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { useMemo } from 'react'
-import SearchBar from './searchbar'
 
-const BibleDropDown = () => {
+type Props = {
+    bible: string | undefined,
+    chapter: string | undefined,
+}
+
+const BibleDropDown = ({ bible, chapter }: Props) => {
     const navigate = useNavigate()
-    const { chapter, bible } = getRouteApi('/bible').useSearch()
     const currentBook = chapter?.split('.')[0]
     const { data: books, isLoading: isLoadingBooks } = useBooks(bible)
 
@@ -31,7 +34,7 @@ const BibleDropDown = () => {
                         const firstChapter = selectedBook?.chapters?.[0]?.id
                         if (firstChapter) {
                             navigate({
-                                to: '/bible',
+                                to: '.',
                                 search: (prev) => ({
                                     ...prev,
                                     chapter: firstChapter,
@@ -63,7 +66,7 @@ const BibleDropDown = () => {
                     value={chapter ?? ''}
                     onValueChange={(value) => {
                         navigate({
-                            to: '/bible',
+                            to: '.',
                             search: (prev) => ({
                                 ...prev,
                                 chapter: value,
