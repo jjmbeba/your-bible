@@ -1,5 +1,6 @@
 import { Id } from "convex/_generated/dataModel";
 import { QueryCtx } from "convex/_generated/server";
+import { ConvexError } from "convex/values";
 
 export const validateCollectionAccess = async (
     ctx: QueryCtx,
@@ -42,11 +43,17 @@ export const validateStoryAccess = async (
     const story = await ctx.db.get(storyId);
 
     if (!story) {
-        throw new Error("Story not found");
+      throw new ConvexError({
+        message: "Story not found",
+        code: "NOT_FOUND"
+      })
     }
 
     if (story.userId !== userId) {
-        throw new Error("You are not authorized to access this story");
+        throw new ConvexError({
+            message: "You are not authorized to access this story",
+            code: "UNAUTHORIZED"
+        })
     }
 
     return story;

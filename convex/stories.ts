@@ -1,10 +1,11 @@
+import { validateStoryAccess } from "@/lib/convex";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { validateStoryAccess } from "@/lib/convex";
 
 export const createStory = mutation({
   args: {
     bibleId: v.string(),
+    story: v.string(),
     chapterId: v.string(),
     chapterReference: v.string(),
     userId: v.string(),
@@ -12,22 +13,21 @@ export const createStory = mutation({
     setting: v.string(),
     tone: v.string(),
     storyLength: v.string(),
-    story: v.string(),
     title: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("stories", {
-      bibleId: args.bibleId,
-      chapterId: args.chapterId,
-      chapterReference: args.chapterReference,
-      userId: args.userId,
-      title: args.title,
-      perspective: args.perspective,
-      setting: args.setting,
-      tone: args.tone,
-      storyLength: args.storyLength,
-      story: args.story,
-    });
+      return  await ctx.db.insert("stories", {
+        bibleId: args.bibleId,
+        chapterId: args.chapterId,
+        chapterReference: args.chapterReference,
+        userId: args.userId,
+        title: args.title,
+        perspective: args.perspective,
+        setting: args.setting,
+        tone: args.tone,
+        storyLength: args.storyLength,
+        story: args.story,
+      }); 
   }
 });
 

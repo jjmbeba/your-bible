@@ -12,6 +12,7 @@ import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ConvexError } from 'convex/values'
 
 export const Route = createFileRoute('/_authed/stories/$storyId')({
     component: RouteComponent,
@@ -28,11 +29,24 @@ function RouteComponent() {
 
     useEffect(() => {
         if (error) {
-            toast.error(error.message)
+            if (error instanceof ConvexError) {
+                toast.error(error.data.message)
+            } else {
+                toast.error(error.message)
+            }
         }
     }, [error])
 
     const { data: chapterData, isLoading: isLoadingChapter } = useChapter(story?.bibleId, story?.chapterId)
+
+    if (!story) {
+        return <div className='flex items-center justify-center h-full text-center'>
+            <div className='flex flex-col items-center justify-center gap-2'>
+                <h1 className='text-lg font-semibold'>Story not found</h1>
+                <p className='text-sm text-muted-foreground'>The story you are looking for does not exist.</p>
+            </div>
+        </div>
+    }
 
     if (isLoading || isSessionPending) return (
         <div className="min-h-[80vh] flex items-center justify-center text-sm text-muted-foreground py-2 sm:py-0 gap-2">

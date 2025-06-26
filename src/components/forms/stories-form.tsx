@@ -30,6 +30,7 @@ const StoriesForm = ({ bible, chapter, chapterReference, originalText }: Props) 
       setting: "",
       tone: "",
       storyLength: "short",
+      originalText,
     },
     validators: {
       onSubmit: storiesSchema

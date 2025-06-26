@@ -23,4 +23,18 @@ export const storiesSchema = z.object({
         message: "Tone must be less than 1000 characters",
     }),
     storyLength: z.string().min(1),
+    originalText: z.string().min(1),
+})
+
+export const createStorySchema = storiesSchema.extend({
+    userId: z.string().min(1),
+    chapterReference: z.string().min(1),
+})
+
+export const generateStorySchema = createStorySchema.extend({
+    originalText: z.string().min(1),
+}).omit({
+    bibleId: true,
+    chapterId: true,
+    title: true,
 })
