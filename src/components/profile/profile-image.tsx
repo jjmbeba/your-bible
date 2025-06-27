@@ -106,7 +106,7 @@ const ProfileImage = () => {
                     <Avatar className='size-20 sm:size-24'>
                         <AvatarImage src={user?.image ?? ''} />
                         <AvatarFallback>
-                            {user.name.charAt(0)}
+                            {user.name?.charAt(0) ?? user.email?.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
                     {value ? (

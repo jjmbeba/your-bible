@@ -14,8 +14,8 @@ const UserButton = () => {
     const queryClient = useQueryClient()
 
     const userInitials = useMemo(() => {
-        return session?.user?.name?.charAt(0).toUpperCase()
-    }, [session?.user?.name])
+        return session?.user?.name?.charAt(0).toUpperCase() ?? session?.user?.email?.charAt(0).toUpperCase()
+    }, [session?.user?.name, session?.user?.email])
 
     if (isPending) {
         return <div className='size-8 rounded-full bg-primary/10 flex items-center justify-center animate-pulse' />
