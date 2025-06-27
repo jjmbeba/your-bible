@@ -1,4 +1,5 @@
 import PersonalInformation from '@/components/profile/personal-info'
+import ProfileImage from '@/components/profile/profile-image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -35,7 +36,7 @@ function RouteComponent() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {/* <ProfileImage /> */}
+        <ProfileImage />
       </CardContent>
     </Card>
   </div>
