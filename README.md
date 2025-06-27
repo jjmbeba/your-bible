@@ -101,21 +101,38 @@ A modern, feature-rich Bible application built with TanStack Start, TypeScript, 
 3. **Environment Setup**
    Create a `.env` file in the root directory:
    ```env
-   # Convex
-   VITE_CONVEX_URL=your_convex_url_here
+   # API Configuration
+   API_BASE_URL=your_api_base_url_here
+   API_KEY=your_api_key_here
    
-   # API.Bible
-   VITE_API_BIBLE_KEY=your_api_bible_key_here
+   # Better Auth
+   BETTER_AUTH_SECRET=your_better_auth_secret_here
+   BETTER_AUTH_URL=your_better_auth_url_here
    
    # Database
    DATABASE_URL=your_database_url_here
    
-   # Google Gemini AI
-   GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-1.5-flash
+   # GitHub OAuth (if using GitHub authentication)
+   GITHUB_CLIENT_ID=your_github_client_id_here
+   GITHUB_CLIENT_SECRET=your_github_client_secret_here
    
-   # Redis (for rate limiting)
+   # File Upload
+   UPLOADTHING_TOKEN=your_uploadthing_token_here
+   
+   # Google Gemini AI
+   GEMINI_MODEL=gemini-1.5-flash
+   GEMINI_API_KEY=your_gemini_api_key_here
+   
+   # Redis/KV Storage
+   KV_URL=your_kv_url_here
+   KV_REST_API_URL=your_kv_rest_api_url_here
+   KV_REST_API_TOKEN=your_kv_rest_api_token_here
+   KV_REST_API_READ_ONLY_TOKEN=your_kv_rest_api_read_only_token_here
    REDIS_URL=your_redis_url_here
+   
+   # Convex
+   CONVEX_DEPLOYMENT=your_convex_deployment_here
+   VITE_CONVEX_URL=your_convex_url_here
    ```
 
 4. **Convex Setup**
