@@ -56,8 +56,10 @@ const UserButton = () => {
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <UserIcon />
-                            Profile
+                            <Link to='/profile' className='flex items-center gap-2'>
+                                <UserIcon />
+                                Profile
+                            </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleLogout}>
                             <LogOutIcon />

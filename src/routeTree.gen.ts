@@ -16,6 +16,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as BibleRouteImport } from './routes/bible'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedProfileRouteImport } from './routes/_authed/profile'
 import { Route as AuthedStoriesIndexRouteImport } from './routes/_authed/stories/index'
 import { Route as AuthedCollectionsIndexRouteImport } from './routes/_authed/collections/index'
 import { Route as AuthedStoriesCreateStoryRouteImport } from './routes/_authed/stories/create-story'
@@ -49,6 +50,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedProfileRoute = AuthedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthedRouteRoute,
 } as any)
 const AuthedStoriesIndexRoute = AuthedStoriesIndexRouteImport.update({
   id: '/stories/',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/bible': typeof BibleRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
+  '/profile': typeof AuthedProfileRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/stories/$storyId': typeof AuthedStoriesStoryIdRoute
   '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/bible': typeof BibleRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
+  '/profile': typeof AuthedProfileRoute
   '/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/stories/$storyId': typeof AuthedStoriesStoryIdRoute
   '/stories/create-story': typeof AuthedStoriesCreateStoryRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/bible': typeof BibleRoute
   '/search': typeof SearchRoute
   '/sign-in': typeof SignInRoute
+  '/_authed/profile': typeof AuthedProfileRoute
   '/_authed/collections/$collectionId': typeof AuthedCollectionsCollectionIdRoute
   '/_authed/stories/$storyId': typeof AuthedStoriesStoryIdRoute
   '/_authed/stories/create-story': typeof AuthedStoriesCreateStoryRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/search'
     | '/sign-in'
+    | '/profile'
     | '/collections/$collectionId'
     | '/stories/$storyId'
     | '/stories/create-story'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/search'
     | '/sign-in'
+    | '/profile'
     | '/collections/$collectionId'
     | '/stories/$storyId'
     | '/stories/create-story'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/bible'
     | '/search'
     | '/sign-in'
+    | '/_authed/profile'
     | '/_authed/collections/$collectionId'
     | '/_authed/stories/$storyId'
     | '/_authed/stories/create-story'
@@ -234,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/profile': {
+      id: '/_authed/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthedProfileRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
     '/_authed/stories/': {
       id: '/_authed/stories/'
       path: '/stories'
@@ -291,6 +310,7 @@ declare module '@tanstack/react-start/server' {
 }
 
 interface AuthedRouteRouteChildren {
+  AuthedProfileRoute: typeof AuthedProfileRoute
   AuthedCollectionsCollectionIdRoute: typeof AuthedCollectionsCollectionIdRoute
   AuthedStoriesStoryIdRoute: typeof AuthedStoriesStoryIdRoute
   AuthedStoriesCreateStoryRoute: typeof AuthedStoriesCreateStoryRoute
@@ -299,6 +319,7 @@ interface AuthedRouteRouteChildren {
 }
 
 const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
+  AuthedProfileRoute: AuthedProfileRoute,
   AuthedCollectionsCollectionIdRoute: AuthedCollectionsCollectionIdRoute,
   AuthedStoriesStoryIdRoute: AuthedStoriesStoryIdRoute,
   AuthedStoriesCreateStoryRoute: AuthedStoriesCreateStoryRoute,
