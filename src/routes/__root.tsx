@@ -89,7 +89,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             <head>
                 <HeadContent />
             </head>
-            <body>
+            <body suppressHydrationWarning>
                 <Header />
                 <main className='pt-8 px-10'>
                     {children}

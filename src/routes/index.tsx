@@ -1,5 +1,5 @@
 // src/routes/index.tsx
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -22,6 +22,7 @@ function Home() {
     const features = [
         {
             icon: BookOpen,
+            dataTestId: "home-page-feature-read",
             title: "Bible Reading",
             description: "Access multiple Bible translations with intuitive navigation and verse highlighting.",
             href: "/bible",
@@ -29,6 +30,7 @@ function Home() {
         },
         {
             icon: Search,
+            dataTestId: "home-page-feature-search",
             title: "Advanced Search",
             description: "Search across Bible text with powerful query capabilities and highlighted results.",
             href: "/search",
@@ -36,6 +38,7 @@ function Home() {
         },
         {
             icon: FolderOpen,
+            dataTestId: "home-page-feature-collections",
             title: "Personal Collections",
             description: "Create and organize your favorite verses into custom collections.",
             href: "/collections",
@@ -43,6 +46,7 @@ function Home() {
         },
         {
             icon: Sparkles,
+            dataTestId: "home-page-feature-stories",
             title: "AI Story Generation",
             description: "Generate creative stories based on biblical passages using AI.",
             href: "/stories",
@@ -53,6 +57,7 @@ function Home() {
     const quickActions = [
         {
             icon: BookMarked,
+            dataTestId: "home-page-quick-action-start-reading",
             title: "Start Reading",
             description: "Begin your Bible study journey",
             href: "/bible",
@@ -60,6 +65,7 @@ function Home() {
         },
         {
             icon: FileText,
+            dataTestId: "home-page-quick-action-take-notes",
             title: "Take Notes",
             description: "Create personal study notes",
             href: "/bible",
@@ -67,6 +73,7 @@ function Home() {
         },
         {
             icon: Lightbulb,
+            dataTestId: "home-page-quick-action-generate-stories",
             title: "Generate Stories",
             description: "Explore AI-powered narratives",
             href: "/stories",
@@ -79,23 +86,22 @@ function Home() {
             <section className="relative px-4 py-20 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-4xl text-center">
                     <div className="mb-8">
-                        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+                        <h1 data-testid='hero-title' className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
                             Your Bible
                         </h1>
-                        <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
+                        <p data-testid="home-page-description" className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
                             A modern, feature-rich Bible application for reading, studying, and exploring scripture with AI-powered insights.
                         </p>
                     </div>
-                    
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link to="/bible">
-                            <Button size="sm" className="w-full sm:w-auto">
+                            <Button name='start-reading' size="sm" className="w-full sm:w-auto">
                                 Start Reading
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         </Link>
                         <Link to="/search">
-                            <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                            <Button name='search-scriptures' variant="outline" size="sm" className="w-full sm:w-auto">
                                 Search Scriptures
                             </Button>
                         </Link>
@@ -105,15 +111,15 @@ function Home() {
             <section className="px-4 py-16 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-7xl">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                        <h2 data-testid="home-page-features-title" className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                             Everything you need for Bible study
                         </h2>
-                        <p className="mt-4 text-lg text-muted-foreground">
+                        <p data-testid="home-page-features-description" className="mt-4 text-lg text-muted-foreground">
                             Powerful tools to enhance your spiritual journey and deepen your understanding of scripture.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div  className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         {features.map((feature) => {
                             const Icon = feature.icon
                             return (
@@ -123,7 +129,7 @@ function Home() {
                                             <div className={cn("w-12 h-12 rounded-lg bg-muted flex items-center justify-center group-hover:scale-110 transition-transform", feature.color)}>
                                                 <Icon className="h-6 w-6" />
                                             </div>
-                                            <CardTitle className="text-lg">{feature.title}</CardTitle>
+                                            <CardTitle data-testid={feature.dataTestId} className="text-lg">{feature.title}</CardTitle>
                                         </CardHeader>
                                         <CardContent>
                                             <CardDescription className="text-sm leading-relaxed">
@@ -140,15 +146,15 @@ function Home() {
             <section className="px-4 py-16 sm:px-6 lg:px-8 bg-muted/30">
                 <div className="mx-auto max-w-4xl">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                        <h2 data-testid="home-page-quick-actions-title" className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                             Get started quickly
                         </h2>
-                        <p className="mt-4 text-lg text-muted-foreground">
+                        <p data-testid="home-page-quick-actions-description" className="mt-4 text-lg text-muted-foreground">
                             Choose your path and begin your Bible study journey today.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div  className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                         {quickActions.map((action) => {
                             const Icon = action.icon
                             return (
@@ -158,13 +164,13 @@ function Home() {
                                             <div className="mx-auto w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                                 <Icon className="h-6 w-6 text-primary" />
                                             </div>
-                                            <CardTitle className="text-lg">{action.title}</CardTitle>
+                                            <CardTitle data-testid={action.dataTestId} className="text-lg">{action.title}</CardTitle>
                                         </CardHeader>
                                         <CardContent className="text-center">
                                             <CardDescription className="text-sm mb-4">
                                                 {action.description}
                                             </CardDescription>
-                                            <Button size="sm" variant={action.variant} className="w-full">
+                                            <Button name={`quick-action-${action.title}`} size="sm" variant={action.variant} className="w-full">
                                                 Get Started
                                                 <ArrowRight className="ml-2 h-4 w-4" />
                                             </Button>
@@ -178,22 +184,18 @@ function Home() {
             </section>
             <section className="px-4 py-16 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                    <h2 data-testid="home-page-cta-title" className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                         Ready to dive deeper?
                     </h2>
-                    <p className="mt-4 text-lg text-muted-foreground">
+                    <p data-testid="home-page-cta-description" className="mt-4 text-lg text-muted-foreground">
                         Create an account to save your collections, notes, and generated stories.
                     </p>
                     <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to="/sign-in">
-                            <Button size="sm" variant="outline">
-                                Sign In
-                            </Button>
+                        <Link data-testid="home-page-cta-sign-in" className={cn(buttonVariants({ variant: "outline", size: "sm" }))} to="/sign-in">
+                            Sign In
                         </Link>
-                        <Link to="/bible">
-                            <Button size="sm">
-                                Start Reading Now
-                            </Button>
+                        <Link data-testid="home-page-cta-start-reading" className={cn(buttonVariants({ size: "sm" }))} to="/bible">
+                            Start Reading Now
                         </Link>
                     </div>
                 </div>
