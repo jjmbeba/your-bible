@@ -68,7 +68,9 @@ function RouteComponent() {
               'w-full': !openNotes,
               'sm:w-1/2': openNotes,
             })}>
-              {bible && chapter ? parseBible(chapterData?.content ?? '', highlightSid, bible, chapter) : <div className='flex items-center justify-center h-full text-center'>
+              {bible && chapter ? <div data-testid="bible-page-content">
+                {parseBible(chapterData?.content ?? '', highlightSid, bible, chapter)}
+              </div> : <div data-testid="bible-page-select-bible-and-chapter" className='flex items-center justify-center h-full text-center'>
                 Select a Bible and Chapter to view the content
               </div>}
             </div>

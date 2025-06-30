@@ -16,7 +16,7 @@ export function parseBible(
         const element = domNode as Element;
         const verseNumber = element.children[0] as Text;
         return (
-          <div key={element.attribs['data-number']} className="inline-flex items-center gap-1">
+          <div key={element.attribs['data-number']} data-testid="bible-chapter-verses" className="inline-flex items-center gap-1">
             <span
               className={cn(
                 'inline-block font-bold text-primary mr-3'

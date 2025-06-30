@@ -55,6 +55,7 @@ const BibleSelector = ({ value }: BibleSelectorProps) => {
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
+                        data-testid="bible-selector"
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}

@@ -28,6 +28,7 @@ const BibleDropDown = ({ bible, chapter }: Props) => {
         <div className='flex flex-col sm:flex-row gap-2 sm:gap-4 items-center w-full sm:w-auto'>
             <div className='w-full sm:w-auto'>
                 <Select
+                    data-testid="bible-dropdown-book"
                     value={selectedBook?.id}
                     onValueChange={(value) => {
                         const selectedBook = books?.find((book: Book) => book.id === value)
@@ -44,7 +45,7 @@ const BibleDropDown = ({ bible, chapter }: Props) => {
                     }}
                     disabled={isLoadingBooks || !bible}
                 >
-                    <SelectTrigger className='w-full sm:w-[180px]'>
+                    <SelectTrigger data-testid="bible-dropdown-book-trigger" className='w-full sm:w-[180px]'>
                         {isLoadingBooks ? (
                             <div className='flex items-center gap-2'>
                                 <Loader2 className='size-4 animate-spin' />
@@ -63,6 +64,7 @@ const BibleDropDown = ({ bible, chapter }: Props) => {
             </div>
             <div className='w-full sm:w-auto'>
                 <Select
+                    data-testid="bible-dropdown-chapter"
                     value={chapter ?? ''}
                     onValueChange={(value) => {
                         navigate({
@@ -75,7 +77,7 @@ const BibleDropDown = ({ bible, chapter }: Props) => {
                     }}
                     disabled={isLoadingBooks || !bible || !selectedBook}
                 >
-                    <SelectTrigger className='w-full sm:w-[200px]'>
+                    <SelectTrigger data-testid="bible-dropdown-chapter-trigger" className='w-full sm:w-[200px]'>
                         <SelectValue placeholder='Select a Bible Chapter' />
                     </SelectTrigger>
                     <SelectContent>
