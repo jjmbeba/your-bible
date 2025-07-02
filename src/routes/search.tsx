@@ -61,7 +61,7 @@ function RouteComponent() {
                                 No results found.
                             </div>
                         ) : (
-                            <div>
+                            <div data-testid="search-results">
                                 {searchResults?.verses.map((verse) => (
                                   <SearchVerseCard key={verse.id} verse={verse} query={query} />
                                 ))}

@@ -17,7 +17,7 @@ type SearchPaginationProps = {
 
 const SearchPagination = ({ currentPage, pages }: SearchPaginationProps) => {
     return (
-        <Pagination className='flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0'>
+        <Pagination data-testid="search-pagination" className='flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0'>
             <p className="text-xs sm:text-sm text-muted-foreground">
                 Page {currentPage} of {pages}
             </p>
@@ -30,7 +30,7 @@ const SearchPagination = ({ currentPage, pages }: SearchPaginationProps) => {
                             ...prev,
                             page: currentPage - 1
                         })
-                    } disabled={currentPage <= 1} aria-disabled={currentPage <= 1}>
+                    } disabled={currentPage <= 1} aria-disabled={currentPage <= 1} data-testid="search-pagination-previous">
                         <PaginationPrevious />
                     </Link>
                 </PaginationItem>
@@ -74,7 +74,7 @@ const SearchPagination = ({ currentPage, pages }: SearchPaginationProps) => {
                         })
                     } disabled={currentPage >= pages} aria-disabled={currentPage >= pages} className={cn({
                         'opacity-50 cursor-not-allowed': currentPage >= pages
-                    })}>
+                    })} data-testid="search-pagination-next">
                         <PaginationNext />
                     </Link>
                 </PaginationItem>

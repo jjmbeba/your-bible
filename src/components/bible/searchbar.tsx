@@ -43,6 +43,7 @@ const SearchBar = ({ disabled = false }: SearchBarProps) => {
                 children={(field) => (
                     <div className='relative flex flex-col gap-2'>
                         <Input
+                            data-testid="search-bar-input"
                             disabled={disabled}
                             type="text"
                             placeholder="Search"
@@ -63,7 +64,7 @@ const SearchBar = ({ disabled = false }: SearchBarProps) => {
             <form.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
-                    <Button type='submit' size='sm' disabled={!canSubmit}>
+                    <Button type='submit' size='sm' disabled={!canSubmit} data-testid="search-bar-submit">
                         {isSubmitting ? <Loader2 className='size-4 animate-spin' /> : 'Search'}
                     </Button>
                 )}

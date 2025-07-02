@@ -84,7 +84,7 @@ const BibleSelector = ({ value }: BibleSelectorProps) => {
                             return value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
                         }}
                     >
-                        <CommandInput placeholder="Search bible..." className="h-9" />
+                        <CommandInput data-testid="bible-selector-input" placeholder="Search bible..." className="h-9" />
                         <CommandList className="max-h-[300px]">
                             <CommandEmpty>No bible found.</CommandEmpty>
                             <CommandGroup>

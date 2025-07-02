@@ -11,9 +11,9 @@ type VerseCardProps = {
 }
 
 const SearchVerseCard = ({ verse, query }: VerseCardProps) => {
-    console.log(verse)
     return (
         <div
+            data-testid="search-verse-card"
             className="mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
         >
             <div className="flex items-start gap-2 sm:gap-3">
