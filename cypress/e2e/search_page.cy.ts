@@ -59,14 +59,24 @@ describe('Search Page', () => {
     })
   })
 
-  // it('is accessible by keyboard', () => {
-  //   cy.get('body').press(Cypress.Keyboard.Keys.TAB)
-  //   cy.focused().should('have.attr', 'data-testid', 'bible-selector')
-  //   cy.focused().type('{enter}')
-  //   cy.get('[data-testid="bible-selector"]').type('king james')
-  //   cy.get('[role="option"]').first().type('{enter}')
-  //   cy.get('[data-testid="search-bar-input"]').focus().type('God')
-  //   cy.get('[data-testid="search-bar-submit"]').focus().type('{enter}')
-  //   cy.get('[data-testid="search-verse-card"], body').should('exist')
-  // })
+  it('is accessible by keyboard', () => {
+    // Test that bible selector is focusable
+    cy.get('[data-testid="bible-selector"]').focus()
+    cy.focused().should('have.attr', 'data-testid', 'bible-selector')
+    
+    // Open bible selector and select an option
+    cy.focused().type('{enter}').click()
+    cy.get('[data-testid="bible-selector-input"]').type('king james').type('{enter}')
+    // cy.get('[role="option"]').first()
+    
+    // Test that search input is focusable and can be typed into
+    cy.get('[data-testid="search-bar-input"]').focus().type('God')
+    cy.focused().should('have.attr', 'data-testid', 'search-bar-input')
+    
+    // Test that search submit button is focusable and can be activated
+    cy.get('[data-testid="search-bar-submit"]').focus().type('{enter}')
+    
+    // Verify search results appear
+    cy.get('[data-testid="search-results"]').should('exist')
+  })
 })
