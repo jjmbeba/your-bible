@@ -9,6 +9,13 @@ import UserButton from './ui/user-button';
 const Header = () => {
     const { location: { pathname } } = useRouterState()
     const [isOpen, setIsOpen] = useState(false);
+    const isFetching = useRouterState({
+        select: (s) => s.status === 'pending',
+    });
+
+    if (isFetching) {
+        return null;
+    }
 
     if (pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')) {
         return null;
@@ -34,15 +41,16 @@ const Header = () => {
     ]);
 
     return (
-        <div className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
-            <Link to="/">
+        <div data-testid="header" className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
+            <Link data-testid="header-logo" to="/">
                 <h1 className='text-xl sm:text-2xl font-bold'>Your Bible</h1>
             </Link>
             {/* Desktop Navigation */}
-            <nav className='hidden sm:flex items-center gap-2'>
+            <nav data-testid="header-nav-desktop" className='hidden sm:flex items-center gap-2'>
                 {links.map((link) => (
                     <Link
                         key={link.to}
+                        data-testid={`header-nav-link-${link.label.toLowerCase()}`}
                         className={cn(buttonVariants({ variant: 'link' }))}
                         activeProps={{
                             className: "underline"
@@ -56,17 +64,18 @@ const Header = () => {
             </nav>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild className="sm:hidden">
-                    <Button variant="outline" size="icon" className="sm:hidden">
+                    <Button data-testid="header-mobile-trigger" variant="outline" size="icon" className="sm:hidden">
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">Toggle menu</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:hidden">
-                    <nav className="flex flex-col h-full">
+                <SheetContent data-testid="header-sheet" side="right" className="w-[300px] sm:hidden">
+                    <nav data-testid="header-nav-mobile" className="flex flex-col h-full">
                         <div className="flex flex-col gap-4 mt-8">
                             {links.map((link) => (
                                 <Link
                                     key={link.to}
+                                    data-testid={`header-mobile-link-${link.label.toLowerCase()}`}
                                     className={cn(
                                         "text-lg font-medium transition-colors hover:text-primary",
                                         pathname === link.to ? "text-primary" : "text-muted-foreground"

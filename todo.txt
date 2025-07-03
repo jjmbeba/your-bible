@@ -1,0 +1,5 @@
+- Fix position of notes so that when bible chapter is scrolled, the notes are still in place
+- Fix padding on notes reset and save button - mobile screen sizes
+- Delete collection verse button in mobile screen sizes
+- Bookmark button on verses in mobile screen sizes
+- Try to tie notes to book and chapters only instead of chapters, book and bible id. Might be useful to render a message 'Please select a bible with the book of :'
