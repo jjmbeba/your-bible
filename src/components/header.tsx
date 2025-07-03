@@ -42,11 +42,11 @@ const Header = () => {
 
     return (
         <div data-testid="header" className='flex justify-between items-center py-4 px-4 sm:mx-10 border border-b border-x-0'>
-            <Link data-testid="header-logo" to="/">
+            <Link data-testid="header-logo" to="/" tabIndex={0} aria-label="Home">
                 <h1 className='text-xl sm:text-2xl font-bold'>Your Bible</h1>
             </Link>
             {/* Desktop Navigation */}
-            <nav data-testid="header-nav-desktop" className='hidden sm:flex items-center gap-2'>
+            <nav data-testid="header-nav-desktop" className='hidden sm:flex items-center gap-2' role="navigation" aria-label="Main navigation">
                 {links.map((link) => (
                     <Link
                         key={link.to}
@@ -56,6 +56,7 @@ const Header = () => {
                             className: "underline"
                         }}
                         to={link.to}
+                        aria-label={link.label}
                     >
                         {link.label}
                     </Link>
@@ -64,15 +65,15 @@ const Header = () => {
             </nav>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild className="sm:hidden">
-                    <Button data-testid="header-mobile-trigger" variant="outline" size="icon" className="sm:hidden">
+                    <Button data-testid="header-mobile-trigger" variant="outline" size="icon" className="sm:hidden" aria-label="Toggle menu">
                         <Menu className="h-5 w-5" />
                         <span className="sr-only">Toggle menu</span>
                     </Button>
                 </SheetTrigger>
                 <SheetContent data-testid="header-sheet" side="right" className="w-[300px] sm:hidden">
-                    <nav data-testid="header-nav-mobile" className="flex flex-col h-full">
+                    <nav data-testid="header-nav-mobile" className="flex flex-col h-full" role="navigation" aria-label="Mobile navigation">
                         <div className="flex flex-col gap-4 mt-8">
-                            {links.map((link) => (
+                            {links.map((link, idx) => (
                                 <Link
                                     key={link.to}
                                     data-testid={`header-mobile-link-${link.label.toLowerCase()}`}
@@ -82,6 +83,13 @@ const Header = () => {
                                     )}
                                     to={link.to}
                                     onClick={() => setIsOpen(false)}
+                                    aria-label={link.label}
+                                    tabIndex={0}
+                                    ref={idx === 0 ? (el) => {
+                                        if (el && isOpen) {
+                                            setTimeout(() => el.focus(), 0);
+                                        }
+                                    } : undefined}
                                 >
                                     {link.label}
                                 </Link>
