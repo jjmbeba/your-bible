@@ -1,5 +1,5 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/docs",
       "destination": "https://jjmbeba-your-bible-48.mintlify.dev/docs"

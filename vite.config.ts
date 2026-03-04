@@ -10,7 +10,6 @@ export default defineConfig({
       '/docs': {
         target: 'https://jjmbeba-your-bible-48.mintlify.dev',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/docs/, '/docs'),
       },
     },
   },
