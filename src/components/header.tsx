@@ -33,10 +33,6 @@ const Header = () => {
       to: "/stories",
       label: "Stories",
     },
-    {
-      to: "/docs",
-      label: "Docs",
-    },
   ]);
 
   return (
@@ -58,6 +54,14 @@ const Header = () => {
             {link.label}
           </Link>
         ))}
+        <a
+          href="/docs"
+          className={cn(buttonVariants({ variant: "link" }))}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Docs
+        </a>
         <UserButton />
       </nav>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
